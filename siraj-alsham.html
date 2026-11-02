@@ -1,0 +1,1260 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <title>سراج الشام - نظام إدارة المهام والشات الذكي</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Amiri:wght@700&display=swap">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <style>
+        :root {
+            --bg: #f8fafc; --surface: #ffffff; --surface-sub: #f1f5f9; --ink: #0f172a; --ink-muted: #64748b; --line: #e2e8f0; --primary: #102a43; --gold: #c59b27;
+            --ok: #059669; --ok-bg: #d1fae5; --warn: #d97706; --warn-bg: #fef3c7; --bad: #dc2626; --bad-bg: #fee2e2; --hold: #4b5563; --hold-bg: #f3f4f6; --stop: #991b1b; --stop-bg: #fee2e2;
+            --shadow: 0 4px 18px rgba(15, 23, 42, 0.05); --body: 'IBM Plex Sans Arabic', sans-serif; --quran: 'Amiri', serif;
+            --sidebar-width: 260px;
+        }
+        [data-theme="dark"] {
+            --bg: #0b0f19; --surface: #111827; --surface-sub: #1f2937; --ink: #f8fafc; --ink-muted: #94a3b8; --line: #1f2937; --primary: #38bdf8; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        * { box-sizing: border-box; transition: background 0.2s, color 0.2s; }
+        body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 14px; line-height: 1.5; overflow-x: hidden; display: flex; }
+
+        #splashScreen {
+            position: fixed; inset: 0; z-index: 9999;
+            background: radial-gradient(circle at center, #1b3a5b 0%, #0a131d 100%);
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px; color: #ffffff; text-align: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        #splashScreen.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        .splash-card {
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px);
+            border: 1px solid rgba(197, 155, 39, 0.35); border-radius: 24px; padding: 30px 20px;
+            max-width: 580px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
+        .splash-title {
+            font-family: 'Cairo', sans-serif; font-size: 28px; font-weight: 800;
+            background: linear-gradient(135deg, #fff7ad 0%, #ffa800 50%, #c59b27 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;
+        }
+        .splash-sub { font-size: 15px; color: #cbd5e1; font-weight: 600; margin-top: 4px; }
+        .quran-box { border-top: 1px dashed rgba(197, 155, 39, 0.5); border-bottom: 1px dashed rgba(197, 155, 39, 0.5); padding: 10px; width: 100%; }
+        .quran-text { font-family: var(--quran); font-size: 18px; color: #f3e5ab; line-height: 1.6; }
+        .splash-btn-main {
+            background: linear-gradient(135deg, #c59b27 0%, #9a761a 100%); color: #ffffff; border: none;
+            padding: 12px 35px; border-radius: 50px; font-size: 15px; font-weight: 700; cursor: pointer;
+            box-shadow: 0 6px 20px rgba(197, 155, 39, 0.4); display: flex; align-items: center; gap: 10px; font-family: 'Cairo', sans-serif;
+        }
+        .role-options { display: none; width: 100%; flex-direction: column; gap: 10px; margin-top: 10px; }
+        .role-btn {
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff; padding: 10px 15px; border-radius: 12px; font-size: 13px; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+
+        aside {
+            width: var(--sidebar-width); background: var(--surface); border-left: 1px solid var(--line);
+            height: 100vh; position: fixed; top: 0; right: 0; display: flex; flex-direction: column; z-index: 50;
+            box-shadow: var(--shadow); transition: transform 0.3s ease, width 0.3s ease;
+        }
+        aside.collapsed { transform: translateX(100%); }
+
+        .sidebar-brand { padding: 16px 20px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+        .brand-info { display: flex; align-items: center; gap: 10px; }
+        .sidebar-brand h2 { font-family: 'Cairo', sans-serif; font-size: 18px; font-weight: 800; color: var(--primary); margin: 0; }
+        .sidebar-brand span { font-size: 11px; color: var(--ink-muted); display: block; }
+
+        .sidebar-menu { flex: 1; overflow-y: auto; padding: 16px 12px; display: flex; flex-direction: column; gap: 8px; }
+        .menu-item { border-radius: 10px; overflow: hidden; }
+        .menu-header {
+            display: flex; align-items: center; justify-content: space-between; padding: 12px 14px;
+            color: var(--ink); font-weight: 600; cursor: pointer; border-radius: 10px; font-size: 13px;
+        }
+        .menu-header:hover { background: var(--surface-sub); color: var(--primary); }
+        .menu-header.active { background: var(--primary); color: #fff; }
+        .submenu { display: none; padding: 6px 10px 6px 20px; flex-direction: column; gap: 4px; }
+        .submenu.open { display: flex; }
+        .submenu-item {
+            padding: 8px 12px; border-radius: 8px; font-size: 12px; color: var(--ink-muted); cursor: pointer;
+            display: flex; align-items: center; gap: 8px; font-weight: 500;
+        }
+        .submenu-item:hover, .submenu-item.active { background: var(--surface-sub); color: var(--gold); font-weight: 700; }
+
+        .main-content { margin-right: var(--sidebar-width); flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 18px; min-height: 100vh; transition: margin-right 0.3s ease; width: calc(100% - var(--sidebar-width)); }
+        .main-content.expanded { margin-right: 0; width: 100%; }
+
+        .top-bar {
+            display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+            background: var(--surface); border-radius: 18px; padding: 16px 24px; border: 1px solid var(--line); border-right: 6px solid var(--gold); box-shadow: var(--shadow);
+        }
+        .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+            border-radius: 10px; padding: 8px 16px; cursor: pointer; font-size: 13px; font-weight: 600;
+        }
+        .btn:hover { background: var(--surface-sub); border-color: var(--primary); }
+        .btn.primary { background: var(--primary); color: #ffffff; border-color: var(--primary); }
+        .btn.gold { background: var(--gold); color: #ffffff; border-color: var(--gold); }
+        .btn.danger { background: var(--bad); color: #ffffff; border-color: var(--bad); }
+        .btn.whatsapp { background: #25d366; color: #ffffff; border-color: #25d366; }
+        .btn.whatsapp:hover { background: #20ba5a; }
+        .theme-toggle { border-radius: 50%; width: 40px; height: 40px; padding: 0; justify-content: center; }
+
+        .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+        .kpi {
+            background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px;
+            box-shadow: var(--shadow); border-top: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center;
+        }
+        .kpi-info span { font-size: 12px; color: var(--ink-muted); font-weight: 600; display: block; }
+        .kpi-info b { font-family: 'Cairo', sans-serif; font-size: 26px; font-weight: 800; color: var(--ink); display: block; margin-top: 2px; }
+        .kpi-icon { font-size: 24px; opacity: 0.85; }
+
+        .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+        .filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
+        .filter-btn { border: 1px solid var(--line); background: var(--surface); color: var(--ink-muted); padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        .filter-btn.active { background: var(--primary); color: #ffffff; border-color: var(--primary); }
+        .filter-btn.bi-btn { background: linear-gradient(135deg, #102a43 0%, #1e40af 100%); color: #fff; border: 1px solid var(--gold); }
+
+        .search-input, .select-input { border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 8px 14px; border-radius: 10px; font-size: 13px; outline: none; width: 100%; max-width: 300px; }
+
+        .table-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow-x: auto; box-shadow: var(--shadow); }
+        table { width: 100%; border-collapse: collapse; text-align: right; min-width: 1000px; }
+        th { background: var(--surface-sub); color: var(--ink-muted); padding: 12px 14px; font-weight: 600; font-size: 12px; border-bottom: 1px solid var(--line); }
+        td { padding: 12px 14px; border-bottom: 1px solid var(--line); color: var(--ink); font-size: 13px; }
+        .badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+        .badge.done { background: var(--ok-bg); color: var(--ok); }
+        .badge.doing { background: #dbeafe; color: #2563eb; }
+        .badge.todo { background: var(--surface-sub); color: var(--ink-muted); }
+        .badge.hold { background: var(--hold-bg); color: var(--hold); }
+        .badge.stop { background: var(--stop-bg); color: var(--stop); }
+        .priority-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-left: 6px; }
+        .p-high { background: var(--bad); } .p-mid { background: var(--warn); } .p-low { background: var(--ok); }
+        .task-overdue { border-right: 4px solid var(--bad); background: rgba(220, 38, 38, 0.03); }
+
+        .meeting-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow); border-right: 5px solid var(--primary); }
+        .meeting-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
+        .meeting-title { font-family: 'Cairo', sans-serif; font-size: 18px; font-weight: 700; color: var(--primary); margin: 0; }
+        .meeting-meta { font-size: 12px; color: var(--ink-muted); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+        .chart-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; box-shadow: var(--shadow); height: 300px; }
+
+        /* الشات الجانبي الذكي العائم */
+        #aiChatToggleBtn {
+            position: fixed; bottom: 25px; left: 25px; z-index: 990;
+            background: linear-gradient(135deg, #102a43 0%, #c59b27 100%);
+            color: #fff; border: none; padding: 12px 20px; border-radius: 50px;
+            box-shadow: 0 8px 25px rgba(16, 42, 67, 0.35); font-family: 'Cairo', sans-serif;
+            font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 10px;
+        }
+        #aiChatWindow {
+            position: fixed; bottom: 85px; left: 25px; width: 380px; height: 500px; z-index: 995;
+            background: var(--surface); border: 1px solid var(--gold); border-radius: 20px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden;
+        }
+        #aiChatWindow.active { display: flex; }
+        .ai-chat-header {
+            background: var(--primary); color: #fff; padding: 12px 16px; display: flex;
+            align-items: center; justify-content: space-between; border-bottom: 2px solid var(--gold);
+        }
+        .ai-chat-header h4 { margin: 0; font-family: 'Cairo', sans-serif; font-size: 14px; display: flex; align-items: center; gap: 8px; }
+        .ai-chat-actions { display: flex; align-items: center; gap: 10px; }
+        .ai-chat-actions button { background: transparent; border: none; color: #fff; font-size: 14px; cursor: pointer; opacity: 0.85; }
+        .ai-chat-actions button:hover { opacity: 1; color: var(--gold); }
+        .ai-chat-body { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: var(--bg); }
+        .chat-msg { max-width: 88%; padding: 10px 14px; border-radius: 14px; font-size: 12px; line-height: 1.6; white-space: pre-line; }
+        .chat-msg.user { background: var(--primary); color: #fff; align-self: flex-start; border-bottom-right-radius: 2px; }
+        .chat-msg.ai { background: var(--surface); color: var(--ink); border: 1px solid var(--line); align-self: flex-end; border-bottom-left-radius: 2px; border-right: 3px solid var(--gold); }
+        .ai-chat-footer { padding: 10px; background: var(--surface); border-top: 1px solid var(--line); display: flex; gap: 8px; }
+        .ai-chat-footer input { flex: 1; border: 1px solid var(--line); padding: 8px 12px; border-radius: 10px; font-size: 12px; outline: none; background: var(--bg); color: var(--ink); }
+
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 15px; }
+        .modal.active { display: flex; }
+        .modal-body { background: var(--surface); border-radius: 16px; padding: 20px; width: min(650px, 100%); max-height: 90vh; overflow-y: auto; border: 1px solid var(--line); position: relative; }
+        .close-modal-btn { position: absolute; left: 15px; top: 15px; border: none; background: transparent; font-size: 18px; cursor: pointer; color: var(--ink-muted); }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-grid .full { grid-column: 1 / -1; }
+        .form-field { display: flex; flex-direction: column; gap: 4px; }
+        .form-field label { font-size: 12px; font-weight: 600; color: var(--ink-muted); }
+        .form-field input, .form-field select, .form-field textarea { border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 8px 12px; border-radius: 8px; font-size: 13px; outline: none; width: 100%; }
+
+        #executiveReportPrint { display: none; }
+        body:not(.admin-mode) .admin-only { display: none !important; }
+
+        @media (max-width: 900px) {
+            aside { transform: translateX(100%); }
+            aside.mobile-open { transform: translateX(0); }
+            .main-content { margin-right: 0 !important; width: 100% !important; padding: 12px; }
+            .form-grid { grid-template-columns: 1fr; }
+            #aiChatWindow { width: calc(100% - 30px); left: 15px; bottom: 80px; }
+        }
+
+        @media print {
+            @page { size: A4 landscape; margin: 10mm; }
+            body * { visibility: hidden; }
+            #executiveReportPrint, #executiveReportPrint * { visibility: visible; }
+            #executiveReportPrint { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 10px; background: #ffffff !important; color: #000000 !important; }
+            .report-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #102a43; padding-bottom: 8px; margin-bottom: 12px; }
+            .report-title h1 { font-family: 'Cairo', sans-serif; color: #102a43; font-size: 20px; margin: 0; }
+            .report-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11px; }
+            .report-table th, .report-table td { border: 1px solid #cbd5e1; padding: 6px; text-align: right; word-break: break-word; }
+            .report-summary-box { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+            .report-kpi-item { border: 1px solid #cbd5e1; padding: 6px; border-radius: 6px; text-align: center; }
+            .report-kpi-item b { font-size: 16px; color: #102a43; display: block; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="splashScreen">
+    <div class="splash-card">
+        <div>
+            <h2 class="splash-title">مؤسسة سراج الشام</h2>
+            <div class="splash-sub">نظام إدارة المهام</div>
+        </div>
+        <div class="quran-box">
+            <div class="quran-text">﴿وَقُلِ اعْمَلُوا فَسَيَرَى اللَّهُ عَمَلَكُمْ وَرَسُولُهُ وَالْمُؤْمِنُونَ﴾</div>
+        </div>
+        <button class="splash-btn-main" id="startBtn" onclick="showRoleSelection()">
+            <i class="fas fa-play"></i> ابدأ الآن
+        </button>
+        <div class="role-options" id="roleOptions">
+            <button class="role-btn" onclick="enterAsGuest()"><i class="fas fa-eye" style="color:#38bdf8"></i> الدخول كعارض فقط (زائر)</button>
+            <button class="role-btn" style="border-color:var(--gold)" onclick="enterAsAdminModal()"><i class="fas fa-shield-halved" style="color:var(--gold)"></i> الدخول كمشرف عام</button>
+        </div>
+    </div>
+</div>
+
+<aside id="appSidebar">
+    <div class="sidebar-brand">
+        <div class="brand-info">
+            <div>
+                <h2>سراج الشام</h2>
+                <span>إدارة المهام</span>
+            </div>
+        </div>
+        <button class="btn" style="padding:4px 8px; font-size:12px;" onclick="toggleSidebar()" title="طي القائمة الجانبية"><i class="fas fa-angles-right"></i></button>
+    </div>
+    <div class="sidebar-menu">
+        <div class="menu-item">
+            <div class="menu-header active" id="menuTasksBtn" onclick="switchMainTab('tasks', this)">
+                <span><i class="fas fa-list-check"></i> المهام</span>
+            </div>
+        </div>
+        <div class="menu-item">
+            <div class="menu-header" id="menuMeetingsBtn" onclick="switchMainTab('meetings', this)">
+                <span><i class="fas fa-users-rectangle"></i> الاجتماعات والقرارات</span>
+            </div>
+        </div>
+        <div class="menu-item">
+            <div class="menu-header" onclick="toggleSubmenu('subArchive')">
+                <span><i class="fas fa-box-archive"></i> أرشيف المكاتب</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="submenu" id="subArchive">
+                <div class="submenu-item active" onclick="switchArchiveOffice('all', this)"><i class="fas fa-folder-open"></i> كافة الوثائق</div>
+                <div class="submenu-item" onclick="switchArchiveOffice('الإدارة التنفيذية', this)"><i class="fas fa-landmark"></i> الإدارة التنفيذية</div>
+                <div class="submenu-item" onclick="switchArchiveOffice('مكتب التعليم', this)"><i class="fas fa-graduation-cap"></i> مكتب التعليم</div>
+                <div class="submenu-item" onclick="switchArchiveOffice('مكتب الأيتام', this)"><i class="fas fa-child"></i> مكتب الأيتام</div>
+                <div class="submenu-item" onclick="switchArchiveOffice('المكتب المالي', this)"><i class="fas fa-wallet"></i> المكتب المالي</div>
+                <div class="submenu-item" onclick="switchArchiveOffice('مكتب الخدمات', this)"><i class="fas fa-hands-helping"></i> مكتب الخدمات</div>
+            </div>
+        </div>
+        <div class="menu-item">
+            <div class="menu-header" id="menuSettingsBtn" onclick="switchMainTab('settings', this)">
+                <span><i class="fas fa-gear"></i> الإعدادات</span>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<div class="main-content" id="mainContentArea">
+    <header class="top-bar">
+        <div style="display:flex; align-items:center; gap:12px;">
+            <button class="btn" style="padding:6px 10px;" onclick="toggleSidebar()" title="إظهار/إخفاء القائمة الجانبية"><i class="fas fa-bars"></i></button>
+            <h1 style="font-family:'Cairo',sans-serif; font-size:20px; color:var(--primary); margin:0;" id="pageMainTitle">إدارة المهام التنفيذية</h1>
+        </div>
+        <div class="top-actions">
+            <span id="roleBadge" class="badge" style="background:#e67e22; color:#fff; padding:5px 10px; font-size:12px;"><i class="fas fa-eye"></i> وضع عرض فقط</span>
+            <button class="btn" id="loginLogoutBtn" onclick="handleAdminAuth()"><i class="fas fa-lock"></i> دخول مشرف</button>
+            <button class="btn theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon" id="themeIcon"></i></button>
+            <button class="btn gold" onclick="openReportModal()"><i class="fas fa-file-invoice"></i> طباعة التقرير</button>
+            <button class="btn primary admin-only" onclick="openDynamicModal()"><i class="fas fa-plus"></i> إضافة</button>
+        </div>
+    </header>
+
+    <section class="kpis">
+        <div class="kpi" style="border-top-color:var(--primary)">
+            <div class="kpi-info"><span>إجمالي المهام</span><b id="stTotal">0</b></div>
+            <i class="fas fa-list-check kpi-icon" style="color:var(--primary)"></i>
+        </div>
+        <div class="kpi" style="border-top-color:var(--ok)">
+            <div class="kpi-info"><span>منجزة</span><b id="stDone" style="color:var(--ok)">0</b></div>
+            <i class="fas fa-circle-check kpi-icon" style="color:var(--ok)"></i>
+        </div>
+        <div class="kpi" style="border-top-color:#2563eb">
+            <div class="kpi-info"><span>قيد التنفيذ</span><b id="stDoing" style="color:#2563eb">0</b></div>
+            <i class="fas fa-spinner kpi-icon" style="color:#2563eb"></i>
+        </div>
+        <div class="kpi" style="border-top-color:var(--warn)">
+            <div class="kpi-info"><span>معلقة / متوقفة</span><b id="stHold" style="color:var(--warn)">0</b></div>
+            <i class="fas fa-pause-circle kpi-icon" style="color:var(--warn)"></i>
+        </div>
+    </section>
+
+    <!-- قسم المهام -->
+    <div id="paneTasks">
+        <div class="filter-bar" style="margin-bottom:12px">
+            <div class="filter-group" id="taskFilterButtons">
+                <button class="filter-btn active" onclick="filterStatus('all', this)">الكل</button>
+                <button class="filter-btn" onclick="filterStatus('doing', this)">قيد التنفيذ</button>
+                <button class="filter-btn" onclick="filterStatus('done', this)">منجزة</button>
+                <button class="filter-btn" onclick="filterStatus('hold', this)">معلقة</button>
+                <button class="filter-btn" onclick="filterStatus('stop', this)">متوقفة</button>
+                <button class="filter-btn bi-btn" onclick="showAnalyticsSection(this)"><i class="fas fa-chart-pie"></i> تحليلات Power BI</button>
+            </div>
+            <input type="search" class="search-input" id="searchBox" placeholder="ابحث باسم المهمة..." oninput="renderTasks()">
+        </div>
+
+        <div class="table-wrap" id="tasksTableContainer">
+            <table>
+                <thead>
+                    <tr>
+                        <th>المهمة</th>
+                        <th>المسؤول</th>
+                        <th>المكتب / القسم</th>
+                        <th>الحالة</th>
+                        <th>الأولوية</th>
+                        <th>التكليف</th>
+                        <th>التسليم</th>
+                        <th>آخر تحديث</th>
+                        <th>ملف الإنجاز</th>
+                        <th>إرسال واتساب</th>
+                        <th class="admin-only">إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="taskRows"></tbody>
+            </table>
+        </div>
+
+        <div id="paneAnalytics" style="display:none; margin-top:15px;">
+            <div class="filter-bar" style="background:var(--surface); padding:12px; border-radius:12px; border:1px solid var(--line); margin-bottom:14px">
+                <div style="font-weight:600; color:var(--primary); margin-bottom:8px;"><i class="fas fa-filter"></i> تصفية بيانات التحليلات:</div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; width:100%;">
+                    <select id="biOfficeFilter" class="select-input" onchange="renderAnalytics()"><option value="all">جميع المكاتب والأقسام</option></select>
+                    <select id="biOwnerFilter" class="select-input" onchange="renderAnalytics()"><option value="all">جميع المسؤولين</option></select>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-card"><h4 style="margin:0 0 10px 0; color:var(--primary); font-size:14px;"><i class="fas fa-chart-pie"></i> توزيع حالات المهام الكلية</h4><div style="position:relative; height:200px"><canvas id="statusChart"></canvas></div></div>
+                <div class="chart-card"><h4 style="margin:0 0 10px 0; color:var(--primary); font-size:14px;"><i class="fas fa-chart-bar"></i> نسبة الإنجاز حسب المكتب / القسم</h4><div style="position:relative; height:200px"><canvas id="officeChart"></canvas></div></div>
+                <div class="chart-card"><h4 style="margin:0 0 10px 0; color:var(--primary); font-size:14px;"><i class="fas fa-layer-group"></i> توزيع الأولويات</h4><div style="position:relative; height:200px"><canvas id="priorityChart"></canvas></div></div>
+                <div class="chart-card"><h4 style="margin:0 0 10px 0; color:var(--primary); font-size:14px;"><i class="fas fa-tasks"></i> حجم أداء المكاتب الإجمالي</h4><div style="position:relative; height:200px"><canvas id="departmentWorkloadChart"></canvas></div></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- قسم الاجتماعات -->
+    <div id="paneMeetings" style="display:none">
+        <div class="filter-bar" style="margin-bottom:12px">
+            <input type="search" class="search-input" id="searchMeeting" placeholder="ابحث في الاجتماعات..." oninput="renderMeetings()" style="max-width:100%">
+        </div>
+        <div id="meetingCards"></div>
+    </div>
+
+    <!-- قسم الأرشيف -->
+    <div id="paneArchive" style="display:none">
+        <div class="filter-bar" style="background:var(--surface); padding:16px; border-radius:14px; border:1px solid var(--line); margin-bottom:16px">
+            <div style="display:flex; justify-content:space-between; align-items:center; width:100%; flex-wrap:wrap; gap:10px">
+                <div style="font-weight:700; color:var(--primary); font-size:14px"><i class="fas fa-folder-tree" style="color:var(--gold)"></i> المكتب: <span id="currentArchiveOfficeLabel">جميع المكاتب</span></div>
+                <div style="display:flex; gap:10px; align-items:center; width:100%;">
+                    <input type="search" class="search-input" id="searchArchive" placeholder="ابحث باسم الوثيقة..." oninput="renderArchive()">
+                </div>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>عنوان الوثيقة / المستند</th>
+                        <th>المكتب التابع له</th>
+                        <th>نوع الوثيقة</th>
+                        <th>تاريخ الأرشفة</th>
+                        <th>ملاحظات وتفاصيل</th>
+                        <th>تحميل الوثيقة</th>
+                        <th class="admin-only">إجراءات</th>
+                    </tr>
+                </thead>
+                <tbody id="archiveRows"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- قسم الإعدادات -->
+    <div id="paneSettings" style="display:none; flex-direction:column; gap:16px;">
+        <div style="background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:20px; box-shadow:var(--shadow);">
+            <h3 style="margin-top:0; color:var(--primary); font-size:16px;"><i class="fas fa-users-viewfinder" style="color:var(--gold)"></i> المستخدمون والمتواجدون الآن</h3>
+            <p style="font-size:13px; color:var(--ink-muted);">رخص ومتابعة الجلسات النشطة على المنصة:</p>
+            <div style="display:flex; gap:12px; align-items:center; background:var(--surface-sub); padding:12px; border-radius:10px;">
+                <i class="fas fa-circle" style="color:var(--ok); font-size:10px;"></i>
+                <div>
+                    <b id="activeUserLabel">زائر (عرض فقط)</b>
+                    <div style="font-size:11px; color:var(--ink-muted);">متواجد الآن في الجلسة الحالية</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:20px; box-shadow:var(--shadow);" class="admin-only">
+            <h3 style="margin-top:0; color:var(--primary); font-size:16px;"><i class="fas fa-key" style="color:var(--gold)"></i> إعدادات الأمان (تغيير كلمة سر المشرف)</h3>
+            <div class="form-grid" style="margin-top:12px;">
+                <div class="form-field"><label>كلمة المرور الجديدة</label><input type="password" id="newAdminPass" placeholder="أدخل كلمة المرور الجديدة"></div>
+                <div class="form-field" style="justify-content:flex-end;"><button class="btn primary" onclick="updateAdminPassword()" style="margin-top:20px;"><i class="fas fa-save"></i> حفظ كلمة المرور</button></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- زر ونافذة الشات الجانبي الذكي التفاعلي -->
+<button id="aiChatToggleBtn" onclick="toggleAiChat()"><i class="fas fa-robot"></i> المساعد الذكي</button>
+<div id="aiChatWindow">
+    <div class="ai-chat-header">
+        <h4><i class="fas fa-wand-magic-sparkles" style="color:var(--gold)"></i> المحادثة مع المساعد الذكي</h4>
+        <div class="ai-chat-actions">
+            <button onclick="clearAiChat()" title="مسح المحادثة"><i class="fas fa-trash-can"></i></button>
+            <button onclick="toggleAiChat()"><i class="fas fa-times"></i></button>
+        </div>
+    </div>
+    <div class="ai-chat-body" id="aiChatBody">
+        <div class="chat-msg ai">السلام عليكم ورحمة الله وبركاته، أنا مساعدك الإداري الذكي لمنصة سراج الشام. تفضل باستفساراتك أو طلباتك وسأجيبك فوراً من بيانات المهام والاجتماعات!</div>
+    </div>
+    <div class="ai-chat-footer">
+        <input type="text" id="aiChatInput" placeholder="اكتب سؤالك أو استفسارك هنا..." onkeypress="handleAiKeyPress(event)">
+        <button class="btn gold" style="padding:6px 12px;" onclick="sendAiMessage()"><i class="fas fa-paper-plane"></i></button>
+    </div>
+</div>
+
+<!-- نماذج الطباعة والنوافذ -->
+<div id="executiveReportPrint">
+    <div class="report-header">
+        <div class="report-title">
+            <h1>مؤسسة سراج الشام (SİRAÇ)</h1>
+            <p id="reportSubTitle">نظام إدارة المهام</p>
+        </div>
+        <div style="text-align:left; font-size:11px; color:#64748b;">
+            <div><b>التاريخ:</b> <span id="reportDate"></span></div>
+            <div><b>النطاق:</b> <span id="reportScope">جميع المكاتب</span></div>
+        </div>
+    </div>
+    <div class="report-summary-box" id="reportKpiBox">
+        <div class="report-kpi-item"><span>إجمالي المهام</span><b id="rptTotal">0</b></div>
+        <div class="report-kpi-item"><span>المنجزة</span><b id="rptDone">0</b></div>
+        <div class="report-kpi-item"><span>قيد التنفيذ</span><b id="rptDoing">0</b></div>
+        <div class="report-kpi-item"><span>نسبة الإنجاز</span><b id="rptRatio">0%</b></div>
+    </div>
+    <div id="reportPrintArea"></div>
+</div>
+
+<div class="modal" id="reportModal">
+    <div class="modal-body">
+        <button class="close-modal-btn" onclick="closeModal('reportModal')"><i class="fas fa-times"></i></button>
+        <h3 style="margin-top:0; color:var(--primary)"><i class="fas fa-print"></i> طباعة التقرير</h3>
+        <div class="form-grid">
+            <div class="form-field full">
+                <label id="rptFilterLabel">تصفية التقرير حسب المكتب / القسم</label>
+                <select id="rptOfficeFilter" class="select-input">
+                    <option value="all">جميع المكاتب والأقسام</option>
+                </select>
+            </div>
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px">
+            <button type="button" class="btn" onclick="closeModal('reportModal')">إلغاء</button>
+            <button type="button" class="btn gold" onclick="triggerCustomPrint()"><i class="fas fa-print"></i> طباعة التقرير</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="taskModal">
+    <div class="modal-body">
+        <button class="close-modal-btn" onclick="closeModal('taskModal')"><i class="fas fa-times"></i></button>
+        <h3 style="margin-top:0; color:var(--primary)" id="modalTitle">إضافة مهمة جديدة</h3>
+        <form onsubmit="saveTask(event)" class="form-grid">
+            <input type="hidden" id="editKey" value="">
+            <div class="form-field full"><label>عنوان المهمة</label><input required id="mTitle"></div>
+            <div class="form-field"><label>المسؤول</label><input required id="mOwner"></div>
+            <div class="form-field">
+                <label>المكتب / القسم</label>
+                <select id="mOffice" required class="select-input">
+                    <option value="الإدارة التنفيذية">الإدارة التنفيذية</option>
+                    <option value="مكتب التعليم">مكتب التعليم</option>
+                    <option value="مكتب الأيتام">مكتب الأيتام</option>
+                    <option value="المكتب المالي">المكتب المالي</option>
+                    <option value="مكتب الخدمات">مكتب الخدمات</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label>الحالة</label>
+                <select id="mStatus" required class="select-input">
+                    <option value="doing">قيد التنفيذ</option>
+                    <option value="done">منجزة</option>
+                    <option value="hold">معلقة</option>
+                    <option value="stop">متوقفة</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label>الأولوية</label>
+                <select id="mPriority" required class="select-input">
+                    <option value="high">عالية</option>
+                    <option value="mid">متوسطة</option>
+                    <option value="low">منخفضة</option>
+                </select>
+            </div>
+            <div class="form-field"><label>تاريخ التكليف</label><input type="date" required id="mAssigned"></div>
+            <div class="form-field"><label>تاريخ التسليم</label><input type="date" required id="mDue"></div>
+            <div class="form-field full"><label>ملف الإنجاز (اختياري)</label><input type="file" id="mFile"></div>
+            <div class="form-field full" style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px">
+                <button type="button" class="btn" onclick="closeModal('taskModal')">إلغاء</button>
+                <button type="submit" class="btn primary">حفظ المهمة</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="archiveModal">
+    <div class="modal-body">
+        <button class="close-modal-btn" onclick="closeModal('archiveModal')"><i class="fas fa-times"></i></button>
+        <h3 style="margin-top:0; color:var(--primary)"><i class="fas fa-file-shield"></i> أرشفة مستند جديد</h3>
+        <form onsubmit="saveArchiveDocument(event)" class="form-grid">
+            <div class="form-field full"><label>عنوان الوثيقة / المستند</label><input required id="arcTitle"></div>
+            <div class="form-field">
+                <label>المكتب التابع له</label>
+                <select id="arcOffice" required class="select-input">
+                    <option value="الإدارة التنفيذية">الإدارة التنفيذية</option>
+                    <option value="مكتب التعليم">مكتب التعليم</option>
+                    <option value="مكتب الأيتام">مكتب الأيتام</option>
+                    <option value="المكتب المالي">المكتب المالي</option>
+                    <option value="مكتب الخدمات">مكتب الخدمات</option>
+                </select>
+            </div>
+            <div class="form-field">
+                <label>نوع الوثيقة</label>
+                <select id="arcType" required class="select-input">
+                    <option value="خطة وبرنامج">خطة وبرنامج عمل</option>
+                    <option value="قرار إداري">قرار / تعميم إداري</option>
+                    <option value="تقرير">تقرير دوري / ختامي</option>
+                </select>
+            </div>
+            <div class="form-field full"><label>ملاحظات وشرح الوثيقة</label><textarea id="arcNotes" rows="2"></textarea></div>
+            <div class="form-field full"><label>الملف المستندي</label><input type="file" id="arcFile" required></div>
+            <div class="form-field full" style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px">
+                <button type="button" class="btn" onclick="closeModal('archiveModal')">إلغاء</button>
+                <button type="submit" class="btn primary">أرشفة الآن</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="meetingModal">
+    <div class="modal-body">
+        <button class="close-modal-btn" onclick="closeModal('meetingModal')"><i class="fas fa-times"></i></button>
+        <h3 style="margin-top:0; color:var(--primary)">تسجيل اجتماع أو قرار جديد</h3>
+        <form onsubmit="saveMeeting(event)" class="form-grid">
+            <div class="form-field full"><label>عنوان الاجتماع</label><input required id="meetTitle"></div>
+            <div class="form-field"><label>تاريخ الاجتماع</label><input type="date" required id="meetDate"></div>
+            <div class="form-field">
+                <label>المكتب المعني بالاجتماع</label>
+                <select id="meetOffices" class="select-input" required>
+                    <option value="الإدارة التنفيذية">الإدارة التنفيذية</option>
+                    <option value="مكتب التعليم">مكتب التعليم</option>
+                    <option value="مكتب الأيتام">مكتب الأيتام</option>
+                    <option value="المكتب المالي">المكتب المالي</option>
+                    <option value="مكتب الخدمات">مكتب الخدمات</option>
+                    <option value="كافة المكاتب">كافة المكاتب</option>
+                </select>
+            </div>
+            <div class="form-field full"><label>القرارات والتوصيات (ضع كل قرار في سطر منفصل)</label><textarea required id="meetDecisions" rows="4" placeholder="مثال:&#10;شراء مستلزمات التعليم&#10;إعداد الموازنة للعام الجديد"></textarea></div>
+            <div class="form-field full" style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px">
+                <button type="button" class="btn" onclick="closeModal('meetingModal')">إلغاء</button>
+                <button type="submit" class="btn primary">حفظ الاجتماع</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyDEJ99XVVDfOg09b4mwiHhD5lQ66XHd-A8",
+        authDomain: "sirajtasks.firebaseapp.com",
+        databaseURL: "https://sirajtasks-default-rtdb.firebaseio.com",
+        projectId: "sirajtasks",
+        storageBucket: "sirajtasks.firebasestorage.app",
+        messagingSenderId: "674183594654",
+        appId: "1:674183594654:web:3b1f96fcce42d848aa718f"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const tasksRef = db.ref('tasks');
+    const meetingsRef = db.ref('meetings');
+    const archiveRef = db.ref('archive');
+    const settingsRef = db.ref('settings/adminPass');
+
+    let tasksData = {};
+    let meetingsData = {};
+    let archiveData = {};
+    let currentAdminPass = "siraj2005";
+    let currentFilter = 'all';
+    let currentArchiveOffice = 'all';
+    let currentActiveTab = 'tasks';
+    let isAdmin = false;
+
+    settingsRef.on('value', snap => { if(snap.val()) currentAdminPass = snap.val(); });
+
+    window.addEventListener('DOMContentLoaded', () => {
+        document.getElementById('splashScreen').classList.remove('hide');
+        document.getElementById('startBtn').style.display = 'flex';
+        document.getElementById('roleOptions').style.display = 'none';
+        applyRoleUI(false);
+    });
+
+    function showRoleSelection() {
+        document.getElementById('startBtn').style.display = 'none';
+        document.getElementById('roleOptions').style.display = 'flex';
+    }
+
+    function enterAsGuest() {
+        applyRoleUI(false);
+        document.getElementById('splashScreen').classList.add('hide');
+    }
+
+    function enterAsAdminModal() {
+        let pass = prompt("الرجاء إدخال كلمة سر المشرف:");
+        if (pass === currentAdminPass) {
+            applyRoleUI(true);
+            document.getElementById('splashScreen').classList.add('hide');
+        } else if (pass !== null) {
+            alert("كلمة المرور غير صحيحة!");
+        }
+    }
+
+    function applyRoleUI(adminState) {
+        isAdmin = adminState;
+        if (isAdmin) {
+            document.body.classList.add('admin-mode');
+            document.getElementById('roleBadge').innerHTML = '<i class="fas fa-shield-halved"></i> مشرف عام';
+            document.getElementById('roleBadge').style.background = '#059669';
+            document.getElementById('loginLogoutBtn').innerHTML = '<i class="fas fa-lock-open"></i> تسجيل خروج';
+            document.getElementById('activeUserLabel').innerText = "مشرف عام (Admin)";
+        } else {
+            document.body.classList.remove('admin-mode');
+            document.getElementById('roleBadge').innerHTML = '<i class="fas fa-eye"></i> زائر';
+            document.getElementById('roleBadge').style.background = '#e67e22';
+            document.getElementById('loginLogoutBtn').innerHTML = '<i class="fas fa-lock"></i> دخول مشرف';
+            document.getElementById('activeUserLabel').innerText = "زائر (عرض فقط)";
+        }
+    }
+
+    function handleAdminAuth() {
+        if (!isAdmin) enterAsAdminModal();
+        else {
+            applyRoleUI(false);
+            document.getElementById('splashScreen').classList.remove('hide');
+            document.getElementById('startBtn').style.display = 'flex';
+            document.getElementById('roleOptions').style.display = 'none';
+        }
+    }
+
+    function updateAdminPassword() {
+        let newPass = document.getElementById('newAdminPass').value;
+        if(!newPass) return alert("الرجاء إدخال كلمة المرور الجديدة");
+        settingsRef.set(newPass).then(() => {
+            alert("تم تحديث كلمة سر المشرف بنجاح!");
+            document.getElementById('newAdminPass').value = '';
+        });
+    }
+
+    function toggleTheme() {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
+        document.getElementById('themeIcon').className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+    }
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('appSidebar');
+        const mainContent = document.getElementById('mainContentArea');
+        if (window.innerWidth <= 900) sidebar.classList.toggle('mobile-open');
+        else {
+            sidebar.classList.toggle('collapsed');
+            mainContent.classList.toggle('expanded');
+        }
+    }
+
+    function toggleSubmenu(id) { document.getElementById(id).classList.toggle('open'); }
+
+    function switchMainTab(tab, el) {
+        document.querySelectorAll('.menu-header').forEach(h => h.classList.remove('active'));
+        if(el) el.classList.add('active');
+
+        currentActiveTab = tab;
+        document.getElementById('paneTasks').style.display = tab === 'tasks' ? 'block' : 'none';
+        document.getElementById('paneMeetings').style.display = tab === 'meetings' ? 'block' : 'none';
+        document.getElementById('paneArchive').style.display = tab === 'archive' ? 'block' : 'none';
+        document.getElementById('paneSettings').style.display = tab === 'settings' ? 'flex' : 'none';
+
+        if(window.innerWidth <= 900) document.getElementById('appSidebar').classList.remove('mobile-open');
+
+        if(tab === 'tasks') {
+            document.getElementById('pageMainTitle').innerText = "إدارة المهام التنفيذية";
+            document.getElementById('tasksTableContainer').style.display = 'block';
+            document.getElementById('paneAnalytics').style.display = 'none';
+            renderTasks();
+        } else if(tab === 'meetings') {
+            document.getElementById('pageMainTitle').innerText = "سجل الاجتماعات والقرارات";
+            renderMeetings();
+        } else if(tab === 'settings') {
+            document.getElementById('pageMainTitle').innerText = "إعدادات النظام والنشاط";
+        }
+    }
+
+    function switchArchiveOffice(office, el) {
+        document.querySelectorAll('.submenu-item').forEach(i => i.classList.remove('active'));
+        if(el) el.classList.add('active');
+
+        currentActiveTab = 'archive';
+        currentArchiveOffice = office;
+        document.getElementById('paneTasks').style.display = 'none';
+        document.getElementById('paneMeetings').style.display = 'none';
+        document.getElementById('paneArchive').style.display = 'block';
+        document.getElementById('paneSettings').style.display = 'none';
+
+        if(window.innerWidth <= 900) document.getElementById('appSidebar').classList.remove('mobile-open');
+
+        document.getElementById('currentArchiveOfficeLabel').innerText = office === 'all' ? 'جميع المكاتب' : office;
+        document.getElementById('pageMainTitle').innerText = "أرشيف المستندات (" + (office === 'all' ? 'الكل' : office) + ")";
+        renderArchive();
+    }
+
+    function showAnalyticsSection(btn) {
+        document.querySelectorAll('#taskFilterButtons .filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById('tasksTableContainer').style.display = 'none';
+        document.getElementById('paneAnalytics').style.display = 'block';
+        document.getElementById('pageMainTitle').innerText = "تحليلات الأداء (Power BI)";
+        renderAnalytics();
+    }
+
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+    function openDynamicModal() {
+        if(currentActiveTab === 'tasks') {
+            document.getElementById('modalTitle').innerText = "إضافة مهمة جديدة";
+            document.getElementById('editKey').value = '';
+            document.getElementById('taskModal').classList.add('active');
+        } else if(currentActiveTab === 'meetings') {
+            document.getElementById('meetingModal').classList.add('active');
+        } else if(currentActiveTab === 'archive') {
+            document.getElementById('archiveModal').classList.add('active');
+        }
+    }
+
+    tasksRef.on('value', snap => { tasksData = snap.val() || {}; renderTasks(); updateKpis(); populateFilters(); });
+    meetingsRef.on('value', snap => { meetingsData = snap.val() || {}; renderMeetings(); populateFilters(); });
+    archiveRef.on('value', snap => { archiveData = snap.val() || {}; renderArchive(); });
+
+    function filterStatus(status, btn) {
+        currentFilter = status;
+        document.querySelectorAll('#taskFilterButtons .filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        
+        document.getElementById('paneAnalytics').style.display = 'none';
+        document.getElementById('tasksTableContainer').style.display = 'block';
+        document.getElementById('pageMainTitle').innerText = "إدارة المهام التنفيذية";
+        renderTasks();
+    }
+
+    function renderTasks() {
+        let rows = '';
+        let query = document.getElementById('searchBox').value.toLowerCase();
+        let todayStr = new Date().toISOString().split('T')[0];
+
+        Object.keys(tasksData).forEach(key => {
+            let t = tasksData[key];
+            if(currentFilter !== 'all' && t.status !== currentFilter) return;
+            if(query && !Object.values(t).some(val => String(val).toLowerCase().includes(query))) return;
+            
+            let badgeClass = t.status === 'done' ? 'done' : t.status === 'doing' ? 'doing' : t.status === 'hold' ? 'hold' : 'stop';
+            let statusText = t.status === 'done' ? 'منجزة' : t.status === 'doing' ? 'قيد التنفيذ' : t.status === 'hold' ? 'معلقة' : 'متوقفة';
+            let pClass = t.priority === 'high' ? 'p-high' : t.priority === 'mid' ? 'p-mid' : 'p-low';
+            let pText = t.priority === 'high' ? 'عالية' : t.priority === 'mid' ? 'متوسطة' : 'منخفضة';
+            let isOverdue = (t.due < todayStr && t.status !== 'done');
+
+            let whatsappText = `السلام عليكم ورحمة الله وبركاته، تم تكليفك بـ "${t.title}" (المكتب: ${t.office})، يرجى مراجعة النظام لمتابعة التفاصيل.`;
+            let whatsappLink = `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappText)}`;
+
+            rows += `<tr class="${isOverdue ? 'task-overdue' : ''}">
+                <td><b>${t.title || ''}</b> ${isOverdue ? '<span class="badge stop" style="font-size:9px;">متأخرة</span>' : ''}</td>
+                <td>${t.owner || ''}</td>
+                <td>${t.office || ''}</td>
+                <td><span class="badge ${badgeClass}">${statusText}</span></td>
+                <td><span class="priority-dot ${pClass}"></span>${pText}</td>
+                <td>${t.assigned || '-'}</td>
+                <td>${t.due || '-'}</td>
+                <td style="font-size:11px; color:var(--ink-muted);">${t.lastUpdated || t.assigned || '-'}</td>
+                <td>${t.fileName ? `<a href="${t.fileData}" download="${t.fileName}">${t.fileName}</a>` : '-'}</td>
+                <td><a href="${whatsappLink}" target="_blank" class="btn whatsapp" style="padding:4px 8px; font-size:11px;"><i class="fab fa-whatsapp"></i> إرسال</a></td>
+                <td class="admin-only">
+                    <button class="btn" style="padding:4px 6px; font-size:11px;" onclick="editTask('${key}')"><i class="fas fa-edit"></i></button>
+                    <button class="btn danger" style="padding:4px 6px; font-size:11px;" onclick="deleteTask('${key}')"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>`;
+        });
+        document.getElementById('taskRows').innerHTML = rows || '<tr><td colspan="11" style="text-align:center">لا توجد مهام مطابقة</td></tr>';
+    }
+
+    function saveTask(e) {
+        e.preventDefault();
+        let key = document.getElementById('editKey').value;
+        let fileInput = document.getElementById('mFile');
+        let todayDate = new Date().toISOString().split('T')[0];
+
+        let taskObj = {
+            title: document.getElementById('mTitle').value,
+            owner: document.getElementById('mOwner').value,
+            office: document.getElementById('mOffice').value,
+            status: document.getElementById('mStatus').value,
+            priority: document.getElementById('mPriority').value,
+            assigned: document.getElementById('mAssigned').value,
+            due: document.getElementById('mDue').value,
+            lastUpdated: todayDate
+        };
+
+        let finishSave = () => {
+            if(key) tasksRef.child(key).update(taskObj);
+            else tasksRef.push(taskObj);
+            closeModal('taskModal');
+        };
+
+        if(fileInput.files[0]) {
+            let reader = new FileReader();
+            reader.onload = function(evt) {
+                taskObj.fileName = fileInput.files[0].name;
+                taskObj.fileData = evt.target.result;
+                finishSave();
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+        } else {
+            if(key && tasksData[key].fileName) {
+                taskObj.fileName = tasksData[key].fileName;
+                taskObj.fileData = tasksData[key].fileData;
+            }
+            finishSave();
+        }
+    }
+
+    function editTask(key) {
+        let t = tasksData[key];
+        document.getElementById('modalTitle').innerText = "تعديل المهمة";
+        document.getElementById('editKey').value = key;
+        document.getElementById('mTitle').value = t.title;
+        document.getElementById('mOwner').value = t.owner;
+        document.getElementById('mOffice').value = t.office;
+        document.getElementById('mStatus').value = t.status;
+        document.getElementById('mPriority').value = t.priority;
+        document.getElementById('mAssigned').value = t.assigned;
+        document.getElementById('mDue').value = t.due;
+        document.getElementById('taskModal').classList.add('active');
+    }
+
+    function deleteTask(key) { if(confirm('حذف هذه المهمة نهائياً؟')) tasksRef.child(key).remove(); }
+
+    function renderMeetings() {
+        let query = document.getElementById('searchMeeting').value.toLowerCase();
+        let html = '';
+        Object.keys(meetingsData).reverse().forEach(key => {
+            let m = meetingsData[key];
+            if(query && !Object.values(m).some(v => String(v).toLowerCase().includes(query))) return;
+            let decisionsHtml = '';
+            if(m.decisions) { 
+                let listItems = m.decisions.split('\n').filter(d => d.trim());
+                listItems.forEach((d, idx) => {
+                    decisionsHtml += `<li style="margin-bottom:6px; display:flex; align-items:center; justify-content:space-between;">
+                        <span><b>${idx + 1}.</b> ${d}</span>
+                        <button class="btn admin-only" style="padding:2px 6px; font-size:10px; background:var(--gold); color:#fff;" onclick="convertDecisionToTask('${d.replace(/'/g, "\\'")}', '${m.offices}')"><i class="fas fa-plus"></i> تحويل لمهمة</button>
+                    </li>`; 
+                }); 
+            }
+            html += `<div class="meeting-card">
+                <div class="meeting-header">
+                    <h3 class="meeting-title"><i class="fas fa-users" style="color:var(--gold)"></i> ${m.title}</h3>
+                    <div class="meeting-meta">
+                        <span><i class="fas fa-calendar"></i> ${m.date}</span>
+                        <span><i class="fas fa-building"></i> ${m.offices}</span>
+                        <button class="btn gold" style="padding:4px 8px; font-size:11px;" onclick="printSingleMeeting('${key}')"><i class="fas fa-print"></i> طباعة الاجتماع</button>
+                        <button class="btn danger admin-only" style="padding:4px 8px; font-size:11px;" onclick="deleteMeeting('${key}')"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+                <ol style="margin:0; padding-right:15px; font-size:13px; line-height:1.8; list-style:none;">${decisionsHtml}</ol>
+            </div>`;
+        });
+        document.getElementById('meetingCards').innerHTML = html || '<p style="text-align:center">لا توجد اجتماعات مسجلة</p>';
+    }
+
+    function printSingleMeeting(key) {
+        let m = meetingsData[key];
+        document.getElementById('reportSubTitle').innerText = "محضر اجتماع رسمي";
+        document.getElementById('reportScope').innerText = "المكتب: " + m.offices;
+        document.getElementById('reportDate').innerText = m.date;
+        document.getElementById('reportKpiBox').style.display = 'none';
+
+        let decisionsList = '';
+        if(m.decisions) {
+            m.decisions.split('\n').filter(d => d.trim()).forEach((d, idx) => {
+                decisionsList += `<li style="margin-bottom:8px;">${d}</li>`;
+            });
+        }
+
+        document.getElementById('reportPrintArea').innerHTML = `
+            <div style="border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px;">
+                <h3 style="color:#102a43; margin-top:0;">${m.title}</h3>
+                <div style="margin-bottom:15px; font-size:12px; color:#64748b;"><b>تاريخ الانعقاد:</b> ${m.date} | <b>المكاتب المشاركة:</b> ${m.offices}</div>
+                <h4 style="color:#102a43; border-bottom:1px solid #cbd5e1; padding-bottom:5px;">القرارات والتوصيات:</h4>
+                <ol style="font-size:13px; line-height:1.9;">${decisionsList}</ol>
+            </div>
+        `;
+        setTimeout(() => { window.print(); }, 300);
+    }
+
+    function convertDecisionToTask(title, officeStr) {
+        document.getElementById('modalTitle').innerText = "تحويل توصية اجتماع إلى مهمة";
+        document.getElementById('editKey').value = '';
+        document.getElementById('mTitle').value = title;
+        document.getElementById('mOwner').value = 'المسؤول التنفيذي';
+        document.getElementById('mOffice').value = officeStr.includes('التعليم') ? 'مكتب التعليم' : officeStr.includes('الأيتام') ? 'مكتب الأيتام' : officeStr.includes('المالي') ? 'المكتب المالي' : 'الإدارة التنفيذية';
+        document.getElementById('mStatus').value = 'doing';
+        document.getElementById('mPriority').value = 'high';
+        let today = new Date().toISOString().split('T')[0];
+        document.getElementById('mAssigned').value = today;
+        document.getElementById('mDue').value = today;
+        
+        document.getElementById('paneMeetings').style.display = 'none';
+        document.getElementById('paneTasks').style.display = 'block';
+        document.getElementById('menuTasksBtn').classList.add('active');
+        document.getElementById('menuMeetingsBtn').classList.remove('active');
+        document.getElementById('pageMainTitle').innerText = "إدارة المهام التنفيذية";
+        currentActiveTab = 'tasks';
+
+        document.getElementById('taskModal').classList.add('active');
+    }
+
+    function saveMeeting(e) {
+        e.preventDefault();
+        meetingsRef.push({
+            title: document.getElementById('meetTitle').value,
+            date: document.getElementById('meetDate').value,
+            offices: document.getElementById('meetOffices').value,
+            decisions: document.getElementById('meetDecisions').value
+        });
+        closeModal('meetingModal');
+    }
+    function deleteMeeting(key) { if(confirm('حذف هذا الاجتماع؟')) meetingsRef.child(key).remove(); }
+
+    /* وظائف الشات الذكي بصيغة المذكر ومرونة تامة */
+    function toggleAiChat() {
+        document.getElementById('aiChatWindow').classList.toggle('active');
+    }
+
+    function clearAiChat() {
+        document.getElementById('aiChatBody').innerHTML = `<div class="chat-msg ai">السلام عليكم ورحمة الله وبركاته، أنا مساعدك الإداري الذكي لمنصة سراج الشام. تفضل باستفساراتك أو طلباتك وسأجيبك فوراً من بيانات المهام والاجتماعات!</div>`;
+    }
+
+    function handleAiKeyPress(e) {
+        if(e.key === 'Enter') sendAiMessage();
+    }
+
+    function sendAiMessage() {
+        let input = document.getElementById('aiChatInput');
+        let text = input.value.trim();
+        if(!text) return;
+
+        let chatBody = document.getElementById('aiChatBody');
+        chatBody.innerHTML += `<div class="chat-msg user">${text}</div>`;
+        input.value = '';
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+        setTimeout(() => {
+            let reply = analyzeUserQuery(text);
+            chatBody.innerHTML += `<div class="chat-msg ai">${reply}</div>`;
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }, 500);
+    }
+
+    function analyzeUserQuery(query) {
+        let q = query.toLowerCase();
+        let tasks = Object.values(tasksData);
+        let meetings = Object.values(meetingsData);
+        let archive = Object.values(archiveData);
+
+        if(q.includes('السلام') || q.includes('مرحبا') || q.includes('اهلين') || q.includes('مؤسسة')) {
+            return "وعليكم السلام ورحمة الله وبركاته، أهلاً بك! أنا مساعدك الذكي، أستطيع قراءة تفاصيل المهام والمكاتب والأرشيف واطلاعك عليها فوراً، سل عما شئت.";
+        }
+
+        // بحث مرن عن أي مكتب
+        let targetOffice = '';
+        if(q.includes('تعليم')) targetOffice = 'مكتب التعليم';
+        else if(q.includes('أيتام') || q.includes('ايتام')) targetOffice = 'مكتب الأيتام';
+        else if(q.includes('مالي')) targetOffice = 'المكتب المالي';
+        else if(q.includes('خدمات')) targetOffice = 'مكتب الخدمات';
+        else if(q.includes('تنفيذية') || q.includes('الادارة')) targetOffice = 'الإدارة التنفيذية';
+
+        if(targetOffice) {
+            let officeTasks = tasks.filter(t => t.office === targetOffice);
+            let doneCount = officeTasks.filter(t => t.status === 'done').length;
+            let doingCount = officeTasks.filter(t => t.status === 'doing').length;
+            let listStr = officeTasks.map(t => `- ${t.title} (${t.status === 'done' ? 'منجزة' : 'قيد التنفيذ'})`).join('\n');
+            
+            return `<b>تفاصيل ${targetOffice}:</b>\n- إجمالي المهام: ${officeTasks.length}\n- منجزة: ${doneCount} | قيد التنفيذ: ${doingCount}\n\n<b>المهام المسجلة:</b>\n${listStr || 'لا توجد مهام مسجلة حالياً.'}`;
+        }
+
+        if(q.includes('أرشيف') || q.includes('الارشيف') || q.includes('ملفات') || q.includes('مستندات')) {
+            return `<b>ملخص الأرشيف الحالي:</b>\n- إجمالي المستندات والأوراق المؤرشفة: ${archive.length} مستند.\nيمكنك استعراضها كاملة عبر الانتقال إلى قسم "أرشيف المكاتب".`;
+        }
+
+        if(q.includes('اجتماع') || q.includes('اجتماعات') || q.includes('قرارات')) {
+            return `<b>ملخص الاجتماعات:</b>\n- إجمالي الاجتماعات المسجلة: ${meetings.length} اجتماع.\nيمكنك مراجعة كافة التفاصيل والقرارات من تبويب "الاجتماعات والقرارات".`;
+        }
+
+        let total = tasks.length;
+        let doneTotal = tasks.filter(t => t.status === 'done').length;
+        let ratio = total > 0 ? Math.round((doneTotal / total) * 100) : 0;
+
+        if(q.includes('وضع') || q.includes('حالة') || q.includes('كم') || q.includes('تقرير') || q.includes('المهام')) {
+            return `<b>حالة النظام العامة حالياً:</b>\n- إجمالي المهام: ${total}\n- نسبة الإنجاز الكلية: ${ratio}%\n- المهام المنجزة: ${doneTotal}\n\nيمكنك سؤالي عن أي مكتب أو قسم بشكل مباشر وسأجيبك فوراً!`;
+        }
+
+        return `فهمت سؤالك، وبناءً على قاعدة بيانات النظام:\n- إجمالي المهام المسجلة: ${total} مهمة.\n- عدد الاجتماعات: ${meetings.length}.\n- عدد الملفات المؤرشفة: ${archive.length}.\n\nتستطيع سؤالي بتحديد اسم المكتب (مثل: "مكتب التعليم شو وضعه") أو طلب إحصائيات معينة وسأقوم بتلبية طلبك فوراً!`;
+    }
+
+    function renderArchive() {
+        let query = document.getElementById('searchArchive').value.toLowerCase();
+        let rows = '';
+        Object.keys(archiveData).reverse().forEach(key => {
+            let a = archiveData[key];
+            if(currentArchiveOffice !== 'all' && a.office !== currentArchiveOffice) return;
+            if(query && !Object.values(a).some(v => String(v).toLowerCase().includes(query))) return;
+            rows += `<tr>
+                <td><b>${a.title}</b></td>
+                <td>${a.office}</td>
+                <td><span class="badge" style="background:var(--surface-sub); color:var(--primary)">${a.type}</span></td>
+                <td>${a.date}</td>
+                <td>${a.notes || '-'}</td>
+                <td><a href="${a.fileData}" download="${a.fileName}"><i class="fas fa-download"></i> ${a.fileName}</a></td>
+                <td class="admin-only"><button class="btn danger" style="padding:4px 6px; font-size:11px;" onclick="deleteArchive('${key}')"><i class="fas fa-trash"></i></button></td>
+            </tr>`;
+        });
+        document.getElementById('archiveRows').innerHTML = rows || '<tr><td colspan="7" style="text-align:center">لا توجد وثائق مؤرشفة لهذا المكتب</td></tr>';
+    }
+
+    function saveArchiveDocument(e) {
+        e.preventDefault();
+        let fileInput = document.getElementById('arcFile');
+        if(!fileInput.files[0]) return;
+        let reader = new FileReader();
+        reader.onload = function(evt) {
+            archiveRef.push({
+                title: document.getElementById('arcTitle').value,
+                office: document.getElementById('arcOffice').value,
+                type: document.getElementById('arcType').value,
+                notes: document.getElementById('arcNotes').value,
+                date: new Date().toISOString().split('T')[0],
+                fileName: fileInput.files[0].name,
+                fileData: evt.target.result
+            });
+            closeModal('archiveModal');
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    }
+    function deleteArchive(key) { if(confirm('حذف هذه الوثيقة؟')) archiveRef.child(key).remove(); }
+
+    function updateKpis() {
+        let total = 0, done = 0, doing = 0, hold = 0;
+        Object.values(tasksData).forEach(t => {
+            total++;
+            if(t.status === 'done') done++;
+            else if(t.status === 'doing') doing++;
+            else hold++;
+        });
+        document.getElementById('stTotal').innerText = total;
+        document.getElementById('stDone').innerText = done;
+        document.getElementById('stDoing').innerText = doing;
+        document.getElementById('stHold').innerText = hold;
+    }
+
+    function populateFilters() {
+        let offices = new Set(["الإدارة التنفيذية", "مكتب التعليم", "مكتب الأيتام", "المكتب المالي", "مكتب الخدمات"]);
+        Object.values(tasksData).forEach(t => { if(t.office) offices.add(t.office); });
+
+        let rptOff = document.getElementById('rptOfficeFilter');
+        let offOpts = '<option value="all">جميع المكاتب والأقسام</option>';
+        offices.forEach(o => offOpts += `<option value="${o}">${o}</option>`);
+        rptOff.innerHTML = offOpts;
+
+        document.getElementById('biOfficeFilter').innerHTML = offOpts;
+    }
+
+    let statusChartInst = null, officeChartInst = null, priorityChartInst = null, workloadChartInst = null;
+    function renderAnalytics() {
+        let officeFilter = document.getElementById('biOfficeFilter').value;
+        let ownerFilter = document.getElementById('biOwnerFilter').value;
+
+        let filteredTasks = Object.values(tasksData).filter(t => {
+            if(officeFilter !== 'all' && t.office !== officeFilter) return false;
+            if(ownerFilter !== 'all' && t.owner !== ownerFilter) return false;
+            return true;
+        });
+
+        let statusCounts = { done: 0, doing: 0, hold: 0, stop: 0 };
+        let priorityCounts = { high: 0, mid: 0, low: 0 };
+        let officeWorkload = {};
+
+        filteredTasks.forEach(t => {
+            if(statusCounts[t.status] !== undefined) statusCounts[t.status]++;
+            if(priorityCounts[t.priority] !== undefined) priorityCounts[t.priority]++;
+            officeWorkload[t.office] = (officeWorkload[t.office] || 0) + 1;
+        });
+
+        if(statusChartInst) statusChartInst.destroy();
+        statusChartInst = new Chart(document.getElementById('statusChart'), {
+            type: 'doughnut',
+            data: { labels: ['منجزة', 'قيد التنفيذ', 'معلقة', 'متوقفة'], datasets: [{ data: [statusCounts.done, statusCounts.doing, statusCounts.hold, statusCounts.stop], backgroundColor: ['#059669', '#2563eb', '#f59e0b', '#dc2626'] }] },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        let officeDone = {}, officeTotal = {};
+        filteredTasks.forEach(t => {
+            officeTotal[t.office] = (officeTotal[t.office] || 0) + 1;
+            if(t.status === 'done') officeDone[t.office] = (officeDone[t.office] || 0) + 1;
+        });
+        let offLabels = Object.keys(officeTotal);
+        let offRates = offLabels.map(o => Math.round(((officeDone[o] || 0) / officeTotal[o]) * 100));
+
+        if(officeChartInst) officeChartInst.destroy();
+        officeChartInst = new Chart(document.getElementById('officeChart'), {
+            type: 'bar',
+            data: { labels: offLabels, datasets: [{ label: 'نسبة الإنجاز %', data: offRates, backgroundColor: '#102a43', borderRadius: 8 }] },
+            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
+        });
+
+        if(priorityChartInst) priorityChartInst.destroy();
+        priorityChartInst = new Chart(document.getElementById('priorityChart'), {
+            type: 'pie',
+            data: { labels: ['عالية', 'متوسطة', 'منخفضة'], datasets: [{ data: [priorityCounts.high, priorityCounts.mid, priorityCounts.low], backgroundColor: ['#e11d48', '#f59e0b', '#10b981'] }] },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+
+        if(workloadChartInst) workloadChartInst.destroy();
+        workloadChartInst = new Chart(document.getElementById('departmentWorkloadChart'), {
+            type: 'bar',
+            data: { labels: Object.keys(officeWorkload), datasets: [{ label: 'عدد المهام', data: Object.values(officeWorkload), backgroundColor: '#c59b27', borderRadius: 8 }] },
+            options: { responsive: true, maintainAspectRatio: false }
+        });
+    }
+
+    function openReportModal() { 
+        document.getElementById('reportModal').classList.add('active'); 
+    }
+
+    function triggerCustomPrint() {
+        closeModal('reportModal');
+        let office = document.getElementById('rptOfficeFilter').value;
+        
+        if(currentActiveTab === 'meetings') {
+            printMeetingsReport(office);
+        } else {
+            printTasksReport(office);
+        }
+    }
+
+    function printTasksReport(office) {
+        document.getElementById('reportSubTitle').innerText = "تقرير متابعة تنفيذ المهام الإدارية";
+        document.getElementById('reportScope').innerText = office === 'all' ? 'جميع المكاتب والأقسام' : 'مكتب: ' + office;
+        document.getElementById('reportDate').innerText = new Date().toLocaleDateString('ar-SA');
+        document.getElementById('reportKpiBox').style.display = 'grid';
+
+        let rows = '';
+        let total = 0, done = 0, doing = 0;
+        Object.values(tasksData).forEach(t => {
+            if(office !== 'all' && t.office !== office) return;
+            total++;
+            if(t.status === 'done') done++;
+            if(t.status === 'doing') doing++;
+            let statusText = t.status === 'done' ? 'منجزة' : t.status === 'doing' ? 'قيد التنفيذ' : t.status === 'hold' ? 'معلقة' : 'متوقفة';
+            rows += `<tr><td><b>${t.title}</b></td><td>${t.owner}</td><td>${t.office}</td><td>${statusText}</td><td>${t.priority}</td><td>${t.assigned}</td><td>${t.due}</td></tr>`;
+        });
+        document.getElementById('rptTotal').innerText = total;
+        document.getElementById('rptDone').innerText = done;
+        document.getElementById('rptDoing').innerText = doing;
+        document.getElementById('rptRatio').innerText = total > 0 ? Math.round((done/total)*100) + '%' : '0%';
+
+        document.getElementById('reportPrintArea').innerHTML = `<table class="report-table">
+            <thead>
+                <tr>
+                    <th>المهمة</th>
+                    <th>المسؤول</th>
+                    <th>المكتب</th>
+                    <th>الحالة</th>
+                    <th>الأولوية</th>
+                    <th>التكليف</th>
+                    <th>التسليم</th>
+                </tr>
+            </thead>
+            <tbody>${rows || '<tr><td colspan="7" style="text-align:center">لا توجد مهام مطابقة</td></tr>'}</tbody>
+        </table>`;
+
+        setTimeout(() => { window.print(); }, 300);
+    }
+
+    function printMeetingsReport(office) {
+        document.getElementById('reportSubTitle').innerText = "سجل الاجتماعات والقرارات";
+        document.getElementById('reportScope').innerText = office === 'all' ? 'جميع المكاتب والأقسام' : 'مكتب: ' + office;
+        document.getElementById('reportDate').innerText = new Date().toLocaleDateString('ar-SA');
+        document.getElementById('reportKpiBox').style.display = 'none';
+
+        let rows = '';
+        Object.values(meetingsData).reverse().forEach((m, idx) => {
+            if(office !== 'all' && !m.offices.includes(office)) return;
+            let decisionsList = '';
+            if(m.decisions) {
+                m.decisions.split('\n').filter(d => d.trim()).forEach((d, i) => {
+                    decisionsList += `<div><b>${i + 1}.</b> ${d}</div>`;
+                });
+            }
+            rows += `<tr>
+                <td><b>${m.title}</b></td>
+                <td>${m.date}</td>
+                <td>${m.offices}</td>
+                <td>${decisionsList}</td>
+            </tr>`;
+        });
+
+        document.getElementById('reportPrintArea').innerHTML = `<table class="report-table">
+            <thead>
+                <tr>
+                    <th>عنوان الاجتماع</th>
+                    <th>التاريخ</th>
+                    <th>المكاتب المشاركة</th>
+                    <th>القرارات والتوصيات</th>
+                </tr>
+            </thead>
+            <tbody>${rows || '<tr><td colspan="4" style="text-align:center">لا توجد اجتماعات مطابقة</td></tr>'}</tbody>
+        </table>`;
+
+        setTimeout(() => { window.print(); }, 300);
+    }
+</script>
+</body>
+</html>
