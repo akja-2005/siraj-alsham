@@ -3,195 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-    <title>سراج الشام - نظام إدارة المهام والشات الذكي</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Amiri:wght@700&display=swap">
+    <title>سراج الشام - إدارة المهام</title>
+    <link rel="icon" type="image/png" href="data:image/png;base64,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">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Amiri:wght@700&display=swap">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <style>
         :root {
-            --bg: #f8fafc; --surface: #ffffff; --surface-sub: #f1f5f9; --ink: #0f172a; --ink-muted: #64748b; --line: #e2e8f0; --primary: #102a43; --gold: #c59b27;
-            --ok: #059669; --ok-bg: #d1fae5; --warn: #d97706; --warn-bg: #fef3c7; --bad: #dc2626; --bad-bg: #fee2e2; --hold: #4b5563; --hold-bg: #f3f4f6; --stop: #991b1b; --stop-bg: #fee2e2;
-            --shadow: 0 4px 18px rgba(15, 23, 42, 0.05); --body: 'IBM Plex Sans Arabic', sans-serif; --quran: 'Amiri', serif;
-            --sidebar-width: 260px;
+            --bg: #f4f6f9; --surface: #ffffff; --surface-sub: #eef1f5; --ink: #16202c; --ink-muted: #5f6c7b; --line: #dde3ea;
+            --brand: #0f3156; --brand-ink: #0f3156; --gold: #a8823a;
+            --ok: #0f7b55; --ok-bg: #dcf3e9; --info: #1d5fb0; --info-bg: #deebfa; --warn: #a15c07; --warn-bg: #fdefd2;
+            --bad: #c0302f; --bad-bg: #fbe3e2; --hold: #4b5563; --hold-bg: #eceff3;
+            --shadow: 0 2px 10px rgba(15, 30, 50, 0.06); --body: 'IBM Plex Sans Arabic', sans-serif; --quran: 'Amiri', serif;
+            --sidebar-width: 250px;
         }
         [data-theme="dark"] {
-            --bg: #0b0f19; --surface: #111827; --surface-sub: #1f2937; --ink: #f8fafc; --ink-muted: #94a3b8; --line: #1f2937; --primary: #38bdf8; --shadow: 0 4px 20px rgba(0,0,0,0.4);
+            --bg: #0d141c; --surface: #15202b; --surface-sub: #1c2935; --ink: #e8edf2; --ink-muted: #9aa8b8; --line: #263443;
+            --brand: #2d6aa6; --brand-ink: #9fc4ea; --gold: #c9a45a;
+            --ok: #5fd1a0; --ok-bg: #123a2c; --info: #86b9f0; --info-bg: #17304d; --warn: #f0b255; --warn-bg: #3d2d12;
+            --bad: #ef7b79; --bad-bg: #432020; --hold: #b5bfcb; --hold-bg: #222f3b; --shadow: 0 2px 10px rgba(0,0,0,0.4);
         }
-        * { box-sizing: border-box; transition: background 0.2s, color 0.2s; }
+        * { box-sizing: border-box; }
         body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 14px; line-height: 1.5; overflow-x: hidden; display: flex; }
 
         #splashScreen {
-            position: fixed; inset: 0; z-index: 9999;
-            background: radial-gradient(circle at center, #1b3a5b 0%, #0a131d 100%);
-            display: flex; align-items: center; justify-content: center;
-            padding: 20px; color: #ffffff; text-align: center;
-            transition: opacity 0.5s ease, visibility 0.5s ease;
+            position: fixed; inset: 0; z-index: 9999; background: linear-gradient(160deg, #123760 0%, #0a1b30 100%);
+            display: flex; align-items: center; justify-content: center; padding: 20px; color: #ffffff; text-align: center;
+            transition: opacity 0.4s ease, visibility 0.4s ease; overflow-y: auto;
         }
         #splashScreen.hide { opacity: 0; visibility: hidden; pointer-events: none; }
-
         .splash-card {
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(16px);
-            border: 1px solid rgba(197, 155, 39, 0.35); border-radius: 24px; padding: 30px 20px;
-            max-width: 580px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            display: flex; flex-direction: column; align-items: center; gap: 15px;
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(201, 164, 90, 0.35); border-radius: 18px; padding: 28px 22px;
+            max-width: 520px; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 14px;
         }
-        .splash-title {
-            font-family: 'Cairo', sans-serif; font-size: 28px; font-weight: 800;
-            background: linear-gradient(135deg, #fff7ad 0%, #ffa800 50%, #c59b27 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;
-        }
-        .splash-sub { font-size: 15px; color: #cbd5e1; font-weight: 600; margin-top: 4px; }
-        .quran-box { border-top: 1px dashed rgba(197, 155, 39, 0.5); border-bottom: 1px dashed rgba(197, 155, 39, 0.5); padding: 10px; width: 100%; }
-        .quran-text { font-family: var(--quran); font-size: 18px; color: #f3e5ab; line-height: 1.6; }
+        .splash-logo { width: 150px; height: auto; background: #fff; border-radius: 16px; padding: 8px; display: block; }
+        .splash-title { font-family: 'Cairo', sans-serif; font-size: 26px; font-weight: 800; color: #ecd9a2; margin: 0; }
+        .splash-sub { font-size: 15px; color: #cbd5e1; font-weight: 600; margin-top: 2px; }
+        .quran-box { border-top: 1px solid rgba(201, 164, 90, 0.4); border-bottom: 1px solid rgba(201, 164, 90, 0.4); padding: 10px; width: 100%; }
+        .quran-text { font-family: var(--quran); font-size: 18px; color: #f3e5ab; line-height: 1.7; }
         .splash-btn-main {
-            background: linear-gradient(135deg, #c59b27 0%, #9a761a 100%); color: #ffffff; border: none;
-            padding: 12px 35px; border-radius: 50px; font-size: 15px; font-weight: 700; cursor: pointer;
-            box-shadow: 0 6px 20px rgba(197, 155, 39, 0.4); display: flex; align-items: center; gap: 10px; font-family: 'Cairo', sans-serif;
+            background: #b8923f; color: #ffffff; border: none; padding: 11px 34px; border-radius: 10px; font-size: 15px; font-weight: 700;
+            cursor: pointer; display: flex; align-items: center; gap: 10px; font-family: 'Cairo', sans-serif;
         }
-        .role-options { display: none; width: 100%; flex-direction: column; gap: 10px; margin-top: 10px; }
+        .role-options { display: none; width: 100%; flex-direction: column; gap: 10px; margin-top: 6px; }
         .role-btn {
-            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2);
-            color: #ffffff; padding: 10px 15px; border-radius: 12px; font-size: 13px; font-weight: 600; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.22); color: #ffffff; padding: 10px 15px; border-radius: 10px;
+            font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--body);
         }
 
         aside {
-            width: var(--sidebar-width); background: var(--surface); border-left: 1px solid var(--line);
-            height: 100vh; position: fixed; top: 0; right: 0; display: flex; flex-direction: column; z-index: 50;
-            box-shadow: var(--shadow); transition: transform 0.3s ease, width 0.3s ease;
+            width: var(--sidebar-width); background: var(--surface); border-left: 1px solid var(--line); height: 100vh; position: fixed; top: 0; right: 0;
+            display: flex; flex-direction: column; z-index: 50; box-shadow: var(--shadow); transition: transform 0.25s ease;
         }
         aside.collapsed { transform: translateX(100%); }
-
-        .sidebar-brand { padding: 16px 20px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; }
+        .sidebar-brand { padding: 14px 16px; border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
         .brand-info { display: flex; align-items: center; gap: 10px; }
-        .sidebar-brand h2 { font-family: 'Cairo', sans-serif; font-size: 18px; font-weight: 800; color: var(--primary); margin: 0; }
+        .brand-logo { width: 46px; height: 46px; object-fit: contain; background: #fff; border-radius: 10px; padding: 2px; border: 1px solid var(--line); }
+        .sidebar-brand h2 { font-family: 'Cairo', sans-serif; font-size: 17px; font-weight: 800; color: var(--brand-ink); margin: 0; line-height: 1.3; }
         .sidebar-brand span { font-size: 11px; color: var(--ink-muted); display: block; }
-
-        .sidebar-menu { flex: 1; overflow-y: auto; padding: 16px 12px; display: flex; flex-direction: column; gap: 8px; }
-        .menu-item { border-radius: 10px; overflow: hidden; }
-        .menu-header {
-            display: flex; align-items: center; justify-content: space-between; padding: 12px 14px;
-            color: var(--ink); font-weight: 600; cursor: pointer; border-radius: 10px; font-size: 13px;
-        }
-        .menu-header:hover { background: var(--surface-sub); color: var(--primary); }
-        .menu-header.active { background: var(--primary); color: #fff; }
-        .submenu { display: none; padding: 6px 10px 6px 20px; flex-direction: column; gap: 4px; }
+        .sidebar-menu { flex: 1; overflow-y: auto; padding: 14px 10px; display: flex; flex-direction: column; gap: 6px; }
+        .menu-header { display: flex; align-items: center; justify-content: space-between; padding: 11px 14px; color: var(--ink); font-weight: 600; cursor: pointer; border-radius: 8px; font-size: 13px; }
+        .menu-header:hover { background: var(--surface-sub); }
+        .menu-header.active { background: var(--brand); color: #fff; }
+        .menu-header i { width: 18px; text-align: center; margin-left: 6px; }
+        .submenu { display: none; padding: 4px 8px 4px 14px; flex-direction: column; gap: 2px; }
         .submenu.open { display: flex; }
-        .submenu-item {
-            padding: 8px 12px; border-radius: 8px; font-size: 12px; color: var(--ink-muted); cursor: pointer;
-            display: flex; align-items: center; gap: 8px; font-weight: 500;
-        }
-        .submenu-item:hover, .submenu-item.active { background: var(--surface-sub); color: var(--gold); font-weight: 700; }
+        .submenu-item { padding: 8px 12px; border-radius: 8px; font-size: 12px; color: var(--ink-muted); cursor: pointer; display: flex; align-items: center; gap: 8px; font-weight: 500; }
+        .submenu-item:hover { background: var(--surface-sub); }
+        .submenu-item.active { background: var(--surface-sub); color: var(--brand-ink); font-weight: 700; box-shadow: inset -3px 0 0 var(--gold); }
 
-        .main-content { margin-right: var(--sidebar-width); flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 18px; min-height: 100vh; transition: margin-right 0.3s ease; width: calc(100% - var(--sidebar-width)); }
+        .main-content { margin-right: var(--sidebar-width); flex: 1; padding: 20px; display: flex; flex-direction: column; gap: 16px; min-height: 100vh; transition: margin-right 0.25s ease; width: calc(100% - var(--sidebar-width)); min-width: 0; }
         .main-content.expanded { margin-right: 0; width: 100%; }
-
         .top-bar {
-            display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
-            background: var(--surface); border-radius: 18px; padding: 16px 24px; border: 1px solid var(--line); border-right: 6px solid var(--gold); box-shadow: var(--shadow);
+            display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap;
+            background: var(--surface); border-radius: 12px; padding: 12px 18px; border: 1px solid var(--line); border-right: 5px solid var(--gold); box-shadow: var(--shadow);
         }
-        .top-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .top-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .btn {
-            display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
-            border-radius: 10px; padding: 8px 16px; cursor: pointer; font-size: 13px; font-weight: 600;
+            display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+            border-radius: 8px; padding: 7px 14px; cursor: pointer; font-size: 13px; font-weight: 600; font-family: var(--body);
         }
-        .btn:hover { background: var(--surface-sub); border-color: var(--primary); }
-        .btn.primary { background: var(--primary); color: #ffffff; border-color: var(--primary); }
-        .btn.gold { background: var(--gold); color: #ffffff; border-color: var(--gold); }
+        .btn:hover { background: var(--surface-sub); }
+        .btn.primary { background: var(--brand); color: #ffffff; border-color: var(--brand); }
+        .btn.primary:hover { filter: brightness(1.12); }
         .btn.danger { background: var(--bad); color: #ffffff; border-color: var(--bad); }
-        .btn.whatsapp { background: #25d366; color: #ffffff; border-color: #25d366; }
-        .btn.whatsapp:hover { background: #20ba5a; }
-        .theme-toggle { border-radius: 50%; width: 40px; height: 40px; padding: 0; justify-content: center; }
+        .btn.whatsapp { background: #1fa855; color: #ffffff; border-color: #1fa855; }
+        .theme-toggle { border-radius: 50%; width: 38px; height: 38px; padding: 0; justify-content: center; }
+        .badge { display: inline-block; padding: 2px 9px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+        .badge.done { background: var(--ok-bg); color: var(--ok); }
+        .badge.doing { background: var(--info-bg); color: var(--info); }
+        .badge.hold { background: var(--hold-bg); color: var(--hold); }
+        .badge.stop { background: var(--bad-bg); color: var(--bad); }
 
-        .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
-        .kpi {
-            background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px 20px;
-            box-shadow: var(--shadow); border-top: 3px solid var(--primary); display: flex; justify-content: space-between; align-items: center;
-        }
+        .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; }
+        .kpi { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; box-shadow: var(--shadow); border-top: 3px solid var(--brand); display: flex; justify-content: space-between; align-items: center; }
         .kpi-info span { font-size: 12px; color: var(--ink-muted); font-weight: 600; display: block; }
-        .kpi-info b { font-family: 'Cairo', sans-serif; font-size: 26px; font-weight: 800; color: var(--ink); display: block; margin-top: 2px; }
-        .kpi-icon { font-size: 24px; opacity: 0.85; }
+        .kpi-info b { font-family: 'Cairo', sans-serif; font-size: 25px; font-weight: 800; color: var(--ink); display: block; margin-top: 2px; }
+        .kpi-icon { font-size: 22px; opacity: 0.8; }
 
         .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
         .filter-group { display: flex; gap: 6px; flex-wrap: wrap; }
-        .filter-btn { border: 1px solid var(--line); background: var(--surface); color: var(--ink-muted); padding: 6px 14px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
-        .filter-btn.active { background: var(--primary); color: #ffffff; border-color: var(--primary); }
-        .filter-btn.bi-btn { background: linear-gradient(135deg, #102a43 0%, #1e40af 100%); color: #fff; border: 1px solid var(--gold); }
+        .filter-btn { border: 1px solid var(--line); background: var(--surface); color: var(--ink-muted); padding: 6px 13px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; font-family: var(--body); }
+        .filter-btn.active { background: var(--brand); color: #ffffff; border-color: var(--brand); }
+        .search-input, .select-input { border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 8px 12px; border-radius: 8px; font-size: 13px; outline: none; width: 100%; max-width: 300px; font-family: var(--body); }
 
-        .search-input, .select-input { border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 8px 14px; border-radius: 10px; font-size: 13px; outline: none; width: 100%; max-width: 300px; }
-
-        .table-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow-x: auto; box-shadow: var(--shadow); }
-        table { width: 100%; border-collapse: collapse; text-align: right; min-width: 1000px; }
-        th { background: var(--surface-sub); color: var(--ink-muted); padding: 12px 14px; font-weight: 600; font-size: 12px; border-bottom: 1px solid var(--line); }
-        td { padding: 12px 14px; border-bottom: 1px solid var(--line); color: var(--ink); font-size: 13px; }
-        .badge { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 600; }
-        .badge.done { background: var(--ok-bg); color: var(--ok); }
-        .badge.doing { background: #dbeafe; color: #2563eb; }
-        .badge.todo { background: var(--surface-sub); color: var(--ink-muted); }
-        .badge.hold { background: var(--hold-bg); color: var(--hold); }
-        .badge.stop { background: var(--stop-bg); color: var(--stop); }
+        .table-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow-x: auto; box-shadow: var(--shadow); }
+        table { width: 100%; border-collapse: collapse; text-align: right; min-width: 900px; }
+        th { background: var(--surface-sub); color: var(--ink-muted); padding: 11px 12px; font-weight: 600; font-size: 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+        td { padding: 11px 12px; border-bottom: 1px solid var(--line); color: var(--ink); font-size: 13px; vertical-align: middle; }
         .priority-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-left: 6px; }
         .p-high { background: var(--bad); } .p-mid { background: var(--warn); } .p-low { background: var(--ok); }
-        .task-overdue { border-right: 4px solid var(--bad); background: rgba(220, 38, 38, 0.03); }
+        .task-overdue { box-shadow: inset -4px 0 0 var(--bad); }
+        .empty-row { text-align: center; color: var(--ink-muted); }
 
-        .meeting-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow); border-right: 5px solid var(--primary); }
-        .meeting-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px; }
-        .meeting-title { font-family: 'Cairo', sans-serif; font-size: 18px; font-weight: 700; color: var(--primary); margin: 0; }
+        .meeting-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 18px; margin-bottom: 14px; box-shadow: var(--shadow); border-right: 4px solid var(--brand); }
+        .meeting-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 10px; }
+        .meeting-title { font-family: 'Cairo', sans-serif; font-size: 17px; font-weight: 700; color: var(--brand-ink); margin: 0; }
         .meeting-meta { font-size: 12px; color: var(--ink-muted); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
 
-        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
-        .chart-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; box-shadow: var(--shadow); height: 300px; }
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+        .chart-card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 16px; box-shadow: var(--shadow); height: 300px; }
+        .chart-card h4 { margin: 0 0 10px 0; color: var(--brand-ink); font-size: 14px; }
 
-        /* الشات الجانبي الذكي العائم */
-        #aiChatToggleBtn {
-            position: fixed; bottom: 25px; left: 25px; z-index: 990;
-            background: linear-gradient(135deg, #102a43 0%, #c59b27 100%);
-            color: #fff; border: none; padding: 12px 20px; border-radius: 50px;
-            box-shadow: 0 8px 25px rgba(16, 42, 67, 0.35); font-family: 'Cairo', sans-serif;
-            font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 10px;
-        }
-        #aiChatWindow {
-            position: fixed; bottom: 85px; left: 25px; width: 380px; height: 500px; z-index: 995;
-            background: var(--surface); border: 1px solid var(--gold); border-radius: 20px;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.2); display: none; flex-direction: column; overflow: hidden;
-        }
-        #aiChatWindow.active { display: flex; }
-        .ai-chat-header {
-            background: var(--primary); color: #fff; padding: 12px 16px; display: flex;
-            align-items: center; justify-content: space-between; border-bottom: 2px solid var(--gold);
-        }
-        .ai-chat-header h4 { margin: 0; font-family: 'Cairo', sans-serif; font-size: 14px; display: flex; align-items: center; gap: 8px; }
-        .ai-chat-actions { display: flex; align-items: center; gap: 10px; }
-        .ai-chat-actions button { background: transparent; border: none; color: #fff; font-size: 14px; cursor: pointer; opacity: 0.85; }
-        .ai-chat-actions button:hover { opacity: 1; color: var(--gold); }
-        .ai-chat-body { flex: 1; padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: var(--bg); }
-        .chat-msg { max-width: 88%; padding: 10px 14px; border-radius: 14px; font-size: 12px; line-height: 1.6; white-space: pre-line; }
-        .chat-msg.user { background: var(--primary); color: #fff; align-self: flex-start; border-bottom-right-radius: 2px; }
-        .chat-msg.ai { background: var(--surface); color: var(--ink); border: 1px solid var(--line); align-self: flex-end; border-bottom-left-radius: 2px; border-right: 3px solid var(--gold); }
-        .ai-chat-footer { padding: 10px; background: var(--surface); border-top: 1px solid var(--line); display: flex; gap: 8px; }
-        .ai-chat-footer input { flex: 1; border: 1px solid var(--line); padding: 8px 12px; border-radius: 10px; font-size: 12px; outline: none; background: var(--bg); color: var(--ink); }
-
-        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 100; align-items: center; justify-content: center; padding: 15px; }
+        .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; padding: 15px; }
         .modal.active { display: flex; }
-        .modal-body { background: var(--surface); border-radius: 16px; padding: 20px; width: min(650px, 100%); max-height: 90vh; overflow-y: auto; border: 1px solid var(--line); position: relative; }
+        .modal-body { background: var(--surface); border-radius: 12px; padding: 20px; width: min(650px, 100%); max-height: 90vh; overflow-y: auto; border: 1px solid var(--line); position: relative; }
         .close-modal-btn { position: absolute; left: 15px; top: 15px; border: none; background: transparent; font-size: 18px; cursor: pointer; color: var(--ink-muted); }
         .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .form-grid .full { grid-column: 1 / -1; }
         .form-field { display: flex; flex-direction: column; gap: 4px; }
         .form-field label { font-size: 12px; font-weight: 600; color: var(--ink-muted); }
-        .form-field input, .form-field select, .form-field textarea { border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 8px 12px; border-radius: 8px; font-size: 13px; outline: none; width: 100%; }
+        .form-field input, .form-field select, .form-field textarea { border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 8px 12px; border-radius: 8px; font-size: 13px; outline: none; width: 100%; font-family: var(--body); max-width: none; }
 
         #executiveReportPrint { display: none; }
         body:not(.admin-mode) .admin-only { display: none !important; }
+        .hidden { display: none !important; }
 
         @media (max-width: 900px) {
             aside { transform: translateX(100%); }
             aside.mobile-open { transform: translateX(0); }
             .main-content { margin-right: 0 !important; width: 100% !important; padding: 12px; }
             .form-grid { grid-template-columns: 1fr; }
-            #aiChatWindow { width: calc(100% - 30px); left: 15px; bottom: 80px; }
+        }
+        @media (max-width: 700px) {
+            .table-wrap { border: none; background: transparent; box-shadow: none; overflow: visible; }
+            table { min-width: 0; }
+            thead { display: none; }
+            table, tbody, tr, td { display: block; width: 100%; }
+            tr { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; margin-bottom: 10px; padding: 6px 0; box-shadow: var(--shadow); }
+            td { display: flex; justify-content: space-between; align-items: center; gap: 14px; border: 0; padding: 6px 14px; text-align: left; }
+            td::before { content: attr(data-label); color: var(--ink-muted); font-weight: 600; font-size: 12px; flex-shrink: 0; text-align: right; }
+            td.empty-row { display: block; text-align: center; }
+            td.empty-row::before { content: none; }
+            .search-input { max-width: none; }
         }
 
         @media print {
@@ -199,13 +165,17 @@
             body * { visibility: hidden; }
             #executiveReportPrint, #executiveReportPrint * { visibility: visible; }
             #executiveReportPrint { display: block !important; position: absolute; left: 0; top: 0; width: 100%; padding: 10px; background: #ffffff !important; color: #000000 !important; }
-            .report-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #102a43; padding-bottom: 8px; margin-bottom: 12px; }
-            .report-title h1 { font-family: 'Cairo', sans-serif; color: #102a43; font-size: 20px; margin: 0; }
-            .report-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11px; }
-            .report-table th, .report-table td { border: 1px solid #cbd5e1; padding: 6px; text-align: right; word-break: break-word; }
+            .report-header { display: flex; align-items: center; justify-content: space-between; border-bottom: 2px solid #0f3156; padding-bottom: 8px; margin-bottom: 12px; }
+            .report-brand { display: flex; align-items: center; gap: 12px; }
+            .report-brand img { height: 64px; width: auto; }
+            .report-title h1 { font-family: 'Cairo', sans-serif; color: #0f3156; font-size: 20px; margin: 0; }
+            .report-title p { margin: 2px 0 0; font-size: 13px; }
+            .report-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 11px; min-width: 0; }
+            .report-table th, .report-table td { border: 1px solid #cbd5e1; padding: 6px; text-align: right; word-break: break-word; display: table-cell; width: auto; color: #000; background: #fff; }
+            .report-table thead { display: table-header-group; }
             .report-summary-box { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
             .report-kpi-item { border: 1px solid #cbd5e1; padding: 6px; border-radius: 6px; text-align: center; }
-            .report-kpi-item b { font-size: 16px; color: #102a43; display: block; }
+            .report-kpi-item b { font-size: 16px; color: #0f3156; display: block; }
         }
     </style>
 </head>
@@ -213,6 +183,7 @@
 
 <div id="splashScreen">
     <div class="splash-card">
+        <img class="splash-logo" data-logo alt="شعار مؤسسة سراج الشام">
         <div>
             <h2 class="splash-title">مؤسسة سراج الشام</h2>
             <div class="splash-sub">نظام إدارة المهام</div>
@@ -220,12 +191,10 @@
         <div class="quran-box">
             <div class="quran-text">﴿وَقُلِ اعْمَلُوا فَسَيَرَى اللَّهُ عَمَلَكُمْ وَرَسُولُهُ وَالْمُؤْمِنُونَ﴾</div>
         </div>
-        <button class="splash-btn-main" id="startBtn" onclick="showRoleSelection()">
-            <i class="fas fa-play"></i> ابدأ الآن
-        </button>
+        <button class="splash-btn-main" id="startBtn" onclick="showRoleSelection()"><i class="fas fa-play"></i> ابدأ الآن</button>
         <div class="role-options" id="roleOptions">
-            <button class="role-btn" onclick="enterAsGuest()"><i class="fas fa-eye" style="color:#38bdf8"></i> الدخول كعارض فقط (زائر)</button>
-            <button class="role-btn" style="border-color:var(--gold)" onclick="enterAsAdminModal()"><i class="fas fa-shield-halved" style="color:var(--gold)"></i> الدخول كمشرف عام</button>
+            <button class="role-btn" onclick="enterAsGuest()"><i class="fas fa-eye"></i> الدخول كعارض فقط (زائر)</button>
+            <button class="role-btn" onclick="enterAsAdminModal()"><i class="fas fa-shield-halved"></i> الدخول كمشرف عام</button>
         </div>
     </div>
 </div>
@@ -233,134 +202,109 @@
 <aside id="appSidebar">
     <div class="sidebar-brand">
         <div class="brand-info">
+            <img class="brand-logo" data-logo alt="">
             <div>
                 <h2>سراج الشام</h2>
                 <span>إدارة المهام</span>
             </div>
         </div>
-        <button class="btn" style="padding:4px 8px; font-size:12px;" onclick="toggleSidebar()" title="طي القائمة الجانبية"><i class="fas fa-angles-right"></i></button>
+        <button class="btn" style="padding:4px 8px" onclick="toggleSidebar()" title="طي القائمة"><i class="fas fa-angles-right"></i></button>
     </div>
     <div class="sidebar-menu">
-        <div class="menu-item">
-            <div class="menu-header active" id="menuTasksBtn" onclick="switchMainTab('tasks', this)">
-                <span><i class="fas fa-list-check"></i> المهام</span>
-            </div>
-        </div>
-        <div class="menu-item">
-            <div class="menu-header" id="menuMeetingsBtn" onclick="switchMainTab('meetings', this)">
-                <span><i class="fas fa-users-rectangle"></i> الاجتماعات والقرارات</span>
-            </div>
-        </div>
-        <div class="menu-item">
-            <div class="menu-header" onclick="toggleSubmenu('subArchive')">
+        <div class="menu-header active" id="menuTasksBtn" onclick="switchMainTab('tasks')"><span><i class="fas fa-list-check"></i> المهام</span></div>
+        <div class="menu-header admin-only" id="menuVolunteersBtn" onclick="switchMainTab('volunteers')"><span><i class="fas fa-user-group"></i> المتطوعات</span></div>
+        <div class="menu-header" id="menuMeetingsBtn" onclick="switchMainTab('meetings')"><span><i class="fas fa-users-rectangle"></i> الاجتماعات والقرارات</span></div>
+        <div>
+            <div class="menu-header" id="menuArchiveBtn" onclick="switchArchiveOffice(currentArchiveOffice)">
                 <span><i class="fas fa-box-archive"></i> أرشيف المكاتب</span>
-                <i class="fas fa-chevron-down"></i>
+                <i class="fas fa-chevron-down" onclick="event.stopPropagation(); toggleSubmenu('subArchive')" style="margin:0;padding:4px"></i>
             </div>
             <div class="submenu" id="subArchive">
-                <div class="submenu-item active" onclick="switchArchiveOffice('all', this)"><i class="fas fa-folder-open"></i> كافة الوثائق</div>
-                <div class="submenu-item" onclick="switchArchiveOffice('الإدارة التنفيذية', this)"><i class="fas fa-landmark"></i> الإدارة التنفيذية</div>
-                <div class="submenu-item" onclick="switchArchiveOffice('مكتب التعليم', this)"><i class="fas fa-graduation-cap"></i> مكتب التعليم</div>
-                <div class="submenu-item" onclick="switchArchiveOffice('مكتب الأيتام', this)"><i class="fas fa-child"></i> مكتب الأيتام</div>
-                <div class="submenu-item" onclick="switchArchiveOffice('المكتب المالي', this)"><i class="fas fa-wallet"></i> المكتب المالي</div>
-                <div class="submenu-item" onclick="switchArchiveOffice('مكتب الخدمات', this)"><i class="fas fa-hands-helping"></i> مكتب الخدمات</div>
+                <div class="submenu-item" data-office="all" onclick="switchArchiveOffice('all')"><i class="fas fa-folder-open"></i> كافة الوثائق</div>
+                <div class="submenu-item" data-office="الإدارة التنفيذية" onclick="switchArchiveOffice('الإدارة التنفيذية')"><i class="fas fa-landmark"></i> الإدارة التنفيذية</div>
+                <div class="submenu-item" data-office="مكتب التعليم" onclick="switchArchiveOffice('مكتب التعليم')"><i class="fas fa-graduation-cap"></i> مكتب التعليم</div>
+                <div class="submenu-item" data-office="مكتب الأيتام" onclick="switchArchiveOffice('مكتب الأيتام')"><i class="fas fa-child"></i> مكتب الأيتام</div>
+                <div class="submenu-item" data-office="المكتب المالي" onclick="switchArchiveOffice('المكتب المالي')"><i class="fas fa-wallet"></i> المكتب المالي</div>
+                <div class="submenu-item" data-office="مكتب الخدمات" onclick="switchArchiveOffice('مكتب الخدمات')"><i class="fas fa-hands-helping"></i> مكتب الخدمات</div>
             </div>
         </div>
-        <div class="menu-item">
-            <div class="menu-header" id="menuSettingsBtn" onclick="switchMainTab('settings', this)">
-                <span><i class="fas fa-gear"></i> الإعدادات</span>
-            </div>
-        </div>
+        <div class="menu-header" id="menuSettingsBtn" onclick="switchMainTab('settings')"><span><i class="fas fa-gear"></i> الإعدادات</span></div>
     </div>
 </aside>
 
 <div class="main-content" id="mainContentArea">
     <header class="top-bar">
-        <div style="display:flex; align-items:center; gap:12px;">
-            <button class="btn" style="padding:6px 10px;" onclick="toggleSidebar()" title="إظهار/إخفاء القائمة الجانبية"><i class="fas fa-bars"></i></button>
-            <h1 style="font-family:'Cairo',sans-serif; font-size:20px; color:var(--primary); margin:0;" id="pageMainTitle">إدارة المهام التنفيذية</h1>
+        <div style="display:flex;align-items:center;gap:12px">
+            <button class="btn" style="padding:6px 10px" onclick="toggleSidebar()" title="إظهار/إخفاء القائمة"><i class="fas fa-bars"></i></button>
+            <h1 style="font-family:'Cairo',sans-serif;font-size:19px;color:var(--brand-ink);margin:0" id="pageMainTitle">إدارة المهام التنفيذية</h1>
         </div>
         <div class="top-actions">
-            <span id="roleBadge" class="badge" style="background:#e67e22; color:#fff; padding:5px 10px; font-size:12px;"><i class="fas fa-eye"></i> وضع عرض فقط</span>
+            <span id="roleBadge" class="badge hold"><i class="fas fa-eye"></i> وضع عرض فقط</span>
             <button class="btn" id="loginLogoutBtn" onclick="handleAdminAuth()"><i class="fas fa-lock"></i> دخول مشرف</button>
-            <button class="btn theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon" id="themeIcon"></i></button>
-            <button class="btn gold" onclick="openReportModal()"><i class="fas fa-file-invoice"></i> طباعة التقرير</button>
-            <button class="btn primary admin-only" onclick="openDynamicModal()"><i class="fas fa-plus"></i> إضافة</button>
+            <button class="btn theme-toggle" onclick="toggleTheme()" title="الوضع الداكن"><i class="fas fa-moon" id="themeIcon"></i></button>
+            <button class="btn" id="btnPrint" onclick="openReportModal()"><i class="fas fa-print"></i> طباعة التقرير</button>
+            <button class="btn primary admin-only" id="btnAdd" onclick="openDynamicModal()"><i class="fas fa-plus"></i> إضافة</button>
         </div>
     </header>
 
-    <section class="kpis">
-        <div class="kpi" style="border-top-color:var(--primary)">
-            <div class="kpi-info"><span>إجمالي المهام</span><b id="stTotal">0</b></div>
-            <i class="fas fa-list-check kpi-icon" style="color:var(--primary)"></i>
-        </div>
-        <div class="kpi" style="border-top-color:var(--ok)">
-            <div class="kpi-info"><span>منجزة</span><b id="stDone" style="color:var(--ok)">0</b></div>
-            <i class="fas fa-circle-check kpi-icon" style="color:var(--ok)"></i>
-        </div>
-        <div class="kpi" style="border-top-color:#2563eb">
-            <div class="kpi-info"><span>قيد التنفيذ</span><b id="stDoing" style="color:#2563eb">0</b></div>
-            <i class="fas fa-spinner kpi-icon" style="color:#2563eb"></i>
-        </div>
-        <div class="kpi" style="border-top-color:var(--warn)">
-            <div class="kpi-info"><span>معلقة / متوقفة</span><b id="stHold" style="color:var(--warn)">0</b></div>
-            <i class="fas fa-pause-circle kpi-icon" style="color:var(--warn)"></i>
-        </div>
+    <section class="kpis" id="kpiSection">
+        <div class="kpi"><div class="kpi-info"><span>إجمالي المهام</span><b id="stTotal">0</b></div><i class="fas fa-list-check kpi-icon" style="color:var(--brand-ink)"></i></div>
+        <div class="kpi" style="border-top-color:var(--ok)"><div class="kpi-info"><span>منجزة</span><b id="stDone" style="color:var(--ok)">0</b></div><i class="fas fa-circle-check kpi-icon" style="color:var(--ok)"></i></div>
+        <div class="kpi" style="border-top-color:var(--info)"><div class="kpi-info"><span>قيد التنفيذ</span><b id="stDoing" style="color:var(--info)">0</b></div><i class="fas fa-spinner kpi-icon" style="color:var(--info)"></i></div>
+        <div class="kpi" style="border-top-color:var(--warn)"><div class="kpi-info"><span>معلقة / متوقفة</span><b id="stHold" style="color:var(--warn)">0</b></div><i class="fas fa-pause-circle kpi-icon" style="color:var(--warn)"></i></div>
     </section>
 
-    <!-- قسم المهام -->
     <div id="paneTasks">
         <div class="filter-bar" style="margin-bottom:12px">
             <div class="filter-group" id="taskFilterButtons">
-                <button class="filter-btn active" onclick="filterStatus('all', this)">الكل</button>
-                <button class="filter-btn" onclick="filterStatus('doing', this)">قيد التنفيذ</button>
-                <button class="filter-btn" onclick="filterStatus('done', this)">منجزة</button>
-                <button class="filter-btn" onclick="filterStatus('hold', this)">معلقة</button>
-                <button class="filter-btn" onclick="filterStatus('stop', this)">متوقفة</button>
-                <button class="filter-btn bi-btn" onclick="showAnalyticsSection(this)"><i class="fas fa-chart-pie"></i> تحليلات Power BI</button>
+                <button class="filter-btn active" data-status="all" onclick="filterStatus('all')">الكل</button>
+                <button class="filter-btn" data-status="doing" onclick="filterStatus('doing')">قيد التنفيذ</button>
+                <button class="filter-btn" data-status="done" onclick="filterStatus('done')">منجزة</button>
+                <button class="filter-btn" data-status="hold" onclick="filterStatus('hold')">معلقة</button>
+                <button class="filter-btn" data-status="stop" onclick="filterStatus('stop')">متوقفة</button>
+                <button class="filter-btn" data-status="stats" onclick="showAnalyticsSection()"><i class="fas fa-chart-pie"></i> الإحصائيات</button>
             </div>
-            <input type="search" class="search-input" id="searchBox" placeholder="ابحث باسم المهمة..." oninput="renderTasks()">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;flex:1;justify-content:flex-end">
+                <select class="select-input" id="taskOfficeFilter" style="max-width:190px" onchange="renderTasks()"><option value="all">كل المكاتب</option></select>
+                <input type="search" class="search-input" id="searchBox" placeholder="ابحث باسم المهمة أو المسؤول..." oninput="renderTasks()">
+            </div>
         </div>
 
         <div class="table-wrap" id="tasksTableContainer">
             <table>
-                <thead>
-                    <tr>
-                        <th>المهمة</th>
-                        <th>المسؤول</th>
-                        <th>المكتب / القسم</th>
-                        <th>الحالة</th>
-                        <th>الأولوية</th>
-                        <th>التكليف</th>
-                        <th>التسليم</th>
-                        <th>آخر تحديث</th>
-                        <th>ملف الإنجاز</th>
-                        <th>إرسال واتساب</th>
-                        <th class="admin-only">إجراءات</th>
-                    </tr>
-                </thead>
+                <thead><tr>
+                    <th>المهمة</th><th>المسؤول</th><th>المكتب / القسم</th><th>الحالة</th><th>التقدم</th><th>الأولوية</th><th>التكليف</th><th>التسليم</th><th>آخر تحديث</th><th>ملف الإنجاز</th><th>واتساب</th><th class="admin-only">إجراءات</th>
+                </tr></thead>
                 <tbody id="taskRows"></tbody>
             </table>
         </div>
 
-        <div id="paneAnalytics" style="display:none; margin-top:15px;">
-            <div class="filter-bar" style="background:var(--surface); padding:12px; border-radius:12px; border:1px solid var(--line); margin-bottom:14px">
-                <div style="font-weight:600; color:var(--primary); margin-bottom:8px;"><i class="fas fa-filter"></i> تصفية بيانات التحليلات:</div>
-                <div style="display:flex; gap:10px; flex-wrap:wrap; width:100%;">
-                    <select id="biOfficeFilter" class="select-input" onchange="renderAnalytics()"><option value="all">جميع المكاتب والأقسام</option></select>
-                    <select id="biOwnerFilter" class="select-input" onchange="renderAnalytics()"><option value="all">جميع المسؤولين</option></select>
-                </div>
+        <div id="paneAnalytics" style="display:none">
+            <div class="filter-bar" style="background:var(--surface);padding:12px;border-radius:10px;border:1px solid var(--line);margin-bottom:14px;justify-content:flex-start">
+                <b style="color:var(--brand-ink)"><i class="fas fa-filter"></i> تصفية:</b>
+                <select id="biOfficeFilter" class="select-input" style="max-width:220px" onchange="renderAnalytics()"><option value="all">جميع المكاتب والأقسام</option></select>
+                <select id="biOwnerFilter" class="select-input" style="max-width:220px" onchange="renderAnalytics()"><option value="all">جميع المسؤولين</option></select>
             </div>
-
             <div class="charts-grid">
-                <div class="chart-card"><h4 style="margin:0 0 10px 0; color:var(--primary); font-size:14px;"><i class="fas fa-chart-pie"></i> توزيع حالات المهام الكلية</h4><div style="position:relative; height:200px"><canvas id="statusChart"></canvas></div></div>
-                <div class="chart-card"><h4 style="margin:0 0 10px 0; color:var(--primary); font-size:14px;"><i class="fas fa-chart-bar"></i> نسبة الإنجاز حسب المكتب / القسم</h4><div style="position:relative; height:200px"><canvas id="officeChart"></canvas></div></div>
-                <div class="chart-card"><h4 style="margin:0 0 10px 0; color:var(--primary); font-size:14px;"><i class="fas fa-layer-group"></i> توزيع الأولويات</h4><div style="position:relative; height:200px"><canvas id="priorityChart"></canvas></div></div>
-                <div class="chart-card"><h4 style="margin:0 0 10px 0; color:var(--primary); font-size:14px;"><i class="fas fa-tasks"></i> حجم أداء المكاتب الإجمالي</h4><div style="position:relative; height:200px"><canvas id="departmentWorkloadChart"></canvas></div></div>
+                <div class="chart-card"><h4>توزيع حالات المهام</h4><div style="position:relative;height:215px"><canvas id="statusChart"></canvas></div></div>
+                <div class="chart-card"><h4>نسبة الإنجاز حسب المكتب</h4><div style="position:relative;height:215px"><canvas id="officeChart"></canvas></div></div>
+                <div class="chart-card"><h4>توزيع الأولويات</h4><div style="position:relative;height:215px"><canvas id="priorityChart"></canvas></div></div>
+                <div class="chart-card"><h4>عدد المهام لكل مكتب</h4><div style="position:relative;height:215px"><canvas id="departmentWorkloadChart"></canvas></div></div>
+            </div>
+            <div class="filter-bar admin-only" style="background:var(--surface);padding:12px;border-radius:10px;border:1px solid var(--line);margin:16px 0 14px;justify-content:flex-start">
+                <b style="color:var(--brand-ink)"><i class="fas fa-user-group"></i> إحصائيات المتطوعات</b>
+                <label style="font-size:12px;color:var(--ink-muted)">الشهر (لسجل الأعمال):</label>
+                <input type="month" id="biMonth" class="select-input" style="max-width:170px" onchange="renderAnalytics()">
+                <button class="btn" style="padding:5px 10px" onclick="$('biMonth').value='';renderAnalytics()">كل الأشهر</button>
+            </div>
+            <div class="charts-grid admin-only">
+                <div class="chart-card" id="volTasksCard" style="grid-column:1/-1"><h4>المهام لكل متطوعة (منجزة / غير منجزة)</h4><div id="volTasksWrap" style="position:relative;height:260px"><canvas id="volTasksChart"></canvas></div></div>
+                <div class="chart-card" id="volHoursCard" style="grid-column:1/-1"><h4>ساعات العمل المسجّلة لكل متطوعة</h4><div id="volHoursWrap" style="position:relative;height:260px"><canvas id="volHoursChart"></canvas></div></div>
+                <div class="chart-card"><h4>أنواع الأعمال المسجّلة</h4><div style="position:relative;height:215px"><canvas id="logTypeChart"></canvas></div></div>
             </div>
         </div>
     </div>
 
-    <!-- قسم الاجتماعات -->
     <div id="paneMeetings" style="display:none">
         <div class="filter-bar" style="margin-bottom:12px">
             <input type="search" class="search-input" id="searchMeeting" placeholder="ابحث في الاجتماعات..." oninput="renderMeetings()" style="max-width:100%">
@@ -368,114 +312,102 @@
         <div id="meetingCards"></div>
     </div>
 
-    <!-- قسم الأرشيف -->
     <div id="paneArchive" style="display:none">
-        <div class="filter-bar" style="background:var(--surface); padding:16px; border-radius:14px; border:1px solid var(--line); margin-bottom:16px">
-            <div style="display:flex; justify-content:space-between; align-items:center; width:100%; flex-wrap:wrap; gap:10px">
-                <div style="font-weight:700; color:var(--primary); font-size:14px"><i class="fas fa-folder-tree" style="color:var(--gold)"></i> المكتب: <span id="currentArchiveOfficeLabel">جميع المكاتب</span></div>
-                <div style="display:flex; gap:10px; align-items:center; width:100%;">
-                    <input type="search" class="search-input" id="searchArchive" placeholder="ابحث باسم الوثيقة..." oninput="renderArchive()">
-                </div>
-            </div>
+        <div class="filter-bar" style="background:var(--surface);padding:14px;border-radius:10px;border:1px solid var(--line);margin-bottom:14px">
+            <div style="font-weight:700;color:var(--brand-ink)"><i class="fas fa-folder-tree"></i> المكتب: <span id="currentArchiveOfficeLabel">جميع المكاتب</span></div>
+            <input type="search" class="search-input" id="searchArchive" placeholder="ابحث باسم الوثيقة..." oninput="renderArchive()">
         </div>
-
         <div class="table-wrap">
             <table>
-                <thead>
-                    <tr>
-                        <th>عنوان الوثيقة / المستند</th>
-                        <th>المكتب التابع له</th>
-                        <th>نوع الوثيقة</th>
-                        <th>تاريخ الأرشفة</th>
-                        <th>ملاحظات وتفاصيل</th>
-                        <th>تحميل الوثيقة</th>
-                        <th class="admin-only">إجراءات</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>الوثيقة</th><th>المكتب</th><th>النوع</th><th>تاريخ الأرشفة</th><th>ملاحظات</th><th>تحميل</th><th class="admin-only">إجراءات</th></tr></thead>
                 <tbody id="archiveRows"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- قسم الإعدادات -->
-    <div id="paneSettings" style="display:none; flex-direction:column; gap:16px;">
-        <div style="background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:20px; box-shadow:var(--shadow);">
-            <h3 style="margin-top:0; color:var(--primary); font-size:16px;"><i class="fas fa-users-viewfinder" style="color:var(--gold)"></i> المستخدمون والمتواجدون الآن</h3>
-            <p style="font-size:13px; color:var(--ink-muted);">رخص ومتابعة الجلسات النشطة على المنصة:</p>
-            <div style="display:flex; gap:12px; align-items:center; background:var(--surface-sub); padding:12px; border-radius:10px;">
-                <i class="fas fa-circle" style="color:var(--ok); font-size:10px;"></i>
-                <div>
-                    <b id="activeUserLabel">زائر (عرض فقط)</b>
-                    <div style="font-size:11px; color:var(--ink-muted);">متواجد الآن في الجلسة الحالية</div>
-                </div>
+    <div id="paneVolunteers" style="display:none">
+        <div class="filter-bar" style="margin-bottom:12px">
+            <input type="search" class="search-input" id="searchVol" placeholder="ابحث باسم المتطوعة..." oninput="renderVolunteers()">
+            <button class="btn" onclick="openImportModal()"><i class="fas fa-file-import"></i> استيراد أسماء</button>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>الاسم</th><th>المكتب</th><th>المهام</th><th>المنجزة</th><th>نسبة الإنجاز</th><th>الأعمال المسجّلة</th><th>الساعات</th><th>الملف</th></tr></thead>
+                <tbody id="volRows"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="paneProfile" style="display:none;flex-direction:column;gap:14px">
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+            <div><h2 id="profName" style="margin:0;font-family:'Cairo',sans-serif;color:var(--brand-ink);font-size:20px"></h2><div id="profOffice" style="color:var(--ink-muted);font-size:13px"></div></div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <button class="btn" onclick="switchMainTab('volunteers')"><i class="fas fa-arrow-right"></i> رجوع للقائمة</button>
+                <button class="btn admin-only" onclick="openVolunteerModal(currentVolunteerId)"><i class="fas fa-pen"></i> تعديل</button>
+                <button class="btn danger admin-only" onclick="deleteVolunteer(currentVolunteerId)"><i class="fas fa-trash"></i></button>
             </div>
         </div>
+        <div class="kpis" id="profKpis"></div>
+        <div class="filter-group">
+            <button class="filter-btn active" id="tabProfLogs" onclick="setProfileTab('logs')">سجل الأعمال</button>
+            <button class="filter-btn" id="tabProfTasks" onclick="setProfileTab('tasks')">المهام</button>
+        </div>
+        <div class="table-wrap" id="profLogsWrap">
+            <table>
+                <thead><tr><th>التاريخ</th><th>النوع</th><th>ما تم عمله</th><th>المكان</th><th>الساعات</th><th>ملاحظات</th><th class="admin-only">إجراءات</th></tr></thead>
+                <tbody id="profLogRows"></tbody>
+            </table>
+        </div>
+        <div class="table-wrap" id="profTasksWrap" style="display:none">
+            <table>
+                <thead><tr><th>المهمة</th><th>المكتب</th><th>الحالة</th><th>التقدم</th><th>التسليم</th><th>ملاحظات</th></tr></thead>
+                <tbody id="profTaskRows"></tbody>
+            </table>
+        </div>
+    </div>
 
-        <div style="background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:20px; box-shadow:var(--shadow);" class="admin-only">
-            <h3 style="margin-top:0; color:var(--primary); font-size:16px;"><i class="fas fa-key" style="color:var(--gold)"></i> إعدادات الأمان (تغيير كلمة سر المشرف)</h3>
-            <div class="form-grid" style="margin-top:12px;">
+    <div id="paneSettings" style="display:none;flex-direction:column;gap:14px">
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px">
+            <h3 style="margin:0 0 8px;color:var(--brand-ink);font-size:16px">المستخدم الحالي</h3>
+            <div style="display:flex;gap:12px;align-items:center;background:var(--surface-sub);padding:12px;border-radius:8px">
+                <i class="fas fa-circle" style="color:var(--ok);font-size:10px"></i>
+                <div><b id="activeUserLabel">زائر (عرض فقط)</b><div style="font-size:11px;color:var(--ink-muted)">الجلسة الحالية</div></div>
+            </div>
+        </div>
+        <div class="admin-only" style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px">
+            <h3 style="margin:0 0 8px;color:var(--brand-ink);font-size:16px">تغيير كلمة سر المشرف</h3>
+            <div class="form-grid">
                 <div class="form-field"><label>كلمة المرور الجديدة</label><input type="password" id="newAdminPass" placeholder="أدخل كلمة المرور الجديدة"></div>
-                <div class="form-field" style="justify-content:flex-end;"><button class="btn primary" onclick="updateAdminPassword()" style="margin-top:20px;"><i class="fas fa-save"></i> حفظ كلمة المرور</button></div>
+                <div class="form-field" style="justify-content:flex-end"><button class="btn primary" onclick="updateAdminPassword()"><i class="fas fa-save"></i> حفظ كلمة المرور</button></div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- زر ونافذة الشات الجانبي الذكي التفاعلي -->
-<button id="aiChatToggleBtn" onclick="toggleAiChat()"><i class="fas fa-robot"></i> المساعد الذكي</button>
-<div id="aiChatWindow">
-    <div class="ai-chat-header">
-        <h4><i class="fas fa-wand-magic-sparkles" style="color:var(--gold)"></i> المحادثة مع المساعد الذكي</h4>
-        <div class="ai-chat-actions">
-            <button onclick="clearAiChat()" title="مسح المحادثة"><i class="fas fa-trash-can"></i></button>
-            <button onclick="toggleAiChat()"><i class="fas fa-times"></i></button>
-        </div>
-    </div>
-    <div class="ai-chat-body" id="aiChatBody">
-        <div class="chat-msg ai">السلام عليكم ورحمة الله وبركاته، أنا مساعدك الإداري الذكي لمنصة سراج الشام. تفضل باستفساراتك أو طلباتك وسأجيبك فوراً من بيانات المهام والاجتماعات!</div>
-    </div>
-    <div class="ai-chat-footer">
-        <input type="text" id="aiChatInput" placeholder="اكتب سؤالك أو استفسارك هنا..." onkeypress="handleAiKeyPress(event)">
-        <button class="btn gold" style="padding:6px 12px;" onclick="sendAiMessage()"><i class="fas fa-paper-plane"></i></button>
-    </div>
-</div>
-
-<!-- نماذج الطباعة والنوافذ -->
 <div id="executiveReportPrint">
     <div class="report-header">
-        <div class="report-title">
-            <h1>مؤسسة سراج الشام (SİRAÇ)</h1>
-            <p id="reportSubTitle">نظام إدارة المهام</p>
+        <div class="report-brand">
+            <img data-logo alt="">
+            <div class="report-title"><h1>مؤسسة سراج الشام (SİRAÇ)</h1><p id="reportSubTitle">نظام إدارة المهام</p></div>
         </div>
-        <div style="text-align:left; font-size:11px; color:#64748b;">
+        <div style="text-align:left;font-size:11px;color:#475569">
             <div><b>التاريخ:</b> <span id="reportDate"></span></div>
             <div><b>النطاق:</b> <span id="reportScope">جميع المكاتب</span></div>
         </div>
     </div>
-    <div class="report-summary-box" id="reportKpiBox">
-        <div class="report-kpi-item"><span>إجمالي المهام</span><b id="rptTotal">0</b></div>
-        <div class="report-kpi-item"><span>المنجزة</span><b id="rptDone">0</b></div>
-        <div class="report-kpi-item"><span>قيد التنفيذ</span><b id="rptDoing">0</b></div>
-        <div class="report-kpi-item"><span>نسبة الإنجاز</span><b id="rptRatio">0%</b></div>
-    </div>
+    <div class="report-summary-box" id="reportKpiBox"></div>
     <div id="reportPrintArea"></div>
 </div>
 
 <div class="modal" id="reportModal">
     <div class="modal-body">
         <button class="close-modal-btn" onclick="closeModal('reportModal')"><i class="fas fa-times"></i></button>
-        <h3 style="margin-top:0; color:var(--primary)"><i class="fas fa-print"></i> طباعة التقرير</h3>
-        <div class="form-grid">
-            <div class="form-field full">
-                <label id="rptFilterLabel">تصفية التقرير حسب المكتب / القسم</label>
-                <select id="rptOfficeFilter" class="select-input">
-                    <option value="all">جميع المكاتب والأقسام</option>
-                </select>
-            </div>
-        </div>
-        <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:20px">
+        <h3 style="margin-top:0;color:var(--brand-ink)"><i class="fas fa-print"></i> طباعة التقرير</h3>
+        <div class="form-grid"><div class="form-field full"><label>تصفية التقرير حسب المكتب / القسم</label>
+            <select id="rptOfficeFilter" class="select-input" style="max-width:none"><option value="all">جميع المكاتب والأقسام</option></select></div></div>
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:18px">
             <button type="button" class="btn" onclick="closeModal('reportModal')">إلغاء</button>
-            <button type="button" class="btn gold" onclick="triggerCustomPrint()"><i class="fas fa-print"></i> طباعة التقرير</button>
+            <button type="button" class="btn primary" onclick="triggerCustomPrint()"><i class="fas fa-print"></i> طباعة</button>
         </div>
     </div>
 </div>
@@ -483,42 +415,24 @@
 <div class="modal" id="taskModal">
     <div class="modal-body">
         <button class="close-modal-btn" onclick="closeModal('taskModal')"><i class="fas fa-times"></i></button>
-        <h3 style="margin-top:0; color:var(--primary)" id="modalTitle">إضافة مهمة جديدة</h3>
-        <form onsubmit="saveTask(event)" class="form-grid">
+        <h3 style="margin-top:0;color:var(--brand-ink)" id="modalTitle">إضافة مهمة جديدة</h3>
+        <form id="taskForm" onsubmit="saveTask(event)" class="form-grid">
             <input type="hidden" id="editKey" value="">
             <div class="form-field full"><label>عنوان المهمة</label><input required id="mTitle"></div>
-            <div class="form-field"><label>المسؤول</label><input required id="mOwner"></div>
-            <div class="form-field">
-                <label>المكتب / القسم</label>
-                <select id="mOffice" required class="select-input">
-                    <option value="الإدارة التنفيذية">الإدارة التنفيذية</option>
-                    <option value="مكتب التعليم">مكتب التعليم</option>
-                    <option value="مكتب الأيتام">مكتب الأيتام</option>
-                    <option value="المكتب المالي">المكتب المالي</option>
-                    <option value="مكتب الخدمات">مكتب الخدمات</option>
-                </select>
-            </div>
-            <div class="form-field">
-                <label>الحالة</label>
-                <select id="mStatus" required class="select-input">
-                    <option value="doing">قيد التنفيذ</option>
-                    <option value="done">منجزة</option>
-                    <option value="hold">معلقة</option>
-                    <option value="stop">متوقفة</option>
-                </select>
-            </div>
-            <div class="form-field">
-                <label>الأولوية</label>
-                <select id="mPriority" required class="select-input">
-                    <option value="high">عالية</option>
-                    <option value="mid">متوسطة</option>
-                    <option value="low">منخفضة</option>
-                </select>
-            </div>
+            <div class="form-field"><label>المسؤولة</label>
+                <select id="mOwnerSel" onchange="onOwnerChange()"></select>
+                <input id="mOwner" placeholder="الاسم" style="margin-top:6px;display:none"></div>
+            <div class="form-field"><label>المكتب / القسم</label><select id="mOffice" required></select></div>
+            <div class="form-field"><label>الحالة</label>
+                <select id="mStatus" required onchange="syncProgress(false)"><option value="doing">قيد التنفيذ</option><option value="done">منجزة</option><option value="hold">معلقة</option><option value="stop">متوقفة</option></select></div>
+            <div class="form-field"><label>الأولوية</label>
+                <select id="mPriority" required><option value="high">عالية</option><option value="mid" selected>متوسطة</option><option value="low">منخفضة</option></select></div>
             <div class="form-field"><label>تاريخ التكليف</label><input type="date" required id="mAssigned"></div>
             <div class="form-field"><label>تاريخ التسليم</label><input type="date" required id="mDue"></div>
-            <div class="form-field full"><label>ملف الإنجاز (اختياري)</label><input type="file" id="mFile"></div>
-            <div class="form-field full" style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px">
+            <div class="form-field full"><label>نسبة الإنجاز: <b id="mProgressVal">0%</b></label><input type="range" min="0" max="100" step="5" id="mProgress" value="0" oninput="syncProgress(true)"></div>
+            <div class="form-field full"><label>ملاحظات</label><textarea id="mNotes" rows="2"></textarea></div>
+            <div class="form-field full"><label>ملف الإنجاز (اختياري، حتى 1.5 ميغابايت)</label><input type="file" id="mFile"></div>
+            <div class="form-field full" style="flex-direction:row;justify-content:flex-end;gap:8px;margin-top:6px">
                 <button type="button" class="btn" onclick="closeModal('taskModal')">إلغاء</button>
                 <button type="submit" class="btn primary">حفظ المهمة</button>
             </div>
@@ -529,30 +443,15 @@
 <div class="modal" id="archiveModal">
     <div class="modal-body">
         <button class="close-modal-btn" onclick="closeModal('archiveModal')"><i class="fas fa-times"></i></button>
-        <h3 style="margin-top:0; color:var(--primary)"><i class="fas fa-file-shield"></i> أرشفة مستند جديد</h3>
-        <form onsubmit="saveArchiveDocument(event)" class="form-grid">
+        <h3 style="margin-top:0;color:var(--brand-ink)">أرشفة مستند جديد</h3>
+        <form id="archiveForm" onsubmit="saveArchiveDocument(event)" class="form-grid">
             <div class="form-field full"><label>عنوان الوثيقة / المستند</label><input required id="arcTitle"></div>
-            <div class="form-field">
-                <label>المكتب التابع له</label>
-                <select id="arcOffice" required class="select-input">
-                    <option value="الإدارة التنفيذية">الإدارة التنفيذية</option>
-                    <option value="مكتب التعليم">مكتب التعليم</option>
-                    <option value="مكتب الأيتام">مكتب الأيتام</option>
-                    <option value="المكتب المالي">المكتب المالي</option>
-                    <option value="مكتب الخدمات">مكتب الخدمات</option>
-                </select>
-            </div>
-            <div class="form-field">
-                <label>نوع الوثيقة</label>
-                <select id="arcType" required class="select-input">
-                    <option value="خطة وبرنامج">خطة وبرنامج عمل</option>
-                    <option value="قرار إداري">قرار / تعميم إداري</option>
-                    <option value="تقرير">تقرير دوري / ختامي</option>
-                </select>
-            </div>
+            <div class="form-field"><label>المكتب التابع له</label><select id="arcOffice" required></select></div>
+            <div class="form-field"><label>نوع الوثيقة</label>
+                <select id="arcType" required><option value="خطة وبرنامج">خطة وبرنامج عمل</option><option value="قرار إداري">قرار / تعميم إداري</option><option value="تقرير">تقرير دوري / ختامي</option></select></div>
             <div class="form-field full"><label>ملاحظات وشرح الوثيقة</label><textarea id="arcNotes" rows="2"></textarea></div>
-            <div class="form-field full"><label>الملف المستندي</label><input type="file" id="arcFile" required></div>
-            <div class="form-field full" style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px">
+            <div class="form-field full"><label>الملف (حتى 1.5 ميغابايت)</label><input type="file" id="arcFile" required></div>
+            <div class="form-field full" style="flex-direction:row;justify-content:flex-end;gap:8px;margin-top:6px">
                 <button type="button" class="btn" onclick="closeModal('archiveModal')">إلغاء</button>
                 <button type="submit" class="btn primary">أرشفة الآن</button>
             </div>
@@ -563,23 +462,13 @@
 <div class="modal" id="meetingModal">
     <div class="modal-body">
         <button class="close-modal-btn" onclick="closeModal('meetingModal')"><i class="fas fa-times"></i></button>
-        <h3 style="margin-top:0; color:var(--primary)">تسجيل اجتماع أو قرار جديد</h3>
-        <form onsubmit="saveMeeting(event)" class="form-grid">
+        <h3 style="margin-top:0;color:var(--brand-ink)">تسجيل اجتماع أو قرار جديد</h3>
+        <form id="meetingForm" onsubmit="saveMeeting(event)" class="form-grid">
             <div class="form-field full"><label>عنوان الاجتماع</label><input required id="meetTitle"></div>
             <div class="form-field"><label>تاريخ الاجتماع</label><input type="date" required id="meetDate"></div>
-            <div class="form-field">
-                <label>المكتب المعني بالاجتماع</label>
-                <select id="meetOffices" class="select-input" required>
-                    <option value="الإدارة التنفيذية">الإدارة التنفيذية</option>
-                    <option value="مكتب التعليم">مكتب التعليم</option>
-                    <option value="مكتب الأيتام">مكتب الأيتام</option>
-                    <option value="المكتب المالي">المكتب المالي</option>
-                    <option value="مكتب الخدمات">مكتب الخدمات</option>
-                    <option value="كافة المكاتب">كافة المكاتب</option>
-                </select>
-            </div>
-            <div class="form-field full"><label>القرارات والتوصيات (ضع كل قرار في سطر منفصل)</label><textarea required id="meetDecisions" rows="4" placeholder="مثال:&#10;شراء مستلزمات التعليم&#10;إعداد الموازنة للعام الجديد"></textarea></div>
-            <div class="form-field full" style="display:flex; justify-content:flex-end; gap:8px; margin-top:10px">
+            <div class="form-field"><label>المكتب المعني بالاجتماع</label><select id="meetOffices" required></select></div>
+            <div class="form-field full"><label>القرارات والتوصيات (كل قرار في سطر منفصل)</label><textarea required id="meetDecisions" rows="4" placeholder="مثال:&#10;شراء مستلزمات التعليم&#10;إعداد الموازنة للعام الجديد"></textarea></div>
+            <div class="form-field full" style="flex-direction:row;justify-content:flex-end;gap:8px;margin-top:6px">
                 <button type="button" class="btn" onclick="closeModal('meetingModal')">إلغاء</button>
                 <button type="submit" class="btn primary">حفظ الاجتماع</button>
             </div>
@@ -587,7 +476,61 @@
     </div>
 </div>
 
+<div class="modal" id="volunteerModal">
+    <div class="modal-body">
+        <button class="close-modal-btn" onclick="closeModal('volunteerModal')"><i class="fas fa-times"></i></button>
+        <h3 style="margin-top:0;color:var(--brand-ink)" id="volModalTitle">إضافة متطوعة</h3>
+        <form id="volunteerForm" onsubmit="saveVolunteer(event)" class="form-grid">
+            <input type="hidden" id="volEditKey">
+            <div class="form-field"><label>الاسم</label><input required id="volName"></div>
+            <div class="form-field"><label>المكتب التابعة له</label><select id="volOffice"></select></div>
+            <div class="form-field full" style="flex-direction:row;justify-content:flex-end;gap:8px;margin-top:6px">
+                <button type="button" class="btn" onclick="closeModal('volunteerModal')">إلغاء</button>
+                <button type="submit" class="btn primary">حفظ</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal" id="importModal">
+    <div class="modal-body">
+        <button class="close-modal-btn" onclick="closeModal('importModal')"><i class="fas fa-times"></i></button>
+        <h3 style="margin-top:0;color:var(--brand-ink)">استيراد أسماء المتطوعات</h3>
+                <div class="form-grid">
+            <div class="form-field full"><label>الأسماء (اسم في كل سطر)</label><textarea id="importNames" rows="9"></textarea></div>
+            <div class="form-field full"><label>المكتب</label><select id="importOffice"></select></div>
+        </div>
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:14px">
+            <button type="button" class="btn" onclick="closeModal('importModal')">إلغاء</button>
+            <button type="button" class="btn primary" onclick="runImport()"><i class="fas fa-file-import"></i> استيراد</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="logModal">
+    <div class="modal-body">
+        <button class="close-modal-btn" onclick="closeModal('logModal')"><i class="fas fa-times"></i></button>
+        <h3 style="margin-top:0;color:var(--brand-ink)" id="logModalTitle">إضافة عمل لسجل المتطوعة</h3>
+        <form id="logForm" onsubmit="saveLog(event)" class="form-grid">
+            <input type="hidden" id="logEditKey">
+            <div class="form-field"><label>المتطوعة</label><select id="logVol" required></select></div>
+            <div class="form-field"><label>التاريخ</label><input type="date" required id="logDate"></div>
+            <div class="form-field"><label>نوع العمل</label>
+                <select id="logType"><option value="field">ميداني</option><option value="training">تدريب</option><option value="office">مكتبي</option><option value="other">أخرى</option></select></div>
+            <div class="form-field"><label>المدة بالساعات (اختياري)</label><input type="number" min="0" max="24" step="0.5" id="logHours"></div>
+            <div class="form-field full"><label>ما تم عمله</label><textarea required id="logDesc" rows="3"></textarea></div>
+            <div class="form-field"><label>المكان (اختياري)</label><input id="logPlace"></div>
+            <div class="form-field"><label>ملاحظات (اختياري)</label><input id="logNotes"></div>
+            <div class="form-field full" style="flex-direction:row;justify-content:flex-end;gap:8px;margin-top:6px">
+                <button type="button" class="btn" onclick="closeModal('logModal')">إلغاء</button>
+                <button type="submit" class="btn primary">حفظ</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
+    const LOGO_SRC = 'data:image/jpeg;base64,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';
     const firebaseConfig = {
         apiKey: "AIzaSyDEJ99XVVDfOg09b4mwiHhD5lQ66XHd-A8",
         authDomain: "sirajtasks.firebaseapp.com",
@@ -605,655 +548,774 @@
     const archiveRef = db.ref('archive');
     const settingsRef = db.ref('settings/adminPass');
 
-    let tasksData = {};
-    let meetingsData = {};
-    let archiveData = {};
+    const OFFICES = ["الإدارة التنفيذية", "مكتب التعليم", "مكتب الأيتام", "المكتب المالي", "مكتب الخدمات"];
+    const STATUS_TEXT = { done: 'منجزة', doing: 'قيد التنفيذ', hold: 'معلقة', stop: 'متوقفة' };
+    const PRIORITY_TEXT = { high: 'عالية', mid: 'متوسطة', low: 'منخفضة' };
+    const MAX_FILE = 1.5 * 1024 * 1024;
+
+    const volunteersRef = db.ref('volunteers');
+    const logsRef = db.ref('workLogs');
+    const LOG_TYPES = { field: 'ميداني', training: 'تدريب', office: 'مكتبي', other: 'أخرى' };
+    let volunteersData = {}, logsData = {}, currentVolunteerId = null, profileTab = 'logs';
+    let tasksData = {}, meetingsData = {}, archiveData = {};
     let currentAdminPass = "siraj2005";
     let currentFilter = 'all';
     let currentArchiveOffice = 'all';
     let currentActiveTab = 'tasks';
     let isAdmin = false;
 
-    settingsRef.on('value', snap => { if(snap.val()) currentAdminPass = snap.val(); });
+    function esc(s) {
+        return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+    function $(id) { return document.getElementById(id); }
+    // تاريخ اليوم بتوقيت دمشق (وليس UTC)
+    function today() { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Damascus' }).format(new Date()); }
+    function safeDataUrl(u) { return typeof u === 'string' && u.startsWith('data:') ? u : '#'; }
+
+    settingsRef.on('value', snap => { if (snap.val()) currentAdminPass = snap.val(); });
+
+    function fillOfficeSelects() {
+        let vo = '<option value="">غير محدد</option>' + OFFICES.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('');
+        $('volOffice').innerHTML = vo; $('importOffice').innerHTML = vo;
+        ['mOffice', 'arcOffice'].forEach(id => { $(id).innerHTML = OFFICES.map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join(''); });
+        $('meetOffices').innerHTML = OFFICES.concat(['كافة المكاتب']).map(o => `<option value="${esc(o)}">${esc(o)}</option>`).join('');
+    }
 
     window.addEventListener('DOMContentLoaded', () => {
-        document.getElementById('splashScreen').classList.remove('hide');
-        document.getElementById('startBtn').style.display = 'flex';
-        document.getElementById('roleOptions').style.display = 'none';
+        document.querySelectorAll('img[data-logo]').forEach(i => { i.src = LOGO_SRC; });
+        fillOfficeSelects();
+        try { if (localStorage.getItem('theme') === 'dark') setTheme(true); } catch (e) {}
         applyRoleUI(false);
+        showPane('tasks');
     });
 
+    /* ---------- الدخول ---------- */
     function showRoleSelection() {
-        document.getElementById('startBtn').style.display = 'none';
-        document.getElementById('roleOptions').style.display = 'flex';
+        $('startBtn').style.display = 'none';
+        $('roleOptions').style.display = 'flex';
     }
-
-    function enterAsGuest() {
-        applyRoleUI(false);
-        document.getElementById('splashScreen').classList.add('hide');
-    }
-
+    function enterAsGuest() { applyRoleUI(false); $('splashScreen').classList.add('hide'); }
     function enterAsAdminModal() {
         let pass = prompt("الرجاء إدخال كلمة سر المشرف:");
-        if (pass === currentAdminPass) {
-            applyRoleUI(true);
-            document.getElementById('splashScreen').classList.add('hide');
-        } else if (pass !== null) {
-            alert("كلمة المرور غير صحيحة!");
-        }
+        if (pass === currentAdminPass) { applyRoleUI(true); $('splashScreen').classList.add('hide'); }
+        else if (pass !== null) alert("كلمة المرور غير صحيحة!");
     }
-
     function applyRoleUI(adminState) {
         isAdmin = adminState;
+        if (!isAdmin && (currentActiveTab === 'volunteers' || currentActiveTab === 'profile')) switchMainTab('tasks');
+        document.body.classList.toggle('admin-mode', isAdmin);
         if (isAdmin) {
-            document.body.classList.add('admin-mode');
-            document.getElementById('roleBadge').innerHTML = '<i class="fas fa-shield-halved"></i> مشرف عام';
-            document.getElementById('roleBadge').style.background = '#059669';
-            document.getElementById('loginLogoutBtn').innerHTML = '<i class="fas fa-lock-open"></i> تسجيل خروج';
-            document.getElementById('activeUserLabel').innerText = "مشرف عام (Admin)";
+            $('roleBadge').className = 'badge done';
+            $('roleBadge').innerHTML = '<i class="fas fa-shield-halved"></i> مشرف عام';
+            $('loginLogoutBtn').innerHTML = '<i class="fas fa-lock-open"></i> تسجيل خروج';
+            $('activeUserLabel').innerText = "مشرف عام (Admin)";
         } else {
-            document.body.classList.remove('admin-mode');
-            document.getElementById('roleBadge').innerHTML = '<i class="fas fa-eye"></i> زائر';
-            document.getElementById('roleBadge').style.background = '#e67e22';
-            document.getElementById('loginLogoutBtn').innerHTML = '<i class="fas fa-lock"></i> دخول مشرف';
-            document.getElementById('activeUserLabel').innerText = "زائر (عرض فقط)";
+            $('roleBadge').className = 'badge hold';
+            $('roleBadge').innerHTML = '<i class="fas fa-eye"></i> وضع عرض فقط';
+            $('loginLogoutBtn').innerHTML = '<i class="fas fa-lock"></i> دخول مشرف';
+            $('activeUserLabel').innerText = "زائر (عرض فقط)";
         }
     }
-
     function handleAdminAuth() {
-        if (!isAdmin) enterAsAdminModal();
-        else {
-            applyRoleUI(false);
-            document.getElementById('splashScreen').classList.remove('hide');
-            document.getElementById('startBtn').style.display = 'flex';
-            document.getElementById('roleOptions').style.display = 'none';
-        }
+        if (!isAdmin) { enterAsAdminModal(); return; }
+        applyRoleUI(false);
+        $('splashScreen').classList.remove('hide');
+        $('startBtn').style.display = 'flex';
+        $('roleOptions').style.display = 'none';
     }
-
     function updateAdminPassword() {
-        let newPass = document.getElementById('newAdminPass').value;
-        if(!newPass) return alert("الرجاء إدخال كلمة المرور الجديدة");
-        settingsRef.set(newPass).then(() => {
-            alert("تم تحديث كلمة سر المشرف بنجاح!");
-            document.getElementById('newAdminPass').value = '';
-        });
+        let newPass = $('newAdminPass').value;
+        if (!newPass) return alert("الرجاء إدخال كلمة المرور الجديدة");
+        settingsRef.set(newPass).then(() => { alert("تم تحديث كلمة سر المشرف بنجاح!"); $('newAdminPass').value = ''; });
     }
 
+    /* ---------- المظهر ---------- */
+    function setTheme(dark) {
+        document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+        $('themeIcon').className = dark ? 'fas fa-sun' : 'fas fa-moon';
+        try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch (e) {}
+    }
     function toggleTheme() {
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        document.documentElement.setAttribute('data-theme', isDark ? '' : 'dark');
-        document.getElementById('themeIcon').className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+        setTheme(document.documentElement.getAttribute('data-theme') !== 'dark');
+        if ($('paneAnalytics').style.display === 'block') renderAnalytics();
     }
-
     function toggleSidebar() {
-        const sidebar = document.getElementById('appSidebar');
-        const mainContent = document.getElementById('mainContentArea');
+        const sidebar = $('appSidebar'), main = $('mainContentArea');
         if (window.innerWidth <= 900) sidebar.classList.toggle('mobile-open');
-        else {
-            sidebar.classList.toggle('collapsed');
-            mainContent.classList.toggle('expanded');
+        else { sidebar.classList.toggle('collapsed'); main.classList.toggle('expanded'); }
+    }
+    function toggleSubmenu(id) { $(id).classList.toggle('open'); }
+
+    /* ---------- التنقل ---------- */
+    function setNav(tab, office) {
+        document.querySelectorAll('.menu-header, .submenu-item').forEach(e => e.classList.remove('active'));
+        if (tab === 'tasks') $('menuTasksBtn').classList.add('active');
+        else if (tab === 'meetings') $('menuMeetingsBtn').classList.add('active');
+        else if (tab === 'volunteers' || tab === 'profile') $('menuVolunteersBtn').classList.add('active');
+        else if (tab === 'settings') $('menuSettingsBtn').classList.add('active');
+        else if (tab === 'archive') {
+            $('menuArchiveBtn').classList.add('active');
+            $('subArchive').classList.add('open');
+            document.querySelectorAll('.submenu-item').forEach(e => { if (e.dataset.office === office) e.classList.add('active'); });
         }
     }
 
-    function toggleSubmenu(id) { document.getElementById(id).classList.toggle('open'); }
-
-    function switchMainTab(tab, el) {
-        document.querySelectorAll('.menu-header').forEach(h => h.classList.remove('active'));
-        if(el) el.classList.add('active');
-
+    function showPane(tab) {
         currentActiveTab = tab;
-        document.getElementById('paneTasks').style.display = tab === 'tasks' ? 'block' : 'none';
-        document.getElementById('paneMeetings').style.display = tab === 'meetings' ? 'block' : 'none';
-        document.getElementById('paneArchive').style.display = tab === 'archive' ? 'block' : 'none';
-        document.getElementById('paneSettings').style.display = tab === 'settings' ? 'flex' : 'none';
+        const panes = { tasks: 'paneTasks', meetings: 'paneMeetings', archive: 'paneArchive', settings: 'paneSettings', volunteers: 'paneVolunteers', profile: 'paneProfile' };
+        Object.keys(panes).forEach(k => { $(panes[k]).style.display = k === tab ? ((k === 'settings' || k === 'profile') ? 'flex' : 'block') : 'none'; });
+        $('kpiSection').style.display = tab === 'tasks' ? 'grid' : 'none';
+        $('btnAdd').classList.toggle('hidden', tab === 'settings');
+        $('btnPrint').classList.toggle('hidden', tab === 'settings');
+        $('btnAdd').innerHTML = '<i class="fas fa-plus"></i> ' + ({ tasks: 'إضافة مهمة', meetings: 'إضافة اجتماع', archive: 'أرشفة وثيقة', volunteers: 'إضافة متطوعة', profile: 'إضافة عمل' }[tab] || 'إضافة');
+        if (window.innerWidth <= 900) $('appSidebar').classList.remove('mobile-open');
+        setNav(tab, currentArchiveOffice);
+    }
 
-        if(window.innerWidth <= 900) document.getElementById('appSidebar').classList.remove('mobile-open');
-
-        if(tab === 'tasks') {
-            document.getElementById('pageMainTitle').innerText = "إدارة المهام التنفيذية";
-            document.getElementById('tasksTableContainer').style.display = 'block';
-            document.getElementById('paneAnalytics').style.display = 'none';
+    function switchMainTab(tab) {
+        if ((tab === 'volunteers' || tab === 'profile') && !isAdmin) return;
+        showPane(tab);
+        if (tab === 'tasks') {
+            $('pageMainTitle').innerText = "إدارة المهام التنفيذية";
+            $('tasksTableContainer').style.display = 'block';
+            $('paneAnalytics').style.display = 'none';
+            setActiveFilterBtn();
             renderTasks();
-        } else if(tab === 'meetings') {
-            document.getElementById('pageMainTitle').innerText = "سجل الاجتماعات والقرارات";
+        } else if (tab === 'meetings') {
+            $('pageMainTitle').innerText = "سجل الاجتماعات والقرارات";
             renderMeetings();
-        } else if(tab === 'settings') {
-            document.getElementById('pageMainTitle').innerText = "إعدادات النظام والنشاط";
+        } else if (tab === 'volunteers') {
+            $('pageMainTitle').innerText = "المتطوعات";
+            renderVolunteers();
+        } else if (tab === 'settings') {
+            $('pageMainTitle').innerText = "الإعدادات";
         }
     }
 
-    function switchArchiveOffice(office, el) {
-        document.querySelectorAll('.submenu-item').forEach(i => i.classList.remove('active'));
-        if(el) el.classList.add('active');
-
-        currentActiveTab = 'archive';
+    function switchArchiveOffice(office) {
         currentArchiveOffice = office;
-        document.getElementById('paneTasks').style.display = 'none';
-        document.getElementById('paneMeetings').style.display = 'none';
-        document.getElementById('paneArchive').style.display = 'block';
-        document.getElementById('paneSettings').style.display = 'none';
-
-        if(window.innerWidth <= 900) document.getElementById('appSidebar').classList.remove('mobile-open');
-
-        document.getElementById('currentArchiveOfficeLabel').innerText = office === 'all' ? 'جميع المكاتب' : office;
-        document.getElementById('pageMainTitle').innerText = "أرشيف المستندات (" + (office === 'all' ? 'الكل' : office) + ")";
+        showPane('archive');
+        $('currentArchiveOfficeLabel').innerText = office === 'all' ? 'جميع المكاتب' : office;
+        $('pageMainTitle').innerText = "أرشيف المستندات (" + (office === 'all' ? 'الكل' : office) + ")";
         renderArchive();
     }
 
-    function showAnalyticsSection(btn) {
-        document.querySelectorAll('#taskFilterButtons .filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        document.getElementById('tasksTableContainer').style.display = 'none';
-        document.getElementById('paneAnalytics').style.display = 'block';
-        document.getElementById('pageMainTitle').innerText = "تحليلات الأداء (Power BI)";
+    function setActiveFilterBtn() {
+        document.querySelectorAll('#taskFilterButtons .filter-btn').forEach(b => b.classList.toggle('active', b.dataset.status === currentFilter));
+    }
+    function filterStatus(status) {
+        currentFilter = status;
+        setActiveFilterBtn();
+        $('paneAnalytics').style.display = 'none';
+        $('tasksTableContainer').style.display = 'block';
+        $('pageMainTitle').innerText = "إدارة المهام التنفيذية";
+        renderTasks();
+    }
+    function showAnalyticsSection() {
+        document.querySelectorAll('#taskFilterButtons .filter-btn').forEach(b => b.classList.toggle('active', b.dataset.status === 'stats'));
+        $('tasksTableContainer').style.display = 'none';
+        $('paneAnalytics').style.display = 'block';
+        $('pageMainTitle').innerText = "الإحصائيات";
         renderAnalytics();
     }
 
-    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+    function closeModal(id) { $(id).classList.remove('active'); }
     function openDynamicModal() {
-        if(currentActiveTab === 'tasks') {
-            document.getElementById('modalTitle').innerText = "إضافة مهمة جديدة";
-            document.getElementById('editKey').value = '';
-            document.getElementById('taskModal').classList.add('active');
-        } else if(currentActiveTab === 'meetings') {
-            document.getElementById('meetingModal').classList.add('active');
-        } else if(currentActiveTab === 'archive') {
-            document.getElementById('archiveModal').classList.add('active');
+        if (currentActiveTab === 'tasks') openTaskModal();
+        else if (currentActiveTab === 'volunteers') openVolunteerModal();
+        else if (currentActiveTab === 'profile') openLogModal(null, currentVolunteerId);
+        else if (currentActiveTab === 'meetings') { $('meetingForm').reset(); $('meetDate').value = today(); $('meetingModal').classList.add('active'); }
+        else if (currentActiveTab === 'archive') {
+            $('archiveForm').reset();
+            if (currentArchiveOffice !== 'all') $('arcOffice').value = currentArchiveOffice;
+            $('archiveModal').classList.add('active');
         }
     }
 
-    tasksRef.on('value', snap => { tasksData = snap.val() || {}; renderTasks(); updateKpis(); populateFilters(); });
-    meetingsRef.on('value', snap => { meetingsData = snap.val() || {}; renderMeetings(); populateFilters(); });
+    /* ---------- قاعدة البيانات ---------- */
+    tasksRef.on('value', snap => { tasksData = snap.val() || {}; renderTasks(); updateKpis(); populateFilters(); if ($('paneAnalytics').style.display === 'block') renderAnalytics(); });
+    meetingsRef.on('value', snap => { meetingsData = snap.val() || {}; renderMeetings(); });
     archiveRef.on('value', snap => { archiveData = snap.val() || {}; renderArchive(); });
+    volunteersRef.on('value', snap => { volunteersData = snap.val() || {}; renderVolunteers(); if (currentActiveTab === 'profile') renderProfile(); if ($('paneAnalytics').style.display === 'block') renderAnalytics(); });
+    logsRef.on('value', snap => { logsData = snap.val() || {}; renderVolunteers(); if (currentActiveTab === 'profile') renderProfile(); if ($('paneAnalytics').style.display === 'block') renderAnalytics(); });
 
-    function filterStatus(status, btn) {
-        currentFilter = status;
-        document.querySelectorAll('#taskFilterButtons .filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        
-        document.getElementById('paneAnalytics').style.display = 'none';
-        document.getElementById('tasksTableContainer').style.display = 'block';
-        document.getElementById('pageMainTitle').innerText = "إدارة المهام التنفيذية";
-        renderTasks();
-    }
-
+    /* ---------- المهام ---------- */
     function renderTasks() {
         let rows = '';
-        let query = document.getElementById('searchBox').value.toLowerCase();
-        let todayStr = new Date().toISOString().split('T')[0];
+        let query = $('searchBox').value.trim().toLowerCase();
+        let officeF = $('taskOfficeFilter').value;
+        let todayStr = today();
+        let keys = Object.keys(tasksData).reverse();
 
-        Object.keys(tasksData).forEach(key => {
+        keys.forEach(key => {
             let t = tasksData[key];
-            if(currentFilter !== 'all' && t.status !== currentFilter) return;
-            if(query && !Object.values(t).some(val => String(val).toLowerCase().includes(query))) return;
-            
-            let badgeClass = t.status === 'done' ? 'done' : t.status === 'doing' ? 'doing' : t.status === 'hold' ? 'hold' : 'stop';
-            let statusText = t.status === 'done' ? 'منجزة' : t.status === 'doing' ? 'قيد التنفيذ' : t.status === 'hold' ? 'معلقة' : 'متوقفة';
-            let pClass = t.priority === 'high' ? 'p-high' : t.priority === 'mid' ? 'p-mid' : 'p-low';
-            let pText = t.priority === 'high' ? 'عالية' : t.priority === 'mid' ? 'متوسطة' : 'منخفضة';
-            let isOverdue = (t.due < todayStr && t.status !== 'done');
+            if (currentFilter !== 'all' && t.status !== currentFilter) return;
+            if (officeF !== 'all' && t.office !== officeF) return;
+            if (query && ![t.title, t.owner, t.office].some(v => String(v || '').toLowerCase().includes(query))) return;
 
+            let badgeClass = STATUS_TEXT[t.status] ? t.status : 'stop';
+            let isOverdue = !!t.due && t.due < todayStr && t.status !== 'done';
+            let prog = t.progress != null ? t.progress : (t.status === 'done' ? 100 : 0);
             let whatsappText = `السلام عليكم ورحمة الله وبركاته، تم تكليفك بـ "${t.title}" (المكتب: ${t.office})، يرجى مراجعة النظام لمتابعة التفاصيل.`;
             let whatsappLink = `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappText)}`;
+            let pClass = t.priority === 'high' ? 'p-high' : t.priority === 'mid' ? 'p-mid' : 'p-low';
 
             rows += `<tr class="${isOverdue ? 'task-overdue' : ''}">
-                <td><b>${t.title || ''}</b> ${isOverdue ? '<span class="badge stop" style="font-size:9px;">متأخرة</span>' : ''}</td>
-                <td>${t.owner || ''}</td>
-                <td>${t.office || ''}</td>
-                <td><span class="badge ${badgeClass}">${statusText}</span></td>
-                <td><span class="priority-dot ${pClass}"></span>${pText}</td>
-                <td>${t.assigned || '-'}</td>
-                <td>${t.due || '-'}</td>
-                <td style="font-size:11px; color:var(--ink-muted);">${t.lastUpdated || t.assigned || '-'}</td>
-                <td>${t.fileName ? `<a href="${t.fileData}" download="${t.fileName}">${t.fileName}</a>` : '-'}</td>
-                <td><a href="${whatsappLink}" target="_blank" class="btn whatsapp" style="padding:4px 8px; font-size:11px;"><i class="fab fa-whatsapp"></i> إرسال</a></td>
-                <td class="admin-only">
-                    <button class="btn" style="padding:4px 6px; font-size:11px;" onclick="editTask('${key}')"><i class="fas fa-edit"></i></button>
-                    <button class="btn danger" style="padding:4px 6px; font-size:11px;" onclick="deleteTask('${key}')"><i class="fas fa-trash"></i></button>
+                <td data-label="المهمة"><b>${esc(t.title)}</b> ${isOverdue ? '<span class="badge stop">متأخرة</span>' : ''}${t.notes ? `<div style="font-size:12px;color:var(--ink-muted);margin-top:2px;text-align:right">${esc(t.notes)}</div>` : ''}</td>
+                <td data-label="المسؤول">${esc(t.owner)}</td>
+                <td data-label="المكتب">${esc(t.office)}</td>
+                <td data-label="الحالة"><span class="badge ${badgeClass}">${STATUS_TEXT[t.status] || 'متوقفة'}</span></td>
+                <td data-label="التقدم"><div style="display:flex;align-items:center;gap:6px;min-width:90px"><div style="flex:1;height:6px;background:var(--surface-sub);border-radius:3px;overflow:hidden"><div style="width:${prog}%;height:100%;background:var(--gold)"></div></div><span style="font-size:11px">${prog}%</span></div></td>
+                <td data-label="الأولوية"><span class="priority-dot ${pClass}"></span>${PRIORITY_TEXT[t.priority] || 'منخفضة'}</td>
+                <td data-label="التكليف">${esc(t.assigned || '-')}</td>
+                <td data-label="التسليم">${esc(t.due || '-')}</td>
+                <td data-label="آخر تحديث" style="color:var(--ink-muted)">${esc(t.lastUpdated || t.assigned || '-')}</td>
+                <td data-label="ملف الإنجاز">${t.fileName ? `<a href="${esc(safeDataUrl(t.fileData))}" download="${esc(t.fileName)}">${esc(t.fileName)}</a>` : '-'}</td>
+                <td data-label="واتساب"><a href="${whatsappLink}" target="_blank" rel="noopener" class="btn whatsapp" style="padding:4px 10px;font-size:12px"><i class="fab fa-whatsapp"></i> إرسال</a></td>
+                <td data-label="إجراءات" class="admin-only">
+                    <button class="btn" style="padding:4px 8px" title="تعديل" onclick="editTask('${key}')"><i class="fas fa-pen"></i></button>
+                    <button class="btn danger" style="padding:4px 8px" title="حذف" onclick="deleteTask('${key}')"><i class="fas fa-trash"></i></button>
                 </td>
             </tr>`;
         });
-        document.getElementById('taskRows').innerHTML = rows || '<tr><td colspan="11" style="text-align:center">لا توجد مهام مطابقة</td></tr>';
+        $('taskRows').innerHTML = rows || '<tr><td colspan="12" class="empty-row">لا توجد مهام مطابقة</td></tr>';
+    }
+
+    function openTaskModal() {
+        $('taskForm').reset();
+        $('editKey').value = '';
+        $('modalTitle').innerText = "إضافة مهمة جديدة";
+        fillOwnerSelect(); onOwnerChange(); syncProgress(false);
+        $('mAssigned').value = today();
+        $('mDue').value = today();
+        $('taskModal').classList.add('active');
     }
 
     function saveTask(e) {
         e.preventDefault();
-        let key = document.getElementById('editKey').value;
-        let fileInput = document.getElementById('mFile');
-        let todayDate = new Date().toISOString().split('T')[0];
-
+        let key = $('editKey').value;
+        let fileInput = $('mFile');
+        let sel = $('mOwnerSel').value;
+        let ownerName = $('mOwner').value.trim(), ownerVid = null;
+        if (sel && sel !== '__other' && volunteersData[sel]) { ownerName = volunteersData[sel].name; ownerVid = sel; }
+        let st = $('mStatus').value;
         let taskObj = {
-            title: document.getElementById('mTitle').value,
-            owner: document.getElementById('mOwner').value,
-            office: document.getElementById('mOffice').value,
-            status: document.getElementById('mStatus').value,
-            priority: document.getElementById('mPriority').value,
-            assigned: document.getElementById('mAssigned').value,
-            due: document.getElementById('mDue').value,
-            lastUpdated: todayDate
+            volunteerId: ownerVid,
+            progress: st === 'done' ? 100 : Number($('mProgress').value),
+            notes: $('mNotes').value.trim(),
+            title: $('mTitle').value.trim(),
+            owner: ownerName,
+            office: $('mOffice').value,
+            status: $('mStatus').value,
+            priority: $('mPriority').value,
+            assigned: $('mAssigned').value,
+            due: $('mDue').value,
+            lastUpdated: today()
         };
-
         let finishSave = () => {
-            if(key) tasksRef.child(key).update(taskObj);
-            else tasksRef.push(taskObj);
+            if (key) tasksRef.child(key).update(taskObj); else tasksRef.push(taskObj);
             closeModal('taskModal');
         };
-
-        if(fileInput.files[0]) {
+        let f = fileInput.files[0];
+        if (f) {
+            if (f.size > MAX_FILE) return alert("حجم الملف كبير. الحد الأقصى 1.5 ميغابايت.");
             let reader = new FileReader();
-            reader.onload = function(evt) {
-                taskObj.fileName = fileInput.files[0].name;
-                taskObj.fileData = evt.target.result;
-                finishSave();
-            };
-            reader.readAsDataURL(fileInput.files[0]);
-        } else {
-            if(key && tasksData[key].fileName) {
-                taskObj.fileName = tasksData[key].fileName;
-                taskObj.fileData = tasksData[key].fileData;
-            }
-            finishSave();
-        }
+            reader.onload = evt => { taskObj.fileName = f.name; taskObj.fileData = evt.target.result; finishSave(); };
+            reader.readAsDataURL(f);
+        } else finishSave();
     }
 
     function editTask(key) {
         let t = tasksData[key];
-        document.getElementById('modalTitle').innerText = "تعديل المهمة";
-        document.getElementById('editKey').value = key;
-        document.getElementById('mTitle').value = t.title;
-        document.getElementById('mOwner').value = t.owner;
-        document.getElementById('mOffice').value = t.office;
-        document.getElementById('mStatus').value = t.status;
-        document.getElementById('mPriority').value = t.priority;
-        document.getElementById('mAssigned').value = t.assigned;
-        document.getElementById('mDue').value = t.due;
-        document.getElementById('taskModal').classList.add('active');
+        $('taskForm').reset();
+        $('modalTitle').innerText = "تعديل المهمة";
+        $('editKey').value = key;
+        $('mTitle').value = t.title || '';
+        fillOwnerSelect(); setOwnerFields(t);
+        $('mOffice').value = t.office || OFFICES[0];
+        $('mStatus').value = t.status || 'doing';
+        $('mPriority').value = t.priority || 'mid';
+        $('mAssigned').value = t.assigned || '';
+        $('mDue').value = t.due || '';
+        $('mProgress').value = t.progress != null ? t.progress : (t.status === 'done' ? 100 : 0);
+        $('mNotes').value = t.notes || '';
+        syncProgress(false);
+        $('taskModal').classList.add('active');
     }
+    function deleteTask(key) { if (confirm('حذف هذه المهمة نهائياً؟')) tasksRef.child(key).remove(); }
 
-    function deleteTask(key) { if(confirm('حذف هذه المهمة نهائياً؟')) tasksRef.child(key).remove(); }
+    /* ---------- الاجتماعات ---------- */
+    function decisionsOf(m) { return (m.decisions || '').split('\n').map(d => d.trim()).filter(Boolean); }
 
     function renderMeetings() {
-        let query = document.getElementById('searchMeeting').value.toLowerCase();
+        let query = $('searchMeeting').value.trim().toLowerCase();
         let html = '';
         Object.keys(meetingsData).reverse().forEach(key => {
             let m = meetingsData[key];
-            if(query && !Object.values(m).some(v => String(v).toLowerCase().includes(query))) return;
-            let decisionsHtml = '';
-            if(m.decisions) { 
-                let listItems = m.decisions.split('\n').filter(d => d.trim());
-                listItems.forEach((d, idx) => {
-                    decisionsHtml += `<li style="margin-bottom:6px; display:flex; align-items:center; justify-content:space-between;">
-                        <span><b>${idx + 1}.</b> ${d}</span>
-                        <button class="btn admin-only" style="padding:2px 6px; font-size:10px; background:var(--gold); color:#fff;" onclick="convertDecisionToTask('${d.replace(/'/g, "\\'")}', '${m.offices}')"><i class="fas fa-plus"></i> تحويل لمهمة</button>
-                    </li>`; 
-                }); 
-            }
+            if (query && ![m.title, m.date, m.offices, m.decisions].some(v => String(v || '').toLowerCase().includes(query))) return;
+            let decisionsHtml = decisionsOf(m).map((d, idx) => `
+                <li style="margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;gap:10px">
+                    <span><b>${idx + 1}.</b> ${esc(d)}</span>
+                    <button class="btn admin-only" style="padding:2px 8px;font-size:11px" onclick="convertDecisionToTask('${key}', ${idx})"><i class="fas fa-plus"></i> تحويل لمهمة</button>
+                </li>`).join('');
             html += `<div class="meeting-card">
                 <div class="meeting-header">
-                    <h3 class="meeting-title"><i class="fas fa-users" style="color:var(--gold)"></i> ${m.title}</h3>
+                    <h3 class="meeting-title">${esc(m.title)}</h3>
                     <div class="meeting-meta">
-                        <span><i class="fas fa-calendar"></i> ${m.date}</span>
-                        <span><i class="fas fa-building"></i> ${m.offices}</span>
-                        <button class="btn gold" style="padding:4px 8px; font-size:11px;" onclick="printSingleMeeting('${key}')"><i class="fas fa-print"></i> طباعة الاجتماع</button>
-                        <button class="btn danger admin-only" style="padding:4px 8px; font-size:11px;" onclick="deleteMeeting('${key}')"><i class="fas fa-trash"></i></button>
+                        <span><i class="fas fa-calendar"></i> ${esc(m.date)}</span>
+                        <span><i class="fas fa-building"></i> ${esc(m.offices)}</span>
+                        <button class="btn" style="padding:4px 10px;font-size:12px" onclick="printSingleMeeting('${key}')"><i class="fas fa-print"></i> طباعة الاجتماع</button>
+                        <button class="btn danger admin-only" style="padding:4px 10px;font-size:12px" onclick="deleteMeeting('${key}')"><i class="fas fa-trash"></i></button>
                     </div>
                 </div>
-                <ol style="margin:0; padding-right:15px; font-size:13px; line-height:1.8; list-style:none;">${decisionsHtml}</ol>
+                <ol style="margin:0;padding:0;font-size:13px;line-height:1.8;list-style:none">${decisionsHtml}</ol>
             </div>`;
         });
-        document.getElementById('meetingCards').innerHTML = html || '<p style="text-align:center">لا توجد اجتماعات مسجلة</p>';
+        $('meetingCards').innerHTML = html || '<p style="text-align:center;color:var(--ink-muted)">لا توجد اجتماعات مسجلة</p>';
     }
 
-    function printSingleMeeting(key) {
-        let m = meetingsData[key];
-        document.getElementById('reportSubTitle').innerText = "محضر اجتماع رسمي";
-        document.getElementById('reportScope').innerText = "المكتب: " + m.offices;
-        document.getElementById('reportDate').innerText = m.date;
-        document.getElementById('reportKpiBox').style.display = 'none';
-
-        let decisionsList = '';
-        if(m.decisions) {
-            m.decisions.split('\n').filter(d => d.trim()).forEach((d, idx) => {
-                decisionsList += `<li style="margin-bottom:8px;">${d}</li>`;
-            });
-        }
-
-        document.getElementById('reportPrintArea').innerHTML = `
-            <div style="border: 1px solid #cbd5e1; padding: 20px; border-radius: 8px;">
-                <h3 style="color:#102a43; margin-top:0;">${m.title}</h3>
-                <div style="margin-bottom:15px; font-size:12px; color:#64748b;"><b>تاريخ الانعقاد:</b> ${m.date} | <b>المكاتب المشاركة:</b> ${m.offices}</div>
-                <h4 style="color:#102a43; border-bottom:1px solid #cbd5e1; padding-bottom:5px;">القرارات والتوصيات:</h4>
-                <ol style="font-size:13px; line-height:1.9;">${decisionsList}</ol>
-            </div>
-        `;
-        setTimeout(() => { window.print(); }, 300);
-    }
-
-    function convertDecisionToTask(title, officeStr) {
-        document.getElementById('modalTitle').innerText = "تحويل توصية اجتماع إلى مهمة";
-        document.getElementById('editKey').value = '';
-        document.getElementById('mTitle').value = title;
-        document.getElementById('mOwner').value = 'المسؤول التنفيذي';
-        document.getElementById('mOffice').value = officeStr.includes('التعليم') ? 'مكتب التعليم' : officeStr.includes('الأيتام') ? 'مكتب الأيتام' : officeStr.includes('المالي') ? 'المكتب المالي' : 'الإدارة التنفيذية';
-        document.getElementById('mStatus').value = 'doing';
-        document.getElementById('mPriority').value = 'high';
-        let today = new Date().toISOString().split('T')[0];
-        document.getElementById('mAssigned').value = today;
-        document.getElementById('mDue').value = today;
-        
-        document.getElementById('paneMeetings').style.display = 'none';
-        document.getElementById('paneTasks').style.display = 'block';
-        document.getElementById('menuTasksBtn').classList.add('active');
-        document.getElementById('menuMeetingsBtn').classList.remove('active');
-        document.getElementById('pageMainTitle').innerText = "إدارة المهام التنفيذية";
-        currentActiveTab = 'tasks';
-
-        document.getElementById('taskModal').classList.add('active');
+    function convertDecisionToTask(meetKey, idx) {
+        let m = meetingsData[meetKey];
+        if (!m) return;
+        let title = decisionsOf(m)[idx] || '';
+        let o = m.offices || '';
+        let office = OFFICES.find(x => x === o) || (o.includes('التعليم') ? 'مكتب التعليم' : o.includes('الأيتام') ? 'مكتب الأيتام' : o.includes('المالي') ? 'المكتب المالي' : o.includes('الخدمات') ? 'مكتب الخدمات' : 'الإدارة التنفيذية');
+        switchMainTab('tasks');
+        openTaskModal();
+        $('modalTitle').innerText = "تحويل قرار اجتماع إلى مهمة";
+        $('mTitle').value = title;
+        $('mOffice').value = office;
+        $('mStatus').value = 'doing';
+        $('mPriority').value = 'high';
     }
 
     function saveMeeting(e) {
         e.preventDefault();
         meetingsRef.push({
-            title: document.getElementById('meetTitle').value,
-            date: document.getElementById('meetDate').value,
-            offices: document.getElementById('meetOffices').value,
-            decisions: document.getElementById('meetDecisions').value
+            title: $('meetTitle').value.trim(),
+            date: $('meetDate').value,
+            offices: $('meetOffices').value,
+            decisions: $('meetDecisions').value
         });
         closeModal('meetingModal');
     }
-    function deleteMeeting(key) { if(confirm('حذف هذا الاجتماع؟')) meetingsRef.child(key).remove(); }
+    function deleteMeeting(key) { if (confirm('حذف هذا الاجتماع؟')) meetingsRef.child(key).remove(); }
 
-    /* وظائف الشات الذكي بصيغة المذكر ومرونة تامة */
-    function toggleAiChat() {
-        document.getElementById('aiChatWindow').classList.toggle('active');
-    }
-
-    function clearAiChat() {
-        document.getElementById('aiChatBody').innerHTML = `<div class="chat-msg ai">السلام عليكم ورحمة الله وبركاته، أنا مساعدك الإداري الذكي لمنصة سراج الشام. تفضل باستفساراتك أو طلباتك وسأجيبك فوراً من بيانات المهام والاجتماعات!</div>`;
-    }
-
-    function handleAiKeyPress(e) {
-        if(e.key === 'Enter') sendAiMessage();
-    }
-
-    function sendAiMessage() {
-        let input = document.getElementById('aiChatInput');
-        let text = input.value.trim();
-        if(!text) return;
-
-        let chatBody = document.getElementById('aiChatBody');
-        chatBody.innerHTML += `<div class="chat-msg user">${text}</div>`;
-        input.value = '';
-        chatBody.scrollTop = chatBody.scrollHeight;
-
-        setTimeout(() => {
-            let reply = analyzeUserQuery(text);
-            chatBody.innerHTML += `<div class="chat-msg ai">${reply}</div>`;
-            chatBody.scrollTop = chatBody.scrollHeight;
-        }, 500);
-    }
-
-    function analyzeUserQuery(query) {
-        let q = query.toLowerCase();
-        let tasks = Object.values(tasksData);
-        let meetings = Object.values(meetingsData);
-        let archive = Object.values(archiveData);
-
-        if(q.includes('السلام') || q.includes('مرحبا') || q.includes('اهلين') || q.includes('مؤسسة')) {
-            return "وعليكم السلام ورحمة الله وبركاته، أهلاً بك! أنا مساعدك الذكي، أستطيع قراءة تفاصيل المهام والمكاتب والأرشيف واطلاعك عليها فوراً، سل عما شئت.";
-        }
-
-        // بحث مرن عن أي مكتب
-        let targetOffice = '';
-        if(q.includes('تعليم')) targetOffice = 'مكتب التعليم';
-        else if(q.includes('أيتام') || q.includes('ايتام')) targetOffice = 'مكتب الأيتام';
-        else if(q.includes('مالي')) targetOffice = 'المكتب المالي';
-        else if(q.includes('خدمات')) targetOffice = 'مكتب الخدمات';
-        else if(q.includes('تنفيذية') || q.includes('الادارة')) targetOffice = 'الإدارة التنفيذية';
-
-        if(targetOffice) {
-            let officeTasks = tasks.filter(t => t.office === targetOffice);
-            let doneCount = officeTasks.filter(t => t.status === 'done').length;
-            let doingCount = officeTasks.filter(t => t.status === 'doing').length;
-            let listStr = officeTasks.map(t => `- ${t.title} (${t.status === 'done' ? 'منجزة' : 'قيد التنفيذ'})`).join('\n');
-            
-            return `<b>تفاصيل ${targetOffice}:</b>\n- إجمالي المهام: ${officeTasks.length}\n- منجزة: ${doneCount} | قيد التنفيذ: ${doingCount}\n\n<b>المهام المسجلة:</b>\n${listStr || 'لا توجد مهام مسجلة حالياً.'}`;
-        }
-
-        if(q.includes('أرشيف') || q.includes('الارشيف') || q.includes('ملفات') || q.includes('مستندات')) {
-            return `<b>ملخص الأرشيف الحالي:</b>\n- إجمالي المستندات والأوراق المؤرشفة: ${archive.length} مستند.\nيمكنك استعراضها كاملة عبر الانتقال إلى قسم "أرشيف المكاتب".`;
-        }
-
-        if(q.includes('اجتماع') || q.includes('اجتماعات') || q.includes('قرارات')) {
-            return `<b>ملخص الاجتماعات:</b>\n- إجمالي الاجتماعات المسجلة: ${meetings.length} اجتماع.\nيمكنك مراجعة كافة التفاصيل والقرارات من تبويب "الاجتماعات والقرارات".`;
-        }
-
-        let total = tasks.length;
-        let doneTotal = tasks.filter(t => t.status === 'done').length;
-        let ratio = total > 0 ? Math.round((doneTotal / total) * 100) : 0;
-
-        if(q.includes('وضع') || q.includes('حالة') || q.includes('كم') || q.includes('تقرير') || q.includes('المهام')) {
-            return `<b>حالة النظام العامة حالياً:</b>\n- إجمالي المهام: ${total}\n- نسبة الإنجاز الكلية: ${ratio}%\n- المهام المنجزة: ${doneTotal}\n\nيمكنك سؤالي عن أي مكتب أو قسم بشكل مباشر وسأجيبك فوراً!`;
-        }
-
-        return `فهمت سؤالك، وبناءً على قاعدة بيانات النظام:\n- إجمالي المهام المسجلة: ${total} مهمة.\n- عدد الاجتماعات: ${meetings.length}.\n- عدد الملفات المؤرشفة: ${archive.length}.\n\nتستطيع سؤالي بتحديد اسم المكتب (مثل: "مكتب التعليم شو وضعه") أو طلب إحصائيات معينة وسأقوم بتلبية طلبك فوراً!`;
-    }
-
+    /* ---------- الأرشيف ---------- */
     function renderArchive() {
-        let query = document.getElementById('searchArchive').value.toLowerCase();
+        let query = $('searchArchive').value.trim().toLowerCase();
         let rows = '';
         Object.keys(archiveData).reverse().forEach(key => {
             let a = archiveData[key];
-            if(currentArchiveOffice !== 'all' && a.office !== currentArchiveOffice) return;
-            if(query && !Object.values(a).some(v => String(v).toLowerCase().includes(query))) return;
+            if (currentArchiveOffice !== 'all' && a.office !== currentArchiveOffice) return;
+            if (query && ![a.title, a.office, a.type, a.notes].some(v => String(v || '').toLowerCase().includes(query))) return;
             rows += `<tr>
-                <td><b>${a.title}</b></td>
-                <td>${a.office}</td>
-                <td><span class="badge" style="background:var(--surface-sub); color:var(--primary)">${a.type}</span></td>
-                <td>${a.date}</td>
-                <td>${a.notes || '-'}</td>
-                <td><a href="${a.fileData}" download="${a.fileName}"><i class="fas fa-download"></i> ${a.fileName}</a></td>
-                <td class="admin-only"><button class="btn danger" style="padding:4px 6px; font-size:11px;" onclick="deleteArchive('${key}')"><i class="fas fa-trash"></i></button></td>
+                <td data-label="الوثيقة"><b>${esc(a.title)}</b></td>
+                <td data-label="المكتب">${esc(a.office)}</td>
+                <td data-label="النوع"><span class="badge hold">${esc(a.type)}</span></td>
+                <td data-label="تاريخ الأرشفة">${esc(a.date)}</td>
+                <td data-label="ملاحظات">${esc(a.notes || '-')}</td>
+                <td data-label="تحميل"><a href="${esc(safeDataUrl(a.fileData))}" download="${esc(a.fileName)}"><i class="fas fa-download"></i> ${esc(a.fileName)}</a></td>
+                <td data-label="إجراءات" class="admin-only"><button class="btn danger" style="padding:4px 8px" onclick="deleteArchive('${key}')"><i class="fas fa-trash"></i></button></td>
             </tr>`;
         });
-        document.getElementById('archiveRows').innerHTML = rows || '<tr><td colspan="7" style="text-align:center">لا توجد وثائق مؤرشفة لهذا المكتب</td></tr>';
+        $('archiveRows').innerHTML = rows || '<tr><td colspan="7" class="empty-row">لا توجد وثائق مؤرشفة لهذا المكتب</td></tr>';
     }
 
     function saveArchiveDocument(e) {
         e.preventDefault();
-        let fileInput = document.getElementById('arcFile');
-        if(!fileInput.files[0]) return;
+        let f = $('arcFile').files[0];
+        if (!f) return;
+        if (f.size > MAX_FILE) return alert("حجم الملف كبير. الحد الأقصى 1.5 ميغابايت.");
         let reader = new FileReader();
-        reader.onload = function(evt) {
+        reader.onload = evt => {
             archiveRef.push({
-                title: document.getElementById('arcTitle').value,
-                office: document.getElementById('arcOffice').value,
-                type: document.getElementById('arcType').value,
-                notes: document.getElementById('arcNotes').value,
-                date: new Date().toISOString().split('T')[0],
-                fileName: fileInput.files[0].name,
+                title: $('arcTitle').value.trim(),
+                office: $('arcOffice').value,
+                type: $('arcType').value,
+                notes: $('arcNotes').value,
+                date: today(),
+                fileName: f.name,
                 fileData: evt.target.result
             });
             closeModal('archiveModal');
         };
-        reader.readAsDataURL(fileInput.files[0]);
+        reader.readAsDataURL(f);
     }
-    function deleteArchive(key) { if(confirm('حذف هذه الوثيقة؟')) archiveRef.child(key).remove(); }
+    function deleteArchive(key) { if (confirm('حذف هذه الوثيقة؟')) archiveRef.child(key).remove(); }
 
+    /* ---------- مؤشرات وفلاتر ---------- */
     function updateKpis() {
         let total = 0, done = 0, doing = 0, hold = 0;
         Object.values(tasksData).forEach(t => {
             total++;
-            if(t.status === 'done') done++;
-            else if(t.status === 'doing') doing++;
-            else hold++;
+            if (t.status === 'done') done++; else if (t.status === 'doing') doing++; else hold++;
         });
-        document.getElementById('stTotal').innerText = total;
-        document.getElementById('stDone').innerText = done;
-        document.getElementById('stDoing').innerText = doing;
-        document.getElementById('stHold').innerText = hold;
+        $('stTotal').innerText = total; $('stDone').innerText = done; $('stDoing').innerText = doing; $('stHold').innerText = hold;
+    }
+
+    function fillSelect(id, firstLabel, values) {
+        let sel = $(id), prev = sel.value;
+        sel.innerHTML = `<option value="all">${firstLabel}</option>` + values.map(v => `<option value="${esc(v)}">${esc(v)}</option>`).join('');
+        sel.value = values.includes(prev) ? prev : 'all';
     }
 
     function populateFilters() {
-        let offices = new Set(["الإدارة التنفيذية", "مكتب التعليم", "مكتب الأيتام", "المكتب المالي", "مكتب الخدمات"]);
-        Object.values(tasksData).forEach(t => { if(t.office) offices.add(t.office); });
-
-        let rptOff = document.getElementById('rptOfficeFilter');
-        let offOpts = '<option value="all">جميع المكاتب والأقسام</option>';
-        offices.forEach(o => offOpts += `<option value="${o}">${o}</option>`);
-        rptOff.innerHTML = offOpts;
-
-        document.getElementById('biOfficeFilter').innerHTML = offOpts;
+        let offices = new Set(OFFICES);
+        let owners = new Set();
+        Object.values(tasksData).forEach(t => { if (t.office) offices.add(t.office); if (t.owner) owners.add(t.owner); });
+        let o = [...offices];
+        fillSelect('rptOfficeFilter', 'جميع المكاتب والأقسام', o);
+        fillSelect('biOfficeFilter', 'جميع المكاتب والأقسام', o);
+        fillSelect('taskOfficeFilter', 'كل المكاتب', o);
+        fillSelect('biOwnerFilter', 'جميع المسؤولين', [...owners].sort());
     }
 
-    let statusChartInst = null, officeChartInst = null, priorityChartInst = null, workloadChartInst = null;
+    /* ---------- الإحصائيات ---------- */
+    let charts = {};
+    function mkChart(id, cfg) {
+        if (charts[id]) charts[id].destroy();
+        charts[id] = new Chart($(id), cfg);
+    }
+    function palette() {
+        const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+        return dark
+            ? { navy: '#6aa0d8', gold: '#d2ac5e', teal: '#4fb3a6', burg: '#d0707f', sand: '#b9a77c', slate: '#8fa3bd' }
+            : { navy: '#14375e', gold: '#b8923f', teal: '#2c7a72', burg: '#8a3040', sand: '#d9c9a3', slate: '#6b7f99' };
+    }
     function renderAnalytics() {
-        let officeFilter = document.getElementById('biOfficeFilter').value;
-        let ownerFilter = document.getElementById('biOwnerFilter').value;
+        const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const P = palette();
+        Chart.defaults.color = dark ? '#c3ceda' : '#475569';
+        Chart.defaults.borderColor = dark ? '#2a3a4a' : '#e5e9ef';
+        Chart.defaults.font.family = "'IBM Plex Sans Arabic', sans-serif";
+        const surface = dark ? '#15202b' : '#ffffff';
+        let officeFilter = $('biOfficeFilter').value, ownerFilter = $('biOwnerFilter').value;
+        let list = Object.values(tasksData).filter(t =>
+            (officeFilter === 'all' || t.office === officeFilter) && (ownerFilter === 'all' || t.owner === ownerFilter));
 
-        let filteredTasks = Object.values(tasksData).filter(t => {
-            if(officeFilter !== 'all' && t.office !== officeFilter) return false;
-            if(ownerFilter !== 'all' && t.owner !== ownerFilter) return false;
-            return true;
+        let st = { done: 0, doing: 0, hold: 0, stop: 0 }, pr = { high: 0, mid: 0, low: 0 }, work = {}, done = {};
+        list.forEach(t => {
+            if (st[t.status] !== undefined) st[t.status]++;
+            if (pr[t.priority] !== undefined) pr[t.priority]++;
+            work[t.office] = (work[t.office] || 0) + 1;
+            if (t.status === 'done') done[t.office] = (done[t.office] || 0) + 1;
         });
+        const opts = { responsive: true, maintainAspectRatio: false };
+        const ring = { ...opts, cutout: '62%', plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8 } } } };
+        const grid = { grid: { color: dark ? '#243241' : '#eceff3' } };
+        mkChart('statusChart', { type: 'doughnut', data: { labels: ['منجزة', 'قيد التنفيذ', 'معلقة', 'متوقفة'], datasets: [{ data: [st.done, st.doing, st.hold, st.stop], backgroundColor: [P.teal, P.navy, P.gold, P.burg], borderColor: surface, borderWidth: 3 }] }, options: ring });
+        let labels = Object.keys(work);
+        mkChart('officeChart', { type: 'bar', data: { labels, datasets: [{ label: 'نسبة الإنجاز %', data: labels.map(o => Math.round(((done[o] || 0) / work[o]) * 100)), backgroundColor: P.navy, borderRadius: 6, maxBarThickness: 38 }] }, options: { ...opts, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, max: 100, ...grid }, x: { grid: { display: false } } } } });
+        mkChart('priorityChart', { type: 'doughnut', data: { labels: ['عالية', 'متوسطة', 'منخفضة'], datasets: [{ data: [pr.high, pr.mid, pr.low], backgroundColor: [P.burg, P.gold, P.teal], borderColor: surface, borderWidth: 3 }] }, options: ring });
+        mkChart('departmentWorkloadChart', { type: 'bar', data: { labels, datasets: [{ label: 'عدد المهام', data: labels.map(o => work[o]), backgroundColor: P.gold, borderRadius: 6, maxBarThickness: 38 }] }, options: { ...opts, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { precision: 0 }, ...grid }, x: { grid: { display: false } } } } });
 
-        let statusCounts = { done: 0, doing: 0, hold: 0, stop: 0 };
-        let priorityCounts = { high: 0, mid: 0, low: 0 };
-        let officeWorkload = {};
-
-        filteredTasks.forEach(t => {
-            if(statusCounts[t.status] !== undefined) statusCounts[t.status]++;
-            if(priorityCounts[t.priority] !== undefined) priorityCounts[t.priority]++;
-            officeWorkload[t.office] = (officeWorkload[t.office] || 0) + 1;
-        });
-
-        if(statusChartInst) statusChartInst.destroy();
-        statusChartInst = new Chart(document.getElementById('statusChart'), {
-            type: 'doughnut',
-            data: { labels: ['منجزة', 'قيد التنفيذ', 'معلقة', 'متوقفة'], datasets: [{ data: [statusCounts.done, statusCounts.doing, statusCounts.hold, statusCounts.stop], backgroundColor: ['#059669', '#2563eb', '#f59e0b', '#dc2626'] }] },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
-
-        let officeDone = {}, officeTotal = {};
-        filteredTasks.forEach(t => {
-            officeTotal[t.office] = (officeTotal[t.office] || 0) + 1;
-            if(t.status === 'done') officeDone[t.office] = (officeDone[t.office] || 0) + 1;
-        });
-        let offLabels = Object.keys(officeTotal);
-        let offRates = offLabels.map(o => Math.round(((officeDone[o] || 0) / officeTotal[o]) * 100));
-
-        if(officeChartInst) officeChartInst.destroy();
-        officeChartInst = new Chart(document.getElementById('officeChart'), {
-            type: 'bar',
-            data: { labels: offLabels, datasets: [{ label: 'نسبة الإنجاز %', data: offRates, backgroundColor: '#102a43', borderRadius: 8 }] },
-            options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, max: 100 } } }
-        });
-
-        if(priorityChartInst) priorityChartInst.destroy();
-        priorityChartInst = new Chart(document.getElementById('priorityChart'), {
-            type: 'pie',
-            data: { labels: ['عالية', 'متوسطة', 'منخفضة'], datasets: [{ data: [priorityCounts.high, priorityCounts.mid, priorityCounts.low], backgroundColor: ['#e11d48', '#f59e0b', '#10b981'] }] },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
-
-        if(workloadChartInst) workloadChartInst.destroy();
-        workloadChartInst = new Chart(document.getElementById('departmentWorkloadChart'), {
-            type: 'bar',
-            data: { labels: Object.keys(officeWorkload), datasets: [{ label: 'عدد المهام', data: Object.values(officeWorkload), backgroundColor: '#c59b27', borderRadius: 8 }] },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
+        if (!isAdmin) return;
+        // إحصائيات المتطوعات
+        const vols = volList();
+        const month = $('biMonth').value;
+        const h = Math.max(260, 50 + vols.length * 30);
+        ['volTasks', 'volHours'].forEach(p => { $(p + 'Wrap').style.height = h + 'px'; $(p + 'Card').style.height = (h + 56) + 'px'; });
+        const stats = vols.map(v => volStats(v, month));
+        mkChart('volTasksChart', { type: 'bar', data: { labels: vols.map(v => v.name), datasets: [
+            { label: 'منجزة', data: stats.map(s => s.done), backgroundColor: P.teal, borderRadius: 4 },
+            { label: 'غير منجزة', data: stats.map(s => s.tasks - s.done), backgroundColor: P.sand, borderRadius: 4 } ] },
+            options: { ...opts, indexAxis: 'y', plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 8 } } }, scales: { x: { stacked: true, beginAtZero: true, ticks: { precision: 0 }, ...grid }, y: { stacked: true, grid: { display: false } } } } });
+        mkChart('volHoursChart', { type: 'bar', data: { labels: vols.map(v => v.name), datasets: [{ label: 'ساعات', data: stats.map(s => s.hours), backgroundColor: P.navy, borderRadius: 4 }] },
+            options: { ...opts, indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true, ...grid }, y: { grid: { display: false } } } } });
+        let types = { field: 0, training: 0, office: 0, other: 0 };
+        Object.values(logsData).forEach(l => { if ((!month || String(l.date || '').startsWith(month)) && types[l.type] !== undefined) types[l.type]++; });
+        mkChart('logTypeChart', { type: 'doughnut', data: { labels: Object.values(LOG_TYPES), datasets: [{ data: [types.field, types.training, types.office, types.other], backgroundColor: [P.navy, P.gold, P.teal, P.slate], borderColor: surface, borderWidth: 3 }] }, options: ring });
     }
 
-    function openReportModal() { 
-        document.getElementById('reportModal').classList.add('active'); 
+    /* ---------- الطباعة ---------- */
+    function setReportKpis(items) {
+        const box = $('reportKpiBox');
+        if (!items) { box.style.display = 'none'; return; }
+        box.style.display = 'grid';
+        box.innerHTML = items.map(i => `<div class="report-kpi-item"><span>${esc(i[0])}</span><b>${esc(i[1])}</b></div>`).join('');
+    }
+    function setReportHead(sub, scope, date) {
+        $('reportSubTitle').innerText = sub;
+        $('reportScope').innerText = scope;
+        $('reportDate').innerText = date || today();
+    }
+    function doPrint() { setTimeout(() => window.print(), 300); }
+
+    function openReportModal() {
+        if (currentActiveTab === 'volunteers') return printVolunteersReport();
+        if (currentActiveTab === 'profile') return printVolunteerReport(currentVolunteerId);
+        if (currentActiveTab === 'archive' && currentArchiveOffice !== 'all') $('rptOfficeFilter').value = currentArchiveOffice;
+        $('reportModal').classList.add('active');
     }
 
     function triggerCustomPrint() {
         closeModal('reportModal');
-        let office = document.getElementById('rptOfficeFilter').value;
-        
-        if(currentActiveTab === 'meetings') {
-            printMeetingsReport(office);
-        } else {
-            printTasksReport(office);
-        }
+        let office = $('rptOfficeFilter').value;
+        if (currentActiveTab === 'meetings') printMeetingsReport(office);
+        else if (currentActiveTab === 'archive') printArchiveReport(office);
+        else printTasksReport(office);
     }
 
     function printTasksReport(office) {
-        document.getElementById('reportSubTitle').innerText = "تقرير متابعة تنفيذ المهام الإدارية";
-        document.getElementById('reportScope').innerText = office === 'all' ? 'جميع المكاتب والأقسام' : 'مكتب: ' + office;
-        document.getElementById('reportDate').innerText = new Date().toLocaleDateString('ar-SA');
-        document.getElementById('reportKpiBox').style.display = 'grid';
-
-        let rows = '';
-        let total = 0, done = 0, doing = 0;
+        setReportHead("تقرير متابعة تنفيذ المهام الإدارية", office === 'all' ? 'جميع المكاتب والأقسام' : 'مكتب: ' + office);
+        let rows = '', total = 0, done = 0, doing = 0;
         Object.values(tasksData).forEach(t => {
-            if(office !== 'all' && t.office !== office) return;
+            if (office !== 'all' && t.office !== office) return;
             total++;
-            if(t.status === 'done') done++;
-            if(t.status === 'doing') doing++;
-            let statusText = t.status === 'done' ? 'منجزة' : t.status === 'doing' ? 'قيد التنفيذ' : t.status === 'hold' ? 'معلقة' : 'متوقفة';
-            rows += `<tr><td><b>${t.title}</b></td><td>${t.owner}</td><td>${t.office}</td><td>${statusText}</td><td>${t.priority}</td><td>${t.assigned}</td><td>${t.due}</td></tr>`;
+            if (t.status === 'done') done++;
+            if (t.status === 'doing') doing++;
+            rows += `<tr><td><b>${esc(t.title)}</b></td><td>${esc(t.owner)}</td><td>${esc(t.office)}</td><td>${STATUS_TEXT[t.status] || ''}</td><td>${PRIORITY_TEXT[t.priority] || ''}</td><td>${esc(t.assigned)}</td><td>${esc(t.due)}</td></tr>`;
         });
-        document.getElementById('rptTotal').innerText = total;
-        document.getElementById('rptDone').innerText = done;
-        document.getElementById('rptDoing').innerText = doing;
-        document.getElementById('rptRatio').innerText = total > 0 ? Math.round((done/total)*100) + '%' : '0%';
-
-        document.getElementById('reportPrintArea').innerHTML = `<table class="report-table">
-            <thead>
-                <tr>
-                    <th>المهمة</th>
-                    <th>المسؤول</th>
-                    <th>المكتب</th>
-                    <th>الحالة</th>
-                    <th>الأولوية</th>
-                    <th>التكليف</th>
-                    <th>التسليم</th>
-                </tr>
-            </thead>
-            <tbody>${rows || '<tr><td colspan="7" style="text-align:center">لا توجد مهام مطابقة</td></tr>'}</tbody>
-        </table>`;
-
-        setTimeout(() => { window.print(); }, 300);
+        setReportKpis([['إجمالي المهام', total], ['المنجزة', done], ['قيد التنفيذ', doing], ['نسبة الإنجاز', total ? Math.round(done / total * 100) + '%' : '0%']]);
+        $('reportPrintArea').innerHTML = `<table class="report-table"><thead><tr><th>المهمة</th><th>المسؤول</th><th>المكتب</th><th>الحالة</th><th>الأولوية</th><th>التكليف</th><th>التسليم</th></tr></thead>
+            <tbody>${rows || '<tr><td colspan="7" style="text-align:center">لا توجد مهام مطابقة</td></tr>'}</tbody></table>`;
+        doPrint();
     }
 
     function printMeetingsReport(office) {
-        document.getElementById('reportSubTitle').innerText = "سجل الاجتماعات والقرارات";
-        document.getElementById('reportScope').innerText = office === 'all' ? 'جميع المكاتب والأقسام' : 'مكتب: ' + office;
-        document.getElementById('reportDate').innerText = new Date().toLocaleDateString('ar-SA');
-        document.getElementById('reportKpiBox').style.display = 'none';
-
+        setReportHead("سجل الاجتماعات والقرارات", office === 'all' ? 'جميع المكاتب والأقسام' : 'مكتب: ' + office);
+        setReportKpis(null);
         let rows = '';
-        Object.values(meetingsData).reverse().forEach((m, idx) => {
-            if(office !== 'all' && !m.offices.includes(office)) return;
-            let decisionsList = '';
-            if(m.decisions) {
-                m.decisions.split('\n').filter(d => d.trim()).forEach((d, i) => {
-                    decisionsList += `<div><b>${i + 1}.</b> ${d}</div>`;
-                });
-            }
+        Object.values(meetingsData).reverse().forEach(m => {
+            if (office !== 'all' && !String(m.offices || '').includes(office)) return;
+            let dl = decisionsOf(m).map((d, i) => `<div><b>${i + 1}.</b> ${esc(d)}</div>`).join('');
+            rows += `<tr><td><b>${esc(m.title)}</b></td><td>${esc(m.date)}</td><td>${esc(m.offices)}</td><td>${dl}</td></tr>`;
+        });
+        $('reportPrintArea').innerHTML = `<table class="report-table"><thead><tr><th>عنوان الاجتماع</th><th>التاريخ</th><th>المكاتب المشاركة</th><th>القرارات والتوصيات</th></tr></thead>
+            <tbody>${rows || '<tr><td colspan="4" style="text-align:center">لا توجد اجتماعات مطابقة</td></tr>'}</tbody></table>`;
+        doPrint();
+    }
+
+    function printSingleMeeting(key) {
+        let m = meetingsData[key];
+        setReportHead("محضر اجتماع رسمي", "المكتب: " + (m.offices || ''), m.date);
+        setReportKpis(null);
+        let list = decisionsOf(m).map(d => `<li style="margin-bottom:8px">${esc(d)}</li>`).join('');
+        $('reportPrintArea').innerHTML = `<div style="border:1px solid #cbd5e1;padding:20px;border-radius:8px">
+            <h3 style="color:#0f3156;margin-top:0">${esc(m.title)}</h3>
+            <div style="margin-bottom:15px;font-size:12px;color:#64748b"><b>تاريخ الانعقاد:</b> ${esc(m.date)} | <b>المكاتب المشاركة:</b> ${esc(m.offices)}</div>
+            <h4 style="color:#0f3156;border-bottom:1px solid #cbd5e1;padding-bottom:5px">القرارات والتوصيات:</h4>
+            <ol style="font-size:13px;line-height:1.9">${list}</ol></div>`;
+        doPrint();
+    }
+
+    function printArchiveReport(office) {
+        setReportHead("سجل الأرشيف", office === 'all' ? 'جميع المكاتب والأقسام' : 'مكتب: ' + office);
+        setReportKpis(null);
+        let rows = '';
+        Object.values(archiveData).reverse().forEach(a => {
+            if (office !== 'all' && a.office !== office) return;
+            rows += `<tr><td><b>${esc(a.title)}</b></td><td>${esc(a.office)}</td><td>${esc(a.type)}</td><td>${esc(a.date)}</td><td>${esc(a.notes || '')}</td></tr>`;
+        });
+        $('reportPrintArea').innerHTML = `<table class="report-table"><thead><tr><th>الوثيقة</th><th>المكتب</th><th>النوع</th><th>التاريخ</th><th>ملاحظات</th></tr></thead>
+            <tbody>${rows || '<tr><td colspan="5" style="text-align:center">لا توجد وثائق مطابقة</td></tr>'}</tbody></table>`;
+        doPrint();
+    }
+
+    /* ---------- المتطوعات وسجل الأعمال ---------- */
+    function volList() {
+        return Object.keys(volunteersData).map(id => ({ id, ...volunteersData[id] }))
+            .sort((a, b) => String(a.name).localeCompare(String(b.name), 'ar'));
+    }
+    function tasksOfVol(v) {
+        return Object.values(tasksData).filter(t => t.volunteerId === v.id || (!t.volunteerId && t.owner && String(t.owner).trim() === String(v.name).trim()));
+    }
+    function logsOfVol(id, month) {
+        return Object.keys(logsData).map(k => ({ key: k, ...logsData[k] }))
+            .filter(l => l.volunteerId === id && (!month || String(l.date || '').startsWith(month)))
+            .sort((a, b) => String(b.date).localeCompare(String(a.date)));
+    }
+    function volStats(v, month) {
+        const tasks = tasksOfVol(v), logs = logsOfVol(v.id, month);
+        return {
+            tasks: tasks.length,
+            done: tasks.filter(t => t.status === 'done').length,
+            logs: logs.length,
+            field: logs.filter(l => l.type === 'field').length,
+            training: logs.filter(l => l.type === 'training').length,
+            hours: logs.reduce((s, l) => s + (Number(l.hours) || 0), 0)
+        };
+    }
+
+    function renderVolunteers() {
+        if (!$('volRows')) return;
+        const q = $('searchVol').value.trim().toLowerCase();
+        let rows = '';
+        volList().forEach(v => {
+            if (q && !String(v.name).toLowerCase().includes(q)) return;
+            const s = volStats(v);
             rows += `<tr>
-                <td><b>${m.title}</b></td>
-                <td>${m.date}</td>
-                <td>${m.offices}</td>
-                <td>${decisionsList}</td>
+                <td data-label="الاسم"><b>${esc(v.name)}</b></td>
+                <td data-label="المكتب">${esc(v.office || 'غير محدد')}</td>
+                <td data-label="المهام">${s.tasks}</td>
+                <td data-label="المنجزة">${s.done}</td>
+                <td data-label="نسبة الإنجاز">${s.tasks ? Math.round(s.done / s.tasks * 100) + '%' : '-'}</td>
+                <td data-label="الأعمال المسجّلة">${s.logs}</td>
+                <td data-label="الساعات">${s.hours}</td>
+                <td data-label="الملف"><button class="btn primary" style="padding:4px 12px;font-size:12px" onclick="openProfile('${v.id}')">فتح الملف</button></td>
             </tr>`;
         });
+        $('volRows').innerHTML = rows || '<tr><td colspan="8" class="empty-row">لا توجد متطوعات مسجلة</td></tr>';
+    }
 
-        document.getElementById('reportPrintArea').innerHTML = `<table class="report-table">
-            <thead>
-                <tr>
-                    <th>عنوان الاجتماع</th>
-                    <th>التاريخ</th>
-                    <th>المكاتب المشاركة</th>
-                    <th>القرارات والتوصيات</th>
-                </tr>
-            </thead>
-            <tbody>${rows || '<tr><td colspan="4" style="text-align:center">لا توجد اجتماعات مطابقة</td></tr>'}</tbody>
-        </table>`;
+    function openVolunteerModal(id) {
+        $('volunteerForm').reset();
+        $('volEditKey').value = id || '';
+        $('volModalTitle').innerText = id ? 'تعديل بيانات المتطوعة' : 'إضافة متطوعة';
+        if (id && volunteersData[id]) { $('volName').value = volunteersData[id].name || ''; $('volOffice').value = volunteersData[id].office || ''; }
+        $('volunteerModal').classList.add('active');
+    }
+    function saveVolunteer(e) {
+        e.preventDefault();
+        const id = $('volEditKey').value;
+        const obj = { name: $('volName').value.trim(), office: $('volOffice').value };
+        if (id) volunteersRef.child(id).update(obj); else volunteersRef.push(obj);
+        closeModal('volunteerModal');
+    }
+    function deleteVolunteer(id) {
+        if (!id || !volunteersData[id]) return;
+        if (!confirm('سيتم حذف المتطوعة وسجل أعمالها. تبقى المهام المسندة إليها باسمها.')) return;
+        Object.keys(logsData).forEach(k => { if (logsData[k].volunteerId === id) logsRef.child(k).remove(); });
+        volunteersRef.child(id).remove();
+        switchMainTab('volunteers');
+    }
 
-        setTimeout(() => { window.print(); }, 300);
+    function openImportModal() { $('importNames').value = ''; $('importModal').classList.add('active'); }
+    function runImport() {
+        const existing = new Set(volList().map(v => v.name.trim()));
+        const names = $('importNames').value.split('\n')
+            .map(n => n.replace(/^[\s\d\.\)\-–،]+/, '').replace(/\s+/g, ' ').trim()).filter(Boolean);
+        let added = 0;
+        names.forEach(n => {
+            if (existing.has(n)) return;
+            existing.add(n);
+            volunteersRef.push({ name: n, office: $('importOffice').value });
+            added++;
+        });
+        closeModal('importModal');
+        alert('عدد الأسماء المضافة: ' + added + (names.length - added ? '، المكررة: ' + (names.length - added) : ''));
+    }
+
+    function fillOwnerSelect() {
+        const sel = $('mOwnerSel');
+        sel.innerHTML = '<option value="">اختيار المسؤولة</option>' +
+            volList().map(v => `<option value="${v.id}">${esc(v.name)}</option>`).join('') +
+            '<option value="__other">شخص آخر (كتابة الاسم)</option>';
+    }
+    function onOwnerChange() {
+        const other = $('mOwnerSel').value === '__other';
+        $('mOwner').style.display = other ? 'block' : 'none';
+        $('mOwner').required = other;
+        $('mOwnerSel').required = true;
+    }
+    function setOwnerFields(t) {
+        const sel = $('mOwnerSel');
+        let vid = t.volunteerId && volunteersData[t.volunteerId] ? t.volunteerId : '';
+        if (!vid && t.owner) { const m = volList().find(v => v.name.trim() === String(t.owner).trim()); if (m) vid = m.id; }
+        if (vid) sel.value = vid; else { sel.value = '__other'; $('mOwner').value = t.owner || ''; }
+        onOwnerChange();
+    }
+    function syncProgress(fromSlider) {
+        if (!fromSlider && $('mStatus').value === 'done') $('mProgress').value = 100;
+        $('mProgressVal').innerText = $('mProgress').value + '%';
+    }
+
+    function openProfile(id) {
+        if (!isAdmin || !volunteersData[id]) return;
+        currentVolunteerId = id;
+        showPane('profile');
+        $('pageMainTitle').innerText = 'ملف المتطوعة';
+        renderProfile();
+    }
+    function setProfileTab(t) {
+        profileTab = t;
+        $('profLogsWrap').style.display = t === 'logs' ? 'block' : 'none';
+        $('profTasksWrap').style.display = t === 'tasks' ? 'block' : 'none';
+        $('tabProfLogs').classList.toggle('active', t === 'logs');
+        $('tabProfTasks').classList.toggle('active', t === 'tasks');
+    }
+    function renderProfile() {
+        const v = volunteersData[currentVolunteerId];
+        if (!v) { switchMainTab('volunteers'); return; }
+        v.id = currentVolunteerId;
+        const s = volStats(v);
+        $('profName').innerText = v.name;
+        $('profOffice').innerText = v.office || 'غير محدد';
+        const k = [['المهام', s.tasks], ['المنجزة', s.done], ['أعمال ميدانية', s.field], ['تدريبات', s.training], ['مجموع الساعات', s.hours]];
+        $('profKpis').innerHTML = k.map(i => `<div class="kpi"><div class="kpi-info"><span>${i[0]}</span><b>${i[1]}</b></div></div>`).join('');
+        $('profLogRows').innerHTML = logsOfVol(v.id).map(l => `<tr>
+            <td data-label="التاريخ">${esc(l.date)}</td>
+            <td data-label="النوع"><span class="badge hold">${LOG_TYPES[l.type] || 'أخرى'}</span></td>
+            <td data-label="ما تم عمله">${esc(l.desc)}</td>
+            <td data-label="المكان">${esc(l.place || '-')}</td>
+            <td data-label="الساعات">${l.hours != null && l.hours !== '' ? esc(l.hours) : '-'}</td>
+            <td data-label="ملاحظات">${esc(l.notes || '-')}</td>
+            <td data-label="إجراءات" class="admin-only">
+                <button class="btn" style="padding:4px 8px" onclick="openLogModal('${l.key}')"><i class="fas fa-pen"></i></button>
+                <button class="btn danger" style="padding:4px 8px" onclick="deleteLog('${l.key}')"><i class="fas fa-trash"></i></button>
+            </td></tr>`).join('') || '<tr><td colspan="7" class="empty-row">لا يوجد سجل أعمال بعد</td></tr>';
+        $('profTaskRows').innerHTML = tasksOfVol(v).map(t => `<tr>
+            <td data-label="المهمة"><b>${esc(t.title)}</b></td>
+            <td data-label="المكتب">${esc(t.office)}</td>
+            <td data-label="الحالة"><span class="badge ${STATUS_TEXT[t.status] ? t.status : 'stop'}">${STATUS_TEXT[t.status] || ''}</span></td>
+            <td data-label="التقدم">${t.progress != null ? t.progress : (t.status === 'done' ? 100 : 0)}%</td>
+            <td data-label="التسليم">${esc(t.due || '-')}</td>
+            <td data-label="ملاحظات">${esc(t.notes || '-')}</td></tr>`).join('') || '<tr><td colspan="6" class="empty-row">لا توجد مهام مرتبطة بها</td></tr>';
+        setProfileTab(profileTab);
+    }
+
+    function openLogModal(key, volId) {
+        $('logForm').reset();
+        $('logVol').innerHTML = volList().map(v => `<option value="${v.id}">${esc(v.name)}</option>`).join('');
+        $('logEditKey').value = key || '';
+        $('logModalTitle').innerText = key ? 'تعديل عمل' : 'إضافة عمل لسجل المتطوعة';
+        if (key && logsData[key]) {
+            const l = logsData[key];
+            $('logVol').value = l.volunteerId; $('logDate').value = l.date || ''; $('logType').value = l.type || 'other';
+            $('logHours').value = l.hours != null ? l.hours : ''; $('logDesc').value = l.desc || '';
+            $('logPlace').value = l.place || ''; $('logNotes').value = l.notes || '';
+        } else {
+            $('logDate').value = today();
+            if (volId) $('logVol').value = volId;
+        }
+        $('logModal').classList.add('active');
+    }
+    function saveLog(e) {
+        e.preventDefault();
+        const key = $('logEditKey').value;
+        const obj = {
+            volunteerId: $('logVol').value, date: $('logDate').value, type: $('logType').value,
+            desc: $('logDesc').value.trim(), place: $('logPlace').value.trim(), notes: $('logNotes').value.trim(),
+            hours: $('logHours').value === '' ? null : Number($('logHours').value)
+        };
+        if (key) logsRef.child(key).update(obj); else logsRef.push(obj);
+        closeModal('logModal');
+    }
+    function deleteLog(key) { if (confirm('حذف هذا العمل من السجل؟')) logsRef.child(key).remove(); }
+
+    function printVolunteersReport() {
+        setReportHead('تقرير المتطوعات', 'جميع المتطوعات');
+        setReportKpis(null);
+        const rows = volList().map(v => { const s = volStats(v);
+            return `<tr><td><b>${esc(v.name)}</b></td><td>${esc(v.office || 'غير محدد')}</td><td>${s.tasks}</td><td>${s.done}</td><td>${s.tasks ? Math.round(s.done / s.tasks * 100) + '%' : '-'}</td><td>${s.field}</td><td>${s.training}</td><td>${s.hours}</td></tr>`; }).join('');
+        $('reportPrintArea').innerHTML = `<table class="report-table"><thead><tr><th>الاسم</th><th>المكتب</th><th>المهام</th><th>المنجزة</th><th>نسبة الإنجاز</th><th>ميداني</th><th>تدريب</th><th>الساعات</th></tr></thead>
+            <tbody>${rows || '<tr><td colspan="8" style="text-align:center">لا توجد بيانات</td></tr>'}</tbody></table>`;
+        doPrint();
+    }
+    function printVolunteerReport(id) {
+        const v = volunteersData[id]; if (!v) return;
+        v.id = id;
+        const s = volStats(v);
+        setReportHead('تقرير المتطوعة: ' + v.name, 'المكتب: ' + (v.office || 'غير محدد'));
+        setReportKpis([['المهام', s.tasks], ['المنجزة', s.done], ['أعمال ميدانية / تدريبات', s.field + ' / ' + s.training], ['مجموع الساعات', s.hours]]);
+        const logs = logsOfVol(id).map(l => `<tr><td>${esc(l.date)}</td><td>${LOG_TYPES[l.type] || ''}</td><td>${esc(l.desc)}</td><td>${esc(l.place || '')}</td><td>${l.hours != null && l.hours !== '' ? esc(l.hours) : ''}</td><td>${esc(l.notes || '')}</td></tr>`).join('');
+        const tasks = tasksOfVol(v).map(t => `<tr><td>${esc(t.title)}</td><td>${esc(t.office)}</td><td>${STATUS_TEXT[t.status] || ''}</td><td>${t.progress != null ? t.progress : (t.status === 'done' ? 100 : 0)}%</td><td>${esc(t.due || '')}</td><td>${esc(t.notes || '')}</td></tr>`).join('');
+        $('reportPrintArea').innerHTML = `<h3 style="color:#0f3156;margin:6px 0">سجل الأعمال</h3>
+            <table class="report-table"><thead><tr><th>التاريخ</th><th>النوع</th><th>ما تم عمله</th><th>المكان</th><th>الساعات</th><th>ملاحظات</th></tr></thead><tbody>${logs || '<tr><td colspan="6" style="text-align:center">لا يوجد سجل</td></tr>'}</tbody></table>
+            <h3 style="color:#0f3156;margin:14px 0 6px">المهام</h3>
+            <table class="report-table"><thead><tr><th>المهمة</th><th>المكتب</th><th>الحالة</th><th>التقدم</th><th>التسليم</th><th>ملاحظات</th></tr></thead><tbody>${tasks || '<tr><td colspan="6" style="text-align:center">لا توجد مهام</td></tr>'}</tbody></table>`;
+        doPrint();
     }
 </script>
 </body>
