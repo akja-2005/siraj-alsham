@@ -10,6 +10,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
 <style>
         :root {
@@ -386,6 +387,22 @@
             </div>
         </div>
         <div class="admin-only" style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px">
+            <h3 style="margin:0 0 8px;color:var(--brand-ink);font-size:16px">ربط أرشيف Google Drive <span id="driveStatus" class="badge hold">غير مربوط</span></h3>
+            <div style="color:var(--ink-muted);font-size:13px;margin-bottom:12px">تُحفظ الوثائق الجديدة في الدرايف ويبقى في الموقع رابطها فقط.</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <input id="driveUrlInput" dir="ltr" placeholder="https://script.google.com/macros/s/.../exec" style="flex:1;min-width:240px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)">
+                <button class="btn primary" onclick="saveDriveUrl()"><i class="fas fa-link"></i> حفظ</button>
+            </div>
+        </div>
+        <div class="admin-only" style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px">
+            <h3 style="margin:0 0 8px;color:var(--brand-ink);font-size:16px">نسخة احتياطية</h3>
+            <div style="color:var(--ink-muted);font-size:13px;margin-bottom:12px">ملف Excel للمراجعة والطباعة، وملف JSON نسخة كاملة تشمل الوثائق المؤرشفة.</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+                <button class="btn primary" onclick="exportExcel()"><i class="fas fa-file-excel"></i> تصدير Excel</button>
+                <button class="btn" onclick="exportJson()"><i class="fas fa-file-code"></i> تصدير JSON</button>
+            </div>
+        </div>
+        <div class="admin-only" style="background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px">
             <h3 style="margin:0 0 8px;color:var(--brand-ink);font-size:16px">كلمة المرور</h3>
             <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span style="color:var(--ink-muted);font-size:13px">يُرسل رابط تغيير كلمة المرور إلى بريد الحساب.</span><button class="btn primary" onclick="sendPasswordReset()"><i class="fas fa-envelope"></i> إرسال الرابط</button></div>
         </div>
@@ -458,10 +475,10 @@
             <div class="form-field"><label>نوع الوثيقة</label>
                 <select id="arcType" required><option value="خطة وبرنامج">خطة وبرنامج عمل</option><option value="قرار إداري">قرار / تعميم إداري</option><option value="تقرير">تقرير دوري / ختامي</option></select></div>
             <div class="form-field full"><label>ملاحظات وشرح الوثيقة</label><textarea id="arcNotes" rows="2"></textarea></div>
-            <div class="form-field full"><label>الملف (حتى 1.5 ميغابايت)</label><input type="file" id="arcFile" required></div>
+            <div class="form-field full"><label id="arcFileLabel">الملف (حتى 1.5 ميغابايت)</label><input type="file" id="arcFile" required></div>
             <div class="form-field full" style="flex-direction:row;justify-content:flex-end;gap:8px;margin-top:6px">
                 <button type="button" class="btn" onclick="closeModal('archiveModal')">إلغاء</button>
-                <button type="submit" class="btn primary">أرشفة الآن</button>
+                <button type="submit" class="btn primary" id="arcSubmit">أرشفة الآن</button>
             </div>
         </form>
     </div>
@@ -554,6 +571,9 @@
     const meetingsRef = db.ref('meetings');
     const archiveRef = db.ref('archive');
     const auth = firebase.auth();
+    const driveRef = db.ref('settings/driveUrl');
+    let driveUrl = '';
+    const MAX_DRIVE_FILE = 20 * 1024 * 1024;
 
     const OFFICES = ["الإدارة التنفيذية", "مكتب التعليم", "مكتب الأيتام", "المكتب المالي", "مكتب الخدمات"];
     const STATUS_TEXT = { done: 'منجزة', doing: 'قيد التنفيذ', hold: 'معلقة', stop: 'متوقفة' };
@@ -669,6 +689,39 @@
             .catch(() => alert('تعذّر إرسال الرابط. أعد المحاولة لاحقاً.'));
     }
 
+    /* ---------- النسخة الاحتياطية ---------- */
+    function downloadBlob(blob, name) {
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob); a.download = name;
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    }
+    function exportJson() {
+        if (!isAdmin) return;
+        const data = { exportedAt: new Date().toISOString(), tasks: tasksData, meetings: meetingsData, archive: archiveData, volunteers: volunteersData, workLogs: logsData };
+        downloadBlob(new Blob([JSON.stringify(data, null, 1)], { type: 'application/json' }), 'siraj-backup-' + today() + '.json');
+    }
+    function exportExcel() {
+        if (!isAdmin) return;
+        if (typeof XLSX === 'undefined') { alert('تعذّر تحميل مكتبة التصدير. تحقق من الإنترنت.'); return; }
+        const vName = id => (volunteersData[id] && volunteersData[id].name) || '';
+        const sheets = [
+            ['المهام', Object.values(tasksData).map(t => ({ 'المهمة': t.title || '', 'المسؤول': t.owner || '', 'المكتب': t.office || '', 'الحالة': STATUS_TEXT[t.status] || '', 'التقدم %': t.progress != null ? t.progress : (t.status === 'done' ? 100 : 0), 'الأولوية': PRIORITY_TEXT[t.priority] || '', 'التكليف': t.assigned || '', 'التسليم': t.due || '', 'ملاحظات': t.notes || '' }))],
+            ['الاجتماعات', Object.values(meetingsData).map(m => ({ 'العنوان': m.title || '', 'التاريخ': m.date || '', 'المكاتب': m.offices || '', 'القرارات': m.decisions || '' }))],
+            ['الأرشيف', Object.values(archiveData).map(a => ({ 'الوثيقة': a.title || '', 'المكتب': a.office || '', 'النوع': a.type || '', 'التاريخ': a.date || '', 'اسم الملف': a.fileName || '', 'رابط الدرايف': a.driveUrl || '', 'ملاحظات': a.notes || '' }))],
+            ['المتطوعات', Object.values(volunteersData).map(v => ({ 'الاسم': v.name || '', 'المكتب': v.office || '' }))],
+            ['سجل الأعمال', Object.values(logsData).map(l => ({ 'المتطوعة': vName(l.volunteerId), 'التاريخ': l.date || '', 'النوع': LOG_TYPES[l.type] || '', 'العمل': l.desc || '', 'المكان': l.place || '', 'الساعات': l.hours == null ? '' : l.hours, 'ملاحظات': l.notes || '' }))]
+        ];
+        const wb = XLSX.utils.book_new();
+        sheets.forEach(([name, rows]) => {
+            const ws = rows.length ? XLSX.utils.json_to_sheet(rows) : XLSX.utils.aoa_to_sheet([['لا توجد بيانات']]);
+            if (rows.length) ws['!cols'] = Object.keys(rows[0]).map(k => ({ wch: Math.min(45, Math.max(10, k.length + 4, ...rows.slice(0, 50).map(r => String(r[k]).length + 2))) }));
+            XLSX.utils.book_append_sheet(wb, ws, name);
+        });
+        wb.Workbook = { Views: [{ RTL: true }] };
+        XLSX.writeFile(wb, 'siraj-data-' + today() + '.xlsx');
+    }
+
     /* ---------- المظهر ---------- */
     function setTheme(dark) {
         document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
@@ -777,13 +830,14 @@
     function listen(ref, fn) { ref.on('value', fn, () => {}); listeners.push(ref); }
     function detachData() {
         listeners.forEach(r => r.off('value')); listeners.length = 0;
-        tasksData = {}; meetingsData = {}; archiveData = {}; volunteersData = {}; logsData = {};
+        tasksData = {}; meetingsData = {}; archiveData = {}; volunteersData = {}; logsData = {}; driveUrl = '';
     }
     function attachData(admin) {
         detachData();
         listen(tasksRef, snap => { tasksData = snap.val() || {}; renderTasks(); updateKpis(); populateFilters(); if ($('paneAnalytics').style.display === 'block') renderAnalytics(); });
         listen(meetingsRef, snap => { meetingsData = snap.val() || {}; renderMeetings(); });
         if (!admin) { renderArchive(); renderVolunteers(); return; }
+        listen(driveRef, snap => { driveUrl = snap.val() || ''; updateDriveUi(); });
         listen(archiveRef, snap => { archiveData = snap.val() || {}; renderArchive(); });
         listen(volunteersRef, snap => { volunteersData = snap.val() || {}; renderVolunteers(); if (currentActiveTab === 'profile') renderProfile(); if ($('paneAnalytics').style.display === 'block') renderAnalytics(); });
         listen(logsRef, snap => { logsData = snap.val() || {}; renderVolunteers(); if (currentActiveTab === 'profile') renderProfile(); if ($('paneAnalytics').style.display === 'block') renderAnalytics(); });
@@ -972,34 +1026,74 @@
                 <td data-label="النوع"><span class="badge hold">${esc(a.type)}</span></td>
                 <td data-label="تاريخ الأرشفة">${esc(a.date)}</td>
                 <td data-label="ملاحظات">${esc(a.notes || '-')}</td>
-                <td data-label="تحميل"><a href="${esc(safeDataUrl(a.fileData))}" download="${esc(a.fileName)}"><i class="fas fa-download"></i> ${esc(a.fileName)}</a></td>
+                <td data-label="تحميل">${archiveLink(a)}</td>
                 <td data-label="إجراءات" class="admin-only"><button class="btn danger" style="padding:4px 8px" onclick="deleteArchive('${key}')"><i class="fas fa-trash"></i></button></td>
             </tr>`;
         });
         $('archiveRows').innerHTML = rows || '<tr><td colspan="7" class="empty-row">لا توجد وثائق مؤرشفة لهذا المكتب</td></tr>';
     }
 
+    function safeDriveUrl(u) { return typeof u === 'string' && /^https:\/\/(drive|docs)\.google\.com\//.test(u) ? u : '#'; }
+    function archiveLink(a) {
+        if (a.driveUrl) return `<a href="${esc(safeDriveUrl(a.driveUrl))}" target="_blank" rel="noopener"><i class="fas fa-up-right-from-square"></i> ${esc(a.fileName || 'فتح')}</a>`;
+        return `<a href="${esc(safeDataUrl(a.fileData))}" download="${esc(a.fileName)}"><i class="fas fa-download"></i> ${esc(a.fileName)}</a>`;
+    }
+    function driveCall(payload) {
+        return auth.currentUser.getIdToken().then(token =>
+            fetch(driveUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(Object.assign({ token }, payload)) })
+        ).then(r => r.json());
+    }
+    function fileToBase64(f) {
+        return new Promise((res, rej) => {
+            const r = new FileReader();
+            r.onload = () => res(String(r.result).split(',')[1] || '');
+            r.onerror = rej;
+            r.readAsDataURL(f);
+        });
+    }
     function saveArchiveDocument(e) {
         e.preventDefault();
-        let f = $('arcFile').files[0];
+        const f = $('arcFile').files[0];
         if (!f) return;
-        if (f.size > MAX_FILE) return alert("حجم الملف كبير. الحد الأقصى 1.5 ميغابايت.");
-        let reader = new FileReader();
-        reader.onload = evt => {
-            archiveRef.push({
-                title: $('arcTitle').value.trim(),
-                office: $('arcOffice').value,
-                type: $('arcType').value,
-                notes: $('arcNotes').value,
-                date: today(),
-                fileName: f.name,
-                fileData: evt.target.result
-            });
-            closeModal('archiveModal');
-        };
-        reader.readAsDataURL(f);
+        const meta = { title: $('arcTitle').value.trim(), office: $('arcOffice').value, type: $('arcType').value, notes: $('arcNotes').value, date: today(), fileName: f.name };
+        if (!driveUrl) {
+            if (f.size > MAX_FILE) return alert('حجم الملف كبير. الحد الأقصى 1.5 ميغابايت. اربط الدرايف من الإعدادات لرفع ملفات أكبر.');
+            const reader = new FileReader();
+            reader.onload = evt => { archiveRef.push(Object.assign(meta, { fileData: evt.target.result })); closeModal('archiveModal'); };
+            reader.readAsDataURL(f);
+            return;
+        }
+        if (f.size > MAX_DRIVE_FILE) return alert('حجم الملف كبير. الحد الأقصى 20 ميغابايت.');
+        const btn = $('arcSubmit'); btn.disabled = true; btn.textContent = 'جارٍ الرفع...';
+        fileToBase64(f)
+            .then(data => driveCall({ action: 'upload', name: f.name, mime: f.type, office: meta.office, data }))
+            .then(r => {
+                if (!r || !r.ok) throw new Error((r && r.error) || 'failed');
+                archiveRef.push(Object.assign(meta, { driveId: r.id, driveUrl: r.url }));
+                $('archiveForm').reset();
+                closeModal('archiveModal');
+            })
+            .catch(() => alert('تعذّر رفع الملف إلى الدرايف. تحقق من الاتصال ومن رابط الربط في الإعدادات.'))
+            .then(() => { btn.disabled = false; btn.textContent = 'أرشفة الآن'; });
     }
-    function deleteArchive(key) { if (confirm('حذف هذه الوثيقة؟')) archiveRef.child(key).remove(); }
+    function deleteArchive(key) {
+        const a = archiveData[key];
+        if (!a || !confirm('حذف هذه الوثيقة؟')) return;
+        archiveRef.child(key).remove();
+        if (a.driveId && driveUrl) driveCall({ action: 'delete', id: a.driveId }).catch(() => {});
+    }
+    function saveDriveUrl() {
+        const v = $('driveUrlInput').value.trim();
+        if (v && !/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(v)) return alert('الرابط غير صحيح. يجب أن ينتهي بـ /exec');
+        (v ? driveRef.set(v) : driveRef.remove()).then(() => alert(v ? 'تم حفظ رابط الدرايف.' : 'تم إلغاء الربط.')).catch(() => alert('تعذّر الحفظ.'));
+    }
+    function updateDriveUi() {
+        if (!$('driveStatus')) return;
+        $('driveStatus').textContent = driveUrl ? 'الربط مفعّل' : 'غير مربوط';
+        $('driveStatus').className = 'badge ' + (driveUrl ? 'done' : 'hold');
+        if (document.activeElement !== $('driveUrlInput')) $('driveUrlInput').value = driveUrl;
+        $('arcFileLabel').textContent = driveUrl ? 'الملف (حتى 20 ميغابايت، يُحفظ في Google Drive)' : 'الملف (حتى 1.5 ميغابايت)';
+    }
 
     /* ---------- مؤشرات وفلاتر ---------- */
     function updateKpis() {
