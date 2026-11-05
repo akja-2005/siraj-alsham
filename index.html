@@ -59,6 +59,10 @@
             font-size: 13px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: var(--body);
         }
 
+        .att-input { width: 100%; min-width: 90px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); font-size: 13px; font-family: var(--body); }
+        tr.att-present td { background: var(--ok-bg); }
+        tr.att-excuse td { background: var(--warn-bg); }
+        tr.att-absent td { background: var(--bad-bg); }
         aside {
             width: var(--sidebar-width); background: var(--surface); border-left: 1px solid var(--line); height: 100vh; position: fixed; top: 0; right: 0;
             display: flex; flex-direction: column; z-index: 50; box-shadow: var(--shadow); transition: transform 0.25s ease;
@@ -225,6 +229,7 @@
     <div class="sidebar-menu">
         <div class="menu-header active" id="menuTasksBtn" onclick="switchMainTab('tasks')"><span><i class="fas fa-list-check"></i> المهام</span></div>
         <div class="menu-header admin-only" id="menuVolunteersBtn" onclick="switchMainTab('volunteers')"><span><i class="fas fa-user-group"></i> المتطوعات</span></div>
+        <div class="menu-header admin-only" id="menuAttendanceBtn" onclick="switchMainTab('attendance')"><span><i class="fas fa-clipboard-user"></i> التفقد اليومي</span></div>
         <div class="menu-header" id="menuMeetingsBtn" onclick="switchMainTab('meetings')"><span><i class="fas fa-users-rectangle"></i> الاجتماعات والقرارات</span></div>
         <div>
             <div class="menu-header admin-only" id="menuArchiveBtn" onclick="switchArchiveOffice(currentArchiveOffice)">
@@ -346,6 +351,40 @@
             <table>
                 <thead><tr><th>الاسم</th><th>المكتب</th><th>المهام</th><th>المنجزة</th><th>نسبة الإنجاز</th><th>الأعمال المسجّلة</th><th>الساعات</th><th>الملف</th></tr></thead>
                 <tbody id="volRows"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="paneAttendance" style="display:none">
+        <div class="filter-bar" style="margin-bottom:12px;justify-content:flex-start">
+            <div style="display:flex;gap:6px">
+                <button class="btn primary" id="attTabDay" onclick="setAttView('day')">يومي</button>
+                <button class="btn" id="attTabMonth" onclick="setAttView('month')">ملخص شهري</button>
+            </div>
+            <div id="attDayTools" style="display:contents">
+                <button class="btn" onclick="attShift(-1)" title="اليوم السابق"><i class="fas fa-chevron-right"></i></button>
+                <input type="date" class="select-input" id="attDate" style="width:auto" onchange="attSetDate(this.value)">
+                <button class="btn" onclick="attShift(1)" title="اليوم التالي"><i class="fas fa-chevron-left"></i></button>
+                <button class="btn" onclick="attSetDate(today())">اليوم</button>
+                <b id="attDayName" style="color:var(--ink-muted);font-size:13px"></b>
+                <button class="btn" onclick="attAllPresent()"><i class="fas fa-check-double"></i> الكل حاضرة</button>
+                <button class="btn" onclick="printAttendanceForm()"><i class="fas fa-file-signature"></i> نموذج للتوقيع</button>
+            </div>
+            <div id="attMonthTools" style="display:none;gap:8px;align-items:center">
+                <input type="month" class="select-input" id="attMonth" style="width:auto" onchange="attSetMonth(this.value)">
+            </div>
+        </div>
+        <div class="kpis" id="attKpis" style="margin-bottom:12px"></div>
+        <div class="table-wrap" id="attDayWrap">
+            <table>
+                <thead><tr><th>م</th><th>الاسم</th><th>الحالة</th><th>الوصول</th><th>المغادرة</th><th>الساعات</th><th>سبب الغياب / الخروج المبكر</th><th>ملاحظات</th></tr></thead>
+                <tbody id="attRows"></tbody>
+            </table>
+        </div>
+        <div class="table-wrap" id="attMonthWrap" style="display:none">
+            <table>
+                <thead><tr><th>الاسم</th><th>أيام الحضور</th><th>غياب بعذر</th><th>غياب بدون عذر</th><th>الساعات</th><th>نسبة الحضور</th></tr></thead>
+                <tbody id="attMonthRows"></tbody>
             </table>
         </div>
     </div>
@@ -572,6 +611,8 @@
     const archiveRef = db.ref('archive');
     const auth = firebase.auth();
     const driveRef = db.ref('settings/driveUrl');
+    const attRef = db.ref('attendance');
+    let attendanceData = {}, attDate = '', attView = 'day', attMonth = '';
     let driveUrl = '';
     const MAX_DRIVE_FILE = 20 * 1024 * 1024;
 
@@ -651,7 +692,7 @@
     }
     function applyRoleUI(adminState, email) {
         isAdmin = adminState;
-        if (!isAdmin && (currentActiveTab === 'volunteers' || currentActiveTab === 'profile' || currentActiveTab === 'archive')) switchMainTab('tasks');
+        if (!isAdmin && (currentActiveTab === 'volunteers' || currentActiveTab === 'profile' || currentActiveTab === 'archive' || currentActiveTab === 'attendance')) switchMainTab('tasks');
         document.body.classList.toggle('admin-mode', isAdmin);
         if (isAdmin) {
             $('roleBadge').className = 'badge done';
@@ -689,6 +730,143 @@
             .catch(() => alert('تعذّر إرسال الرابط. أعد المحاولة لاحقاً.'));
     }
 
+    /* ---------- التفقد اليومي ---------- */
+    const ATT_STATUS = { present: 'حاضرة', excuse: 'غائبة بعذر', absent: 'غائبة بدون عذر' };
+    function attVols() { return Object.keys(volunteersData).map(id => ({ id, ...volunteersData[id] })); }
+    function toMin(t) { const m = /^(\d{1,2}):(\d{2})$/.exec(t || ''); return m ? (+m[1]) * 60 + (+m[2]) : null; }
+    function attMins(r) { const a = toMin(r && r.arrive), l = toMin(r && r.leave); return a != null && l != null && l > a ? l - a : 0; }
+    function fmtHM(m) { return m ? Math.floor(m / 60) + ':' + String(m % 60).padStart(2, '0') : '-'; }
+    function dayName(d) { try { return new Intl.DateTimeFormat('ar-SY-u-ca-gregory-nu-latn', { weekday: 'long', timeZone: 'UTC' }).format(new Date(d + 'T12:00:00Z')); } catch (e) { return ''; } }
+    function shiftDate(d, n) { const t = new Date(d + 'T12:00:00Z'); t.setUTCDate(t.getUTCDate() + n); return t.toISOString().slice(0, 10); }
+
+    function setAttView(v) {
+        attView = v;
+        $('attTabDay').classList.toggle('primary', v === 'day');
+        $('attTabMonth').classList.toggle('primary', v === 'month');
+        $('attDayTools').style.display = v === 'day' ? 'contents' : 'none';
+        $('attMonthTools').style.display = v === 'month' ? 'flex' : 'none';
+        $('attDayWrap').style.display = v === 'day' ? '' : 'none';
+        $('attMonthWrap').style.display = v === 'month' ? '' : 'none';
+        $('attDate').value = attDate; $('attMonth').value = attMonth;
+        renderAttendance(true);
+    }
+    function attSetDate(v) { if (!v) return; attDate = v; attMonth = v.slice(0, 7); $('attDate').value = v; renderAttendance(true); }
+    function attShift(n) { attSetDate(shiftDate(attDate, n)); }
+    function attSetMonth(v) { if (!v) return; attMonth = v; renderAttendance(true); }
+
+    function attKpi(label, val) { return `<div class="kpi"><div class="kpi-info"><span>${esc(label)}</span><b>${esc(val)}</b></div></div>`; }
+    function attDayStats() {
+        const day = attendanceData[attDate] || {}, vols = attVols();
+        let p = 0, e = 0, a = 0, m = 0;
+        vols.forEach(v => { const r = day[v.id]; if (!r) return; if (r.status === 'present') p++; else if (r.status === 'excuse') e++; else if (r.status === 'absent') a++; m += attMins(r); });
+        return { total: vols.length, p, e, a, m, none: vols.length - vols.filter(v => day[v.id] && day[v.id].status).length };
+    }
+    function attMonthStats() {
+        return attVols().map(v => {
+            let p = 0, e = 0, a = 0, m = 0;
+            Object.keys(attendanceData).forEach(d => {
+                if (d.slice(0, 7) !== attMonth) return;
+                const r = attendanceData[d][v.id]; if (!r) return;
+                if (r.status === 'present') p++; else if (r.status === 'excuse') e++; else if (r.status === 'absent') a++;
+                m += attMins(r);
+            });
+            return { v, p, e, a, m, rate: p + e + a ? Math.round(p / (p + e + a) * 100) : null };
+        });
+    }
+    function updateAttKpis() {
+        if (attView === 'day') {
+            const s = attDayStats();
+            $('attKpis').innerHTML = attKpi('حاضرة', s.p) + attKpi('غائبة بعذر', s.e) + attKpi('غائبة بدون عذر', s.a) + attKpi('غير مسجّلة', s.none) + attKpi('مجموع الساعات', fmtHM(s.m));
+        } else {
+            const st = attMonthStats(), days = Object.keys(attendanceData).filter(d => d.slice(0, 7) === attMonth).length;
+            $('attKpis').innerHTML = attKpi('أيام مسجّلة', days) + attKpi('مرات الحضور', st.reduce((x, y) => x + y.p, 0)) + attKpi('مرات الغياب', st.reduce((x, y) => x + y.e + y.a, 0)) + attKpi('مجموع الساعات', fmtHM(st.reduce((x, y) => x + y.m, 0)));
+        }
+    }
+    function renderAttendance(force) {
+        if (currentActiveTab !== 'attendance') return;
+        const act = document.activeElement;
+        if (!force && act && $('paneAttendance').contains(act) && /INPUT|SELECT|TEXTAREA/.test(act.tagName)) { updateAttKpis(); return; }
+        updateAttKpis();
+        const vols = attVols();
+        if (attView === 'day') {
+            const day = attendanceData[attDate] || {};
+            $('attDayName').textContent = dayName(attDate);
+            $('attRows').innerHTML = vols.map((v, i) => {
+                const r = day[v.id] || {};
+                const opts = '<option value=""></option>' + Object.keys(ATT_STATUS).map(k => `<option value="${k}"${r.status === k ? ' selected' : ''}>${ATT_STATUS[k]}</option>`).join('');
+                return `<tr class="${r.status ? 'att-' + r.status : ''}" id="attRow_${v.id}">
+                    <td data-label="م">${i + 1}</td>
+                    <td data-label="الاسم"><b>${esc(v.name)}</b></td>
+                    <td data-label="الحالة"><select class="att-input" id="attS_${v.id}" onchange="attSave('${v.id}')">${opts}</select></td>
+                    <td data-label="الوصول"><input type="time" class="att-input" id="attA_${v.id}" value="${esc(r.arrive || '')}" onchange="attSave('${v.id}')"></td>
+                    <td data-label="المغادرة"><input type="time" class="att-input" id="attL_${v.id}" value="${esc(r.leave || '')}" onchange="attSave('${v.id}')"></td>
+                    <td data-label="الساعات" id="attH_${v.id}">${fmtHM(attMins(r))}</td>
+                    <td data-label="سبب الغياب / الخروج المبكر"><input class="att-input" id="attR_${v.id}" value="${esc(r.reason || '')}" onchange="attSave('${v.id}')"></td>
+                    <td data-label="ملاحظات"><input class="att-input" id="attN_${v.id}" value="${esc(r.notes || '')}" onchange="attSave('${v.id}')"></td>
+                </tr>`;
+            }).join('') || '<tr><td colspan="8" class="empty-row">لا توجد متطوعات. أضف الأسماء من قسم المتطوعات.</td></tr>';
+        } else {
+            $('attMonthRows').innerHTML = attMonthStats().map(s => `<tr>
+                <td data-label="الاسم"><b>${esc(s.v.name)}</b></td>
+                <td data-label="أيام الحضور">${s.p}</td>
+                <td data-label="غياب بعذر">${s.e}</td>
+                <td data-label="غياب بدون عذر">${s.a}</td>
+                <td data-label="الساعات">${fmtHM(s.m)}</td>
+                <td data-label="نسبة الحضور">${s.rate == null ? '-' : s.rate + '%'}</td></tr>`).join('') || '<tr><td colspan="6" class="empty-row">لا توجد متطوعات</td></tr>';
+        }
+    }
+    function attSave(id) {
+        const g = k => $('att' + k + '_' + id).value.trim();
+        const o = { status: g('S'), arrive: g('A'), leave: g('L'), reason: g('R'), notes: g('N') };
+        if (!o.status && o.arrive) { o.status = 'present'; $('attS_' + id).value = 'present'; }
+        if (o.arrive && o.leave && toMin(o.leave) <= toMin(o.arrive)) alert('وقت المغادرة يجب أن يكون بعد وقت الوصول.');
+        Object.keys(o).forEach(k => { if (!o[k]) delete o[k]; });
+        const ref = attRef.child(attDate).child(id);
+        (Object.keys(o).length ? ref.set(o) : ref.remove()).catch(() => alert('تعذّر الحفظ. تحقق من الاتصال.'));
+        $('attH_' + id).textContent = fmtHM(attMins(o));
+        $('attRow_' + id).className = o.status ? 'att-' + o.status : '';
+    }
+    function attAllPresent() {
+        const day = attendanceData[attDate] || {}, upd = {};
+        attVols().forEach(v => { if (!(day[v.id] && day[v.id].status)) upd[v.id] = Object.assign({}, day[v.id] || {}, { status: 'present' }); });
+        if (!Object.keys(upd).length) return alert('جميع المتطوعات مسجّلات لهذا اليوم.');
+        if (!confirm('تسجيل ' + Object.keys(upd).length + ' متطوعة حاضرات؟')) return;
+        attRef.child(attDate).update(upd).then(() => renderAttendance(true)).catch(() => alert('تعذّر الحفظ.'));
+    }
+    function printAttendanceForm() {
+        setReportHead('جدول التفقد اليومي', 'اليوم: ' + dayName(attDate), attDate);
+        setReportKpis(null);
+        const rows = attVols().map((v, i) => `<tr style="height:30px"><td>${i + 1}</td><td><b>${esc(v.name)}</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`).join('');
+        $('reportPrintArea').innerHTML = `<table class="report-table"><thead><tr><th>م</th><th>الاسم</th><th>وقت الوصول</th><th>التوقيع</th><th>وقت المغادرة</th><th>التوقيع</th><th>سبب الغياب / الخروج المبكر</th><th>ملاحظات</th></tr></thead><tbody>${rows}</tbody></table>`;
+        doPrint();
+    }
+    function printAttendanceDay() {
+        const s = attDayStats(), day = attendanceData[attDate] || {};
+        setReportHead('سجل التفقد اليومي', 'اليوم: ' + dayName(attDate), attDate);
+        setReportKpis([['حاضرة', s.p], ['غائبة بعذر', s.e], ['غائبة بدون عذر', s.a], ['مجموع الساعات', fmtHM(s.m)]]);
+        const rows = attVols().map((v, i) => { const r = day[v.id] || {}; return `<tr><td>${i + 1}</td><td><b>${esc(v.name)}</b></td><td>${esc(ATT_STATUS[r.status] || '')}</td><td>${esc(r.arrive || '')}</td><td>${esc(r.leave || '')}</td><td>${fmtHM(attMins(r))}</td><td>${esc(r.reason || '')}</td><td>${esc(r.notes || '')}</td></tr>`; }).join('');
+        $('reportPrintArea').innerHTML = `<table class="report-table"><thead><tr><th>م</th><th>الاسم</th><th>الحالة</th><th>الوصول</th><th>المغادرة</th><th>الساعات</th><th>السبب</th><th>ملاحظات</th></tr></thead><tbody>${rows}</tbody></table>`;
+        doPrint();
+    }
+    function printAttendanceMonth() {
+        const st = attMonthStats();
+        setReportHead('ملخص التفقد الشهري', 'الشهر: ' + attMonth, today());
+        setReportKpis([['مرات الحضور', st.reduce((x, y) => x + y.p, 0)], ['مرات الغياب', st.reduce((x, y) => x + y.e + y.a, 0)], ['مجموع الساعات', fmtHM(st.reduce((x, y) => x + y.m, 0))]]);
+        const rows = st.map(s => `<tr><td><b>${esc(s.v.name)}</b></td><td>${s.p}</td><td>${s.e}</td><td>${s.a}</td><td>${fmtHM(s.m)}</td><td>${s.rate == null ? '-' : s.rate + '%'}</td></tr>`).join('');
+        $('reportPrintArea').innerHTML = `<table class="report-table"><thead><tr><th>الاسم</th><th>أيام الحضور</th><th>غياب بعذر</th><th>غياب بدون عذر</th><th>الساعات</th><th>نسبة الحضور</th></tr></thead><tbody>${rows}</tbody></table>`;
+        doPrint();
+    }
+    function attendanceRows() {
+        const out = [];
+        Object.keys(attendanceData).sort().forEach(d => {
+            attVols().forEach(v => {
+                const r = attendanceData[d][v.id]; if (!r) return;
+                out.push({ 'التاريخ': d, 'الاسم': v.name || '', 'الحالة': ATT_STATUS[r.status] || '', 'الوصول': r.arrive || '', 'المغادرة': r.leave || '', 'الساعات': fmtHM(attMins(r)) === '-' ? '' : fmtHM(attMins(r)), 'السبب': r.reason || '', 'ملاحظات': r.notes || '' });
+            });
+        });
+        return out;
+    }
+
     /* ---------- النسخة الاحتياطية ---------- */
     function downloadBlob(blob, name) {
         const a = document.createElement('a');
@@ -698,7 +876,7 @@
     }
     function exportJson() {
         if (!isAdmin) return;
-        const data = { exportedAt: new Date().toISOString(), tasks: tasksData, meetings: meetingsData, archive: archiveData, volunteers: volunteersData, workLogs: logsData };
+        const data = { exportedAt: new Date().toISOString(), tasks: tasksData, meetings: meetingsData, archive: archiveData, volunteers: volunteersData, workLogs: logsData, attendance: attendanceData };
         downloadBlob(new Blob([JSON.stringify(data, null, 1)], { type: 'application/json' }), 'siraj-backup-' + today() + '.json');
     }
     function exportExcel() {
@@ -710,6 +888,7 @@
             ['الاجتماعات', Object.values(meetingsData).map(m => ({ 'العنوان': m.title || '', 'التاريخ': m.date || '', 'المكاتب': m.offices || '', 'القرارات': m.decisions || '' }))],
             ['الأرشيف', Object.values(archiveData).map(a => ({ 'الوثيقة': a.title || '', 'المكتب': a.office || '', 'النوع': a.type || '', 'التاريخ': a.date || '', 'اسم الملف': a.fileName || '', 'رابط الدرايف': a.driveUrl || '', 'ملاحظات': a.notes || '' }))],
             ['المتطوعات', Object.values(volunteersData).map(v => ({ 'الاسم': v.name || '', 'المكتب': v.office || '' }))],
+            ['التفقد', attendanceRows()],
             ['سجل الأعمال', Object.values(logsData).map(l => ({ 'المتطوعة': vName(l.volunteerId), 'التاريخ': l.date || '', 'النوع': LOG_TYPES[l.type] || '', 'العمل': l.desc || '', 'المكان': l.place || '', 'الساعات': l.hours == null ? '' : l.hours, 'ملاحظات': l.notes || '' }))]
         ];
         const wb = XLSX.utils.book_new();
@@ -745,6 +924,7 @@
         if (tab === 'tasks') $('menuTasksBtn').classList.add('active');
         else if (tab === 'meetings') $('menuMeetingsBtn').classList.add('active');
         else if (tab === 'volunteers' || tab === 'profile') $('menuVolunteersBtn').classList.add('active');
+        else if (tab === 'attendance') $('menuAttendanceBtn').classList.add('active');
         else if (tab === 'settings') $('menuSettingsBtn').classList.add('active');
         else if (tab === 'archive') {
             $('menuArchiveBtn').classList.add('active');
@@ -755,10 +935,10 @@
 
     function showPane(tab) {
         currentActiveTab = tab;
-        const panes = { tasks: 'paneTasks', meetings: 'paneMeetings', archive: 'paneArchive', settings: 'paneSettings', volunteers: 'paneVolunteers', profile: 'paneProfile' };
+        const panes = { tasks: 'paneTasks', meetings: 'paneMeetings', archive: 'paneArchive', settings: 'paneSettings', volunteers: 'paneVolunteers', profile: 'paneProfile', attendance: 'paneAttendance' };
         Object.keys(panes).forEach(k => { $(panes[k]).style.display = k === tab ? ((k === 'settings' || k === 'profile') ? 'flex' : 'block') : 'none'; });
         $('kpiSection').style.display = tab === 'tasks' ? 'grid' : 'none';
-        $('btnAdd').classList.toggle('hidden', tab === 'settings');
+        $('btnAdd').classList.toggle('hidden', tab === 'settings' || tab === 'attendance');
         $('btnPrint').classList.toggle('hidden', tab === 'settings');
         $('btnAdd').innerHTML = '<i class="fas fa-plus"></i> ' + ({ tasks: 'إضافة مهمة', meetings: 'إضافة اجتماع', archive: 'أرشفة وثيقة', volunteers: 'إضافة متطوعة', profile: 'إضافة عمل' }[tab] || 'إضافة');
         if (window.innerWidth <= 900) $('appSidebar').classList.remove('mobile-open');
@@ -766,7 +946,7 @@
     }
 
     function switchMainTab(tab) {
-        if ((tab === 'volunteers' || tab === 'profile') && !isAdmin) return;
+        if ((tab === 'volunteers' || tab === 'profile' || tab === 'attendance') && !isAdmin) return;
         showPane(tab);
         if (tab === 'tasks') {
             $('pageMainTitle').innerText = "إدارة المهام التنفيذية";
@@ -780,6 +960,11 @@
         } else if (tab === 'volunteers') {
             $('pageMainTitle').innerText = "المتطوعات";
             renderVolunteers();
+        } else if (tab === 'attendance') {
+            $('pageMainTitle').innerText = "التفقد اليومي";
+            if (!attDate) attDate = today();
+            if (!attMonth) attMonth = attDate.slice(0, 7);
+            setAttView(attView);
         } else if (tab === 'settings') {
             $('pageMainTitle').innerText = "الإعدادات";
         }
@@ -830,7 +1015,7 @@
     function listen(ref, fn) { ref.on('value', fn, () => {}); listeners.push(ref); }
     function detachData() {
         listeners.forEach(r => r.off('value')); listeners.length = 0;
-        tasksData = {}; meetingsData = {}; archiveData = {}; volunteersData = {}; logsData = {}; driveUrl = '';
+        tasksData = {}; meetingsData = {}; archiveData = {}; volunteersData = {}; logsData = {}; attendanceData = {}; driveUrl = '';
     }
     function attachData(admin) {
         detachData();
@@ -838,6 +1023,7 @@
         listen(meetingsRef, snap => { meetingsData = snap.val() || {}; renderMeetings(); });
         if (!admin) { renderArchive(); renderVolunteers(); return; }
         listen(driveRef, snap => { driveUrl = snap.val() || ''; updateDriveUi(); });
+        listen(attRef, snap => { attendanceData = snap.val() || {}; renderAttendance(); });
         listen(archiveRef, snap => { archiveData = snap.val() || {}; renderArchive(); });
         listen(volunteersRef, snap => { volunteersData = snap.val() || {}; renderVolunteers(); if (currentActiveTab === 'profile') renderProfile(); if ($('paneAnalytics').style.display === 'block') renderAnalytics(); });
         listen(logsRef, snap => { logsData = snap.val() || {}; renderVolunteers(); if (currentActiveTab === 'profile') renderProfile(); if ($('paneAnalytics').style.display === 'block') renderAnalytics(); });
@@ -1194,6 +1380,7 @@
     function doPrint() { setTimeout(() => window.print(), 300); }
 
     function openReportModal() {
+        if (currentActiveTab === 'attendance') return attView === 'day' ? printAttendanceDay() : printAttendanceMonth();
         if (currentActiveTab === 'volunteers') return printVolunteersReport();
         if (currentActiveTab === 'profile') return printVolunteerReport(currentVolunteerId);
         if (currentActiveTab === 'archive' && currentArchiveOffice !== 'all') $('rptOfficeFilter').value = currentArchiveOffice;
