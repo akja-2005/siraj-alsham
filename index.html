@@ -60,9 +60,12 @@
         }
 
         .att-input { width: 100%; min-width: 90px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); color: var(--ink); font-size: 13px; font-family: var(--body); }
-        tr.att-present td { background: var(--ok-bg); }
-        tr.att-excuse td { background: var(--warn-bg); }
-        tr.att-absent td { background: var(--bad-bg); }
+        .att-sum { display: flex; flex-wrap: wrap; gap: 6px 26px; padding: 10px 14px; margin-bottom: 12px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; font-size: 13px; color: var(--ink-muted); }
+        .att-sum b { color: var(--ink); font-size: 14px; margin-right: 3px; }
+        @media (min-width: 701px) {
+            .grid-table table { border-collapse: collapse; }
+            .grid-table th, .grid-table td { border: 1px solid var(--line); }
+        }
         aside {
             width: var(--sidebar-width); background: var(--surface); border-left: 1px solid var(--line); height: 100vh; position: fixed; top: 0; right: 0;
             display: flex; flex-direction: column; z-index: 50; box-shadow: var(--shadow); transition: transform 0.25s ease;
@@ -368,20 +371,19 @@
                 <button class="btn" onclick="attSetDate(today())">اليوم</button>
                 <b id="attDayName" style="color:var(--ink-muted);font-size:13px"></b>
                 <button class="btn" onclick="attAllPresent()"><i class="fas fa-check-double"></i> الكل حاضرة</button>
-                <button class="btn" onclick="printAttendanceForm()"><i class="fas fa-file-signature"></i> نموذج للتوقيع</button>
             </div>
             <div id="attMonthTools" style="display:none;gap:8px;align-items:center">
                 <input type="month" class="select-input" id="attMonth" style="width:auto" onchange="attSetMonth(this.value)">
             </div>
         </div>
-        <div class="kpis" id="attKpis" style="margin-bottom:12px"></div>
-        <div class="table-wrap" id="attDayWrap">
+        <div class="att-sum" id="attKpis"></div>
+        <div class="table-wrap grid-table" id="attDayWrap">
             <table>
                 <thead><tr><th>م</th><th>الاسم</th><th>الحالة</th><th>الوصول</th><th>المغادرة</th><th>الساعات</th><th>سبب الغياب / الخروج المبكر</th><th>ملاحظات</th></tr></thead>
                 <tbody id="attRows"></tbody>
             </table>
         </div>
-        <div class="table-wrap" id="attMonthWrap" style="display:none">
+        <div class="table-wrap grid-table" id="attMonthWrap" style="display:none">
             <table>
                 <thead><tr><th>الاسم</th><th>أيام الحضور</th><th>غياب بعذر</th><th>غياب بدون عذر</th><th>الساعات</th><th>نسبة الحضور</th></tr></thead>
                 <tbody id="attMonthRows"></tbody>
@@ -402,11 +404,18 @@
         <div class="filter-group">
             <button class="filter-btn active" id="tabProfLogs" onclick="setProfileTab('logs')">سجل الأعمال</button>
             <button class="filter-btn" id="tabProfTasks" onclick="setProfileTab('tasks')">المهام</button>
+            <button class="filter-btn" id="tabProfAtt" onclick="setProfileTab('att')">التفقد</button>
         </div>
         <div class="table-wrap" id="profLogsWrap">
             <table>
                 <thead><tr><th>التاريخ</th><th>النوع</th><th>ما تم عمله</th><th>المكان</th><th>الساعات</th><th>ملاحظات</th><th class="admin-only">إجراءات</th></tr></thead>
                 <tbody id="profLogRows"></tbody>
+            </table>
+        </div>
+        <div class="table-wrap grid-table" id="profAttWrap" style="display:none">
+            <table>
+                <thead><tr><th>التاريخ</th><th>اليوم</th><th>الحالة</th><th>الوصول</th><th>المغادرة</th><th>الساعات</th><th>السبب</th><th>ملاحظات</th></tr></thead>
+                <tbody id="profAttRows"></tbody>
             </table>
         </div>
         <div class="table-wrap" id="profTasksWrap" style="display:none">
@@ -754,7 +763,7 @@
     function attShift(n) { attSetDate(shiftDate(attDate, n)); }
     function attSetMonth(v) { if (!v) return; attMonth = v; renderAttendance(true); }
 
-    function attKpi(label, val) { return `<div class="kpi"><div class="kpi-info"><span>${esc(label)}</span><b>${esc(val)}</b></div></div>`; }
+    function attSum(items) { return items.map(i => `<span>${esc(i[0])}: <b>${esc(i[1])}</b></span>`).join(''); }
     function attDayStats() {
         const day = attendanceData[attDate] || {}, vols = attVols();
         let p = 0, e = 0, a = 0, m = 0;
@@ -776,10 +785,10 @@
     function updateAttKpis() {
         if (attView === 'day') {
             const s = attDayStats();
-            $('attKpis').innerHTML = attKpi('حاضرة', s.p) + attKpi('غائبة بعذر', s.e) + attKpi('غائبة بدون عذر', s.a) + attKpi('غير مسجّلة', s.none) + attKpi('مجموع الساعات', fmtHM(s.m));
+            $('attKpis').innerHTML = attSum([['حاضرة', s.p], ['غائبة بعذر', s.e], ['غائبة بدون عذر', s.a], ['غير مسجّلة', s.none], ['مجموع الساعات', fmtHM(s.m)]]);
         } else {
             const st = attMonthStats(), days = Object.keys(attendanceData).filter(d => d.slice(0, 7) === attMonth).length;
-            $('attKpis').innerHTML = attKpi('أيام مسجّلة', days) + attKpi('مرات الحضور', st.reduce((x, y) => x + y.p, 0)) + attKpi('مرات الغياب', st.reduce((x, y) => x + y.e + y.a, 0)) + attKpi('مجموع الساعات', fmtHM(st.reduce((x, y) => x + y.m, 0)));
+            $('attKpis').innerHTML = attSum([['أيام مسجّلة', days], ['مرات الحضور', st.reduce((x, y) => x + y.p, 0)], ['مرات الغياب', st.reduce((x, y) => x + y.e + y.a, 0)], ['مجموع الساعات', fmtHM(st.reduce((x, y) => x + y.m, 0))]]);
         }
     }
     function renderAttendance(force) {
@@ -832,13 +841,6 @@
         if (!Object.keys(upd).length) return alert('جميع المتطوعات مسجّلات لهذا اليوم.');
         if (!confirm('تسجيل ' + Object.keys(upd).length + ' متطوعة حاضرات؟')) return;
         attRef.child(attDate).update(upd).then(() => renderAttendance(true)).catch(() => alert('تعذّر الحفظ.'));
-    }
-    function printAttendanceForm() {
-        setReportHead('جدول التفقد اليومي', 'اليوم: ' + dayName(attDate), attDate);
-        setReportKpis(null);
-        const rows = attVols().map((v, i) => `<tr style="height:30px"><td>${i + 1}</td><td><b>${esc(v.name)}</b></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>`).join('');
-        $('reportPrintArea').innerHTML = `<table class="report-table"><thead><tr><th>م</th><th>الاسم</th><th>وقت الوصول</th><th>التوقيع</th><th>وقت المغادرة</th><th>التوقيع</th><th>سبب الغياب / الخروج المبكر</th><th>ملاحظات</th></tr></thead><tbody>${rows}</tbody></table>`;
-        doPrint();
     }
     function printAttendanceDay() {
         const s = attDayStats(), day = attendanceData[attDate] || {};
@@ -1023,7 +1025,7 @@
         listen(meetingsRef, snap => { meetingsData = snap.val() || {}; renderMeetings(); });
         if (!admin) { renderArchive(); renderVolunteers(); return; }
         listen(driveRef, snap => { driveUrl = snap.val() || ''; updateDriveUi(); });
-        listen(attRef, snap => { attendanceData = snap.val() || {}; renderAttendance(); });
+        listen(attRef, snap => { attendanceData = snap.val() || {}; renderAttendance(); if (currentActiveTab === 'profile') renderProfile(); });
         listen(archiveRef, snap => { archiveData = snap.val() || {}; renderArchive(); });
         listen(volunteersRef, snap => { volunteersData = snap.val() || {}; renderVolunteers(); if (currentActiveTab === 'profile') renderProfile(); if ($('paneAnalytics').style.display === 'block') renderAnalytics(); });
         listen(logsRef, snap => { logsData = snap.val() || {}; renderVolunteers(); if (currentActiveTab === 'profile') renderProfile(); if ($('paneAnalytics').style.display === 'block') renderAnalytics(); });
@@ -1566,10 +1568,22 @@
         $('pageMainTitle').innerText = 'ملف المتطوعة';
         renderProfile();
     }
+    function attOfVol(id) {
+        const out = [];
+        Object.keys(attendanceData).forEach(d => { const r = attendanceData[d][id]; if (r) out.push(Object.assign({ date: d }, r)); });
+        return out.sort((a, b) => b.date.localeCompare(a.date));
+    }
+    function attStatsVol(id) {
+        const s = { p: 0, e: 0, a: 0, m: 0 };
+        attOfVol(id).forEach(r => { if (r.status === 'present') s.p++; else if (r.status === 'excuse') s.e++; else if (r.status === 'absent') s.a++; s.m += attMins(r); });
+        return s;
+    }
     function setProfileTab(t) {
         profileTab = t;
         $('profLogsWrap').style.display = t === 'logs' ? 'block' : 'none';
         $('profTasksWrap').style.display = t === 'tasks' ? 'block' : 'none';
+        $('profAttWrap').style.display = t === 'att' ? 'block' : 'none';
+        $('tabProfAtt').classList.toggle('active', t === 'att');
         $('tabProfLogs').classList.toggle('active', t === 'logs');
         $('tabProfTasks').classList.toggle('active', t === 'tasks');
     }
@@ -1580,7 +1594,8 @@
         const s = volStats(v);
         $('profName').innerText = v.name;
         $('profOffice').innerText = v.office || 'غير محدد';
-        const k = [['المهام', s.tasks], ['المنجزة', s.done], ['أعمال ميدانية', s.field], ['تدريبات', s.training], ['مجموع الساعات', s.hours]];
+        const as = attStatsVol(v.id);
+        const k = [['المهام', s.tasks], ['المنجزة', s.done], ['أعمال ميدانية', s.field], ['تدريبات', s.training], ['ساعات الأعمال', s.hours], ['أيام الحضور', as.p], ['أيام الغياب', as.e + as.a], ['ساعات الدوام', fmtHM(as.m)]];
         $('profKpis').innerHTML = k.map(i => `<div class="kpi"><div class="kpi-info"><span>${i[0]}</span><b>${i[1]}</b></div></div>`).join('');
         $('profLogRows').innerHTML = logsOfVol(v.id).map(l => `<tr>
             <td data-label="التاريخ">${esc(l.date)}</td>
@@ -1600,6 +1615,15 @@
             <td data-label="التقدم">${t.progress != null ? t.progress : (t.status === 'done' ? 100 : 0)}%</td>
             <td data-label="التسليم">${esc(t.due || '-')}</td>
             <td data-label="ملاحظات">${esc(t.notes || '-')}</td></tr>`).join('') || '<tr><td colspan="6" class="empty-row">لا توجد مهام مرتبطة بها</td></tr>';
+        $('profAttRows').innerHTML = attOfVol(v.id).map(r => `<tr>
+            <td data-label="التاريخ">${esc(r.date)}</td>
+            <td data-label="اليوم">${esc(dayName(r.date))}</td>
+            <td data-label="الحالة">${esc(ATT_STATUS[r.status] || '-')}</td>
+            <td data-label="الوصول">${esc(r.arrive || '-')}</td>
+            <td data-label="المغادرة">${esc(r.leave || '-')}</td>
+            <td data-label="الساعات">${fmtHM(attMins(r))}</td>
+            <td data-label="السبب">${esc(r.reason || '-')}</td>
+            <td data-label="ملاحظات">${esc(r.notes || '-')}</td></tr>`).join('') || '<tr><td colspan="8" class="empty-row">لا يوجد تفقد مسجّل</td></tr>';
         setProfileTab(profileTab);
     }
 
@@ -1646,13 +1670,17 @@
         v.id = id;
         const s = volStats(v);
         setReportHead('تقرير المتطوعة: ' + v.name, 'المكتب: ' + (v.office || 'غير محدد'));
-        setReportKpis([['المهام', s.tasks], ['المنجزة', s.done], ['أعمال ميدانية / تدريبات', s.field + ' / ' + s.training], ['مجموع الساعات', s.hours]]);
+        const as = attStatsVol(id);
+        setReportKpis([['المهام', s.tasks], ['المنجزة', s.done], ['أعمال ميدانية / تدريبات', s.field + ' / ' + s.training], ['ساعات الأعمال', s.hours], ['أيام الحضور / الغياب', as.p + ' / ' + (as.e + as.a)], ['ساعات الدوام', fmtHM(as.m)]]);
+        const att = attOfVol(id).map(r => `<tr><td>${esc(r.date)}</td><td>${esc(ATT_STATUS[r.status] || '')}</td><td>${esc(r.arrive || '')}</td><td>${esc(r.leave || '')}</td><td>${fmtHM(attMins(r))}</td><td>${esc(r.reason || '')}</td></tr>`).join('');
         const logs = logsOfVol(id).map(l => `<tr><td>${esc(l.date)}</td><td>${LOG_TYPES[l.type] || ''}</td><td>${esc(l.desc)}</td><td>${esc(l.place || '')}</td><td>${l.hours != null && l.hours !== '' ? esc(l.hours) : ''}</td><td>${esc(l.notes || '')}</td></tr>`).join('');
         const tasks = tasksOfVol(v).map(t => `<tr><td>${esc(t.title)}</td><td>${esc(t.office)}</td><td>${STATUS_TEXT[t.status] || ''}</td><td>${t.progress != null ? t.progress : (t.status === 'done' ? 100 : 0)}%</td><td>${esc(t.due || '')}</td><td>${esc(t.notes || '')}</td></tr>`).join('');
         $('reportPrintArea').innerHTML = `<h3 style="color:#0f3156;margin:6px 0">سجل الأعمال</h3>
             <table class="report-table"><thead><tr><th>التاريخ</th><th>النوع</th><th>ما تم عمله</th><th>المكان</th><th>الساعات</th><th>ملاحظات</th></tr></thead><tbody>${logs || '<tr><td colspan="6" style="text-align:center">لا يوجد سجل</td></tr>'}</tbody></table>
             <h3 style="color:#0f3156;margin:14px 0 6px">المهام</h3>
-            <table class="report-table"><thead><tr><th>المهمة</th><th>المكتب</th><th>الحالة</th><th>التقدم</th><th>التسليم</th><th>ملاحظات</th></tr></thead><tbody>${tasks || '<tr><td colspan="6" style="text-align:center">لا توجد مهام</td></tr>'}</tbody></table>`;
+            <table class="report-table"><thead><tr><th>المهمة</th><th>المكتب</th><th>الحالة</th><th>التقدم</th><th>التسليم</th><th>ملاحظات</th></tr></thead><tbody>${tasks || '<tr><td colspan="6" style="text-align:center">لا توجد مهام</td></tr>'}</tbody></table>
+            <h3 style="color:#0f3156;margin:14px 0 6px">التفقد</h3>
+            <table class="report-table"><thead><tr><th>التاريخ</th><th>الحالة</th><th>الوصول</th><th>المغادرة</th><th>الساعات</th><th>السبب</th></tr></thead><tbody>${att || '<tr><td colspan="6" style="text-align:center">لا يوجد تفقد مسجّل</td></tr>'}</tbody></table>`;
         doPrint();
     }
 </script>
